@@ -21,8 +21,9 @@ public final class SubCell {
     /**
      * Returns the central subcell of a given cell.
      * 
-     * @param cell - Cell of which the central subcell is returned.
-     * @return subcell - central subcell of the given cell.
+     * @param cell
+     *          cell of which the central subcell is returned.
+     * @return subcell central subcell of the given cell.
      */
     
     public static SubCell centralSubCellOf(Cell cell){
@@ -35,7 +36,7 @@ public final class SubCell {
     /**
      * Returns the Manhattan distance between the current subcell and the central subcell.
      * 
-     * @return Intenger between 0 and 16 - the distance between a subcell and the center of a cell.
+     * @return distance between a subcell and the central subcell.
      */
     
     public int distanceToCentral(){
@@ -59,8 +60,9 @@ public final class SubCell {
      * Returns the neighbor subcell in a given direction, with respect to the property that a border subcell's
      * neighbor is on the opposite border, like for the cells. 
      * 
-     * @param d - direction to the neighbor.
-     * @return The neighbor subcell in the direction d.
+     * @param d
+     *          direction to the neighbor.
+     * @return neighbor subcell in the direction d.
      */
     
     public SubCell neighbor(Direction d){
@@ -94,7 +96,7 @@ public final class SubCell {
     /**
      * Returns the cell containing the current subcell.
      * 
-     * @return Object of type {@code Cell}.
+     * @return cell containing the current subcell.
      */
     
     public Cell containingCell(){
@@ -125,12 +127,12 @@ public final class SubCell {
     }
     
     /**
-     * @return x - column of the subcell.
+     * @return column of the subcell.
      */
     public int x(){ return this.x; }
     
     /**
-     * @return y - row of the subcell.
+     * @return row of the subcell.
      */
     public int y(){ return this.y; }
 
