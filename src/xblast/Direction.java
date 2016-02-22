@@ -11,7 +11,6 @@ package xblast;
  * @author Julien Malka (259041)
  */
 
-//Rajouter "final" ou enum est implicitement final?
 public enum Direction {
     N, E, S, W;
     
@@ -36,13 +35,12 @@ public enum Direction {
             return E;
             
         default:
-            return E;
-        //direction default?
+            return null;
         }
     }
     
     /**
-     * Returns true if and only if the direction is horizontal (i.e. E or W).
+     * Determines whether the direction is horizontal (i.e. E or W).
      * 
      * @return <b>true</b> if the direction is E or W,
      *         <b>false</b> otherwise
@@ -53,7 +51,7 @@ public enum Direction {
     }
     
     /**
-     * Returns true if and only if the direction is parallel to the argument.
+     * Determines whether the direction is parallel to the argument.
      * 
      * @param that - the direction to compare with.
      * @return <b>true</b> if the direction is parallel to the argument,
