@@ -19,10 +19,10 @@ public final class SubCell {
     }
     
     /**
-     * Returns the central subcell of a given cell.
+     * Returns the central subcell of a given Cell.
      * 
      * @param cell - Cell of which the central subcell is returned.
-     * @return subcell - central subcell of the given cell.
+     * @return Object of type SubCell.
      */
     
     public static SubCell centralSubCellOf(Cell cell){
@@ -35,7 +35,7 @@ public final class SubCell {
     /**
      * Returns the Manhattan distance between the current subcell and the central subcell.
      * 
-     * @return Intenger between 0 and 16 - the distance between a subcell and the center of a cell.
+     * @return Intenger between 0 and 16 (maximum distance for a subcell and the center one).
      */
     
     public int distanceToCentral(){
