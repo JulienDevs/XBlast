@@ -10,8 +10,6 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import ch.epfl.maze.util.Direction;
-
 import java.lang.Math;
 
 public final class Cell {
