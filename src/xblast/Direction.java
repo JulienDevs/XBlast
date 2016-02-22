@@ -36,7 +36,7 @@ public enum Direction {
             return E;
             
         default:
-            break;
+            return E;
         //direction default?
         }
     }
