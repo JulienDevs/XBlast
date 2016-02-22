@@ -5,6 +5,9 @@ import static org.junit.Assert.assertFalse;
 
 import org.junit.Test;
 
+import ch.epfl.xblast.Cell;
+import ch.epfl.xblast.Direction;
+
 public class CellTest {
     @Test
     public void rowMajorIndexCorrespondsToOrder() {

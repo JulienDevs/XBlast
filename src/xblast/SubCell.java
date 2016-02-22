@@ -2,6 +2,9 @@ package xblast;
 
 import java.lang.Math;
 
+import ch.epfl.xblast.Cell;
+import ch.epfl.xblast.Direction;
+
 /**
  * @author Yaron Dibner (257145)
  * @author Julien Malka (259041)
