@@ -1,7 +1,5 @@
 package xblast;
 
-import ch.epfl.maze.util.Direction;
-
 /**
  * Direction que le joueur peut prendre.
  * N pour nord
