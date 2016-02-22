@@ -1,4 +1,4 @@
-package ch.epfl.xblast;
+package xblast;
 
 /**
  * @author Yaron Dibner (257145)
