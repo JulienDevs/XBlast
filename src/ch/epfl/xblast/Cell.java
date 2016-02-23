@@ -100,12 +100,14 @@ public final class Cell {
 
     
     /**
-     * @return x - column of the subcell.
+     * @return column of the cell.
      */
     public int x() {
         return x;
     }
-
+    /**
+     * @return row of the cell.
+     */
     public int y() {
         return y;
     }
