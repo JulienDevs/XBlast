@@ -22,14 +22,15 @@ public final class Lists {
      * 
      * @param List
      *          list to be mirrored
-     * @return List - symmetric version of l
+     * @return List
+     *          symmetric version of l
      * @throws IllegalArgumentException
      */
     public static <T> List<T> mirrored(List<T> l) throws IllegalArgumentException{
         if(l.isEmpty() || l == null){
             throw new IllegalArgumentException();
         }
-        List<T> tmpList = l.subList(0, l.size() - 2);
+        List<T> tmpList = l.subList(0, l.size() - 1);
         Collections.reverse(tmpList);
         l.addAll(tmpList);
         return l;
