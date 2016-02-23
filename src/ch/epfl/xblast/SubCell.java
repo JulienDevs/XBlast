@@ -3,6 +3,9 @@ package ch.epfl.xblast;
 import java.lang.Math;
 
 /**
+ * Immutable class.
+ * A subcell is a subpart of a cell.
+ * 
  * @author Yaron Dibner (257145)
  * @author Julien Malka (259041)
 */

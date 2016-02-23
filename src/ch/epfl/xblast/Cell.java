@@ -2,6 +2,10 @@
 package ch.epfl.xblast;
 
 /**
+ * Immutable class.
+ * Gives information about the board's dimension and
+ * handles the order of the cells in the board (row major or spiral).
+ * 
  * @author Yaron Dibner (257145)
  * @author Julien Malka (259041)
 **/
