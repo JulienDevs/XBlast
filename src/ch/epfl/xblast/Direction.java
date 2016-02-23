@@ -1,11 +1,11 @@
 package ch.epfl.xblast;
 
 /**
- * Direction que le joueur peut prendre.
- * N pour nord
- * E pour est
- * S pour sud
- * W pour ouest
+ * Directions the player can take.
+ * N for north
+ * E for east
+ * S for south
+ * W for west
  * 
  * @author Yaron Dibner (257145)
  * @author Julien Malka (259041)
