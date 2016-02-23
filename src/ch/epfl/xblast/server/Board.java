@@ -148,12 +148,12 @@ public final class Board {
     
     
     /**
-     * Verify if the matrix given has the correct numbers of rows with each time the correct numbers of columns, throws exeption if not
+     * Verify if the matrix given has the correct numbers of rows with each time the correct numbers of columns, throws exception if not
      * 
      * @param matrix
      *          Array of dimension 2
      * @param rows
-     *          number of ligns
+     *          number of lines
      * @param columns
      *          number of columns                  
      *          
