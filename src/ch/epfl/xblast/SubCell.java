@@ -28,8 +28,8 @@ public final class SubCell {
     
     public static SubCell centralSubCellOf(Cell cell){
         int tmpX, tmpY;
-        tmpX = cell.x() + 8;
-        tmpY = cell.y() + 8;
+        tmpX = cell.x() * 16 + 8;
+        tmpY = cell.y() * 16 + 8;
         return new SubCell(tmpX, tmpY);
     }
     
@@ -71,19 +71,19 @@ public final class SubCell {
         
         switch(d) {
         case E:
-            x = Math.floorMod(x++, COLUMNS);
+            x = Math.floorMod(++x, COLUMNS);
             break;
         
         case W:
-            x = Math.floorMod(x--, COLUMNS);
+            x = Math.floorMod(--x, COLUMNS);
             break;
             
         case N:
-            y = Math.floorMod(y--, ROWS);
+            y = Math.floorMod(--y, ROWS);
             break;
             
         case S:
-            y = Math.floorMod(y++, ROWS);
+            y = Math.floorMod(++y, ROWS);
             break;
         
         default:
@@ -123,7 +123,7 @@ public final class SubCell {
     
     @Override
     public String toString(){
-        return "(x " + " y)";
+        return "(" + this.x + ", " + this.y + ")";
     }
     
     /**
