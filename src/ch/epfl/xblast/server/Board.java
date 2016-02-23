@@ -104,4 +104,14 @@ public final class Board {
     public Block blockAt (Cell c){
         return this.blocksAt(c).head();
     }
+    
+    void checkBlockMatrix(List<List<Block>> matrix, int rows, int columns){
+        if(matrix.size()!=rows || matrix.get(0).size()!=columns){
+            throw new IllegalArgumentException();   
+            
+        }
+        
+    }
+    
+    
 }
