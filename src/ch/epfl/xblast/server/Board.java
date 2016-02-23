@@ -43,16 +43,8 @@ public final class Board {
      *          block list is incorrect
      */
     
-    public static Board ofRows(List<List<Block>> rows) throws IllegalArgumentException{
-        if(rows.size() != 13){
-            throw new IllegalArgumentException();
-        }
-        for(int k = 0 ; k < rows.size() ; k++){
-            if(rows.get(k).size() != 15){
-                throw new IllegalArgumentException();
-            }
-        }
-        
+    public static Board ofRows(List<List<Block>> rows)throws IllegalArgumentException{
+        checkBlockMatrix(rows,13,15);
         List<Sq<Block>> constantBlocks = new ArrayList<Sq<Block>>();
         
         for(int i = 0 ; i < rows.size() ; i++){
@@ -77,14 +69,7 @@ public final class Board {
      */
     
     public static Board ofInnerBlocksWalled(List<List<Block>> innerBlocks) throws IllegalArgumentException{
-        if(innerBlocks.size() != 11){
-            throw new IllegalArgumentException();
-        }
-        for(int k = 0 ; k < innerBlocks.size() ; k++){
-            if(innerBlocks.get(k).size() != 13){
-                throw new IllegalArgumentException();
-            }
-        }
+        checkBlockMatrix(innerBlocks,11,13);
         
         List<Sq<Block>> blocks = new ArrayList<Sq<Block>>();
         
@@ -116,14 +101,7 @@ public final class Board {
      */
     
     public static Board ofQuadrantNWBlocksWalled(List<List<Block>> quadrantNWBBlocks) throws IllegalArgumentException{
-        if(quadrantNWBBlocks.size() != 6){
-            throw new IllegalArgumentException();
-        }
-        for(int k = 0 ; k < quadrantNWBBlocks.size() ; k++){
-            if(quadrantNWBBlocks.get(k).size() != 7){
-                throw new IllegalArgumentException();
-            }
-        }
+        checkBlockMatrix(quadrantNWBBlocks,6,7);
         
         List<Sq<Block>> symmetricBlocks = new ArrayList<Sq<Block>>();
         
@@ -168,11 +146,34 @@ public final class Board {
         return this.blocksAt(c).head();
     }
     
-    void checkBlockMatrix(List<List<Block>> matrix, int rows, int columns){
-        if(matrix.size()!=rows || matrix.get(0).size()!=columns){
+    
+    /**
+     * Verify if the matrix given has the correct numbers of rows with each time the correct numbers of columns, throws exeption if not
+     * 
+     * @param matrix
+     *          Array of dimension 2
+     * @param rows
+     *          number of ligns
+     * @param columns
+     *          number of columns                  
+     *          
+     * 
+     */
+    
+    private static void checkBlockMatrix(List<List<Block>> matrix, int rows, int columns) throws IllegalArgumentException{
+        if(matrix.size()!=rows){
             throw new IllegalArgumentException();   
             
         }
+        
+        for(int k=0; k< matrix.size();k++ ){
+           if(matrix.get(k).size()!=columns){
+             throw new IllegalArgumentException();   
+               
+           } 
+            
+        }
+        
         
     }
     
