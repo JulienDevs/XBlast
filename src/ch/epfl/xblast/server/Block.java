@@ -16,7 +16,7 @@ public enum Block {
      *         <b>false</b> otherwise
      */
     public boolean isFree(){
-        return this == FREE;
+        return (this == FREE);
     }
     
     /**
@@ -37,6 +37,6 @@ public enum Block {
      *         <b>false</b> otherwise
      */
     public boolean castsShadow(){
-        return this == INDESTRUCTIBLE_WALL || this == DESTRUCTIBLE_WALL || this == CRUMBLING_WALL; 
+        return (this == INDESTRUCTIBLE_WALL || this == DESTRUCTIBLE_WALL || this == CRUMBLING_WALL); 
     }
 }
