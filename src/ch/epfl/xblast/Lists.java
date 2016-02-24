@@ -27,7 +27,7 @@ public final class Lists {
      * @throws IllegalArgumentException
      */
     public static <T> List<T> mirrored(List<T> l) throws IllegalArgumentException{
-        if(l.isEmpty() || l == null){
+        if(l == null || l.isEmpty()){
             throw new IllegalArgumentException();
         }
         List<T> tmpList = l.subList(0, l.size() - 1);
