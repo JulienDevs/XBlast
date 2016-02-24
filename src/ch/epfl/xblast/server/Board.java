@@ -161,6 +161,9 @@ public final class Board {
      */
     
     private static void checkBlockMatrix(List<List<Block>> matrix, int rows, int columns) throws IllegalArgumentException{
+        if(matrix==null){
+            throw new IllegalArgumentException();    
+        }
         if(matrix.size()!=rows){
             throw new IllegalArgumentException();   
             
