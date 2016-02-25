@@ -1,6 +1,7 @@
 package ch.epfl.xblast;
 
 import java.util.List;
+import java.util.ArrayList;
 import java.util.Collections;
 
 /**
@@ -30,8 +31,11 @@ public final class Lists {
         if(l == null || l.isEmpty()){
             throw new IllegalArgumentException();
         }
-        List<T> tmpList = l.subList(0, l.size() - 1);
+        List<T> list = new ArrayList<T>(l);
+        List<T> tmpList = list.subList(0, list.size() - 1);
         Collections.reverse(tmpList);
+        System.out.println(tmpList);
+        System.out.println(l);
         l.addAll(tmpList);
         return l;
     }

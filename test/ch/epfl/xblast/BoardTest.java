@@ -16,6 +16,13 @@ import ch.epfl.xblast.server.Board;
 
 public class BoardTest {
     
+    //NEED TO MAKE CHECKBLOCKMMATRIX PUBLIC BEFORE RUN
+    
+    
+    
+    
+    
+    
     @Test(expected = IllegalArgumentException.class)
     public void checkBlockMatrixThrowsExceptionOnNullMatrix() {
         List<List<Block>> lol = null;
