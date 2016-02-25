@@ -11,7 +11,7 @@ import org.junit.Test;
 public class ListTest {
 
     @Test(expected = IllegalArgumentException.class)
-    public void mirroredMethodThrowsexceptionOnNullArgument() {
+    public void mirroredMethodThrowsExceptionOnNullArgument() {
         List <Integer> test = null;
         Lists.mirrored(test);
         
