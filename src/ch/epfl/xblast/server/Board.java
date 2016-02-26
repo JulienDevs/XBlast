@@ -148,7 +148,7 @@ public final class Board {
     
     
     /**
-     * Verify if the matrix given has the correct numbers of rows with each time the correct numbers of columns, throws exception if not
+     * Verify if the matrix given has the correct numbers of rows with each time the correct numbers of columns
      * 
      * @param matrix
      *          Array of dimension 2
@@ -156,7 +156,8 @@ public final class Board {
      *          number of lines
      * @param columns
      *          number of columns                  
-     *          
+     * @throws IllegalArgumentException if the given matrix is not correct
+     *                   
      * 
      */
     
