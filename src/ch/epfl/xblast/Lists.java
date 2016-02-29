@@ -36,7 +36,8 @@ public final class Lists {
         Collections.reverse(tmpList);
         System.out.println(tmpList);
         System.out.println(l);
-        l.addAll(tmpList);
-        return l;
+        list.addAll(tmpList);
+        list = Collections.unmodifiableList(list);
+        return list;
     }
 }

@@ -85,12 +85,10 @@ public final class SubCell {
             y = Math.floorMod(--y, ROWS);
             break;
             
-        case S:
+        default:
             y = Math.floorMod(++y, ROWS);
             break;
-        
-        default:
-            return null;
+            
         }
         
         return new SubCell(x, y);
