@@ -6,6 +6,7 @@ import ch.epfl.cs108.Sq;
 import ch.epfl.xblast.ArgumentChecker;
 import ch.epfl.xblast.Cell;
 import ch.epfl.xblast.Direction;
+import ch.epfl.xblast.PlayerID;
 
 /**
  * Immutable class.
@@ -70,7 +71,7 @@ public final class Bomb {
     /**
      * @return {@code PlayerId} that dropped the bomb    
      */ 
-    public PlayerId ownerId(){ return ownerId; }
+    public PlayerID ownerId(){ return ownerId; }
     
     /**
      * @return position where the bomb was dropped

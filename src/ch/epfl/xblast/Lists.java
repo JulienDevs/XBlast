@@ -32,7 +32,7 @@ public final class Lists {
             throw new IllegalArgumentException();
         }
         List<T> list = new ArrayList<T>(l);
-        List<T> tmpList = list.subList(0, list.size() - 1);
+        List<T> tmpList = l.subList(0, l.size() - 1);
         Collections.reverse(tmpList);
         System.out.println(tmpList);
         System.out.println(l);
