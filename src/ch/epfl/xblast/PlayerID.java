@@ -1,6 +1,7 @@
 package ch.epfl.xblast;
 
 /**
+ * Id's of the 4 players
  * @author Yaron Dibner (257145)
  * @author Julien Malka (259041)
 **/
