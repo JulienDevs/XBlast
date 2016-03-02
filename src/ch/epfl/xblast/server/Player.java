@@ -55,6 +55,7 @@ public final class Player {
    
    public Sq<LifeState> statesForNextLife(){
        
+       
    }
    
    public int lives(){
