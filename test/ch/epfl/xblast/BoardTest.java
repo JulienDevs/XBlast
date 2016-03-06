@@ -21,14 +21,13 @@ public class BoardTest {
     
     
     
-    
+    /*
     
     @Test(expected = IllegalArgumentException.class)
     public void checkBlockMatrixThrowsExceptionOnNullMatrix() {
         List<List<Block>> lol = null;
         Board.checkBlockMatrix(lol, 2, 3);
     }
-    
     @Test(expected = IllegalArgumentException.class)
     public void checkBlockMatrixThrowsExceptionOnIncorrectMatrix() {
         List<List<Block>> lol = new ArrayList<List<Block>>();
@@ -49,7 +48,7 @@ public class BoardTest {
     }
     
     
-    
+    */
     
 
 }

@@ -1,4 +1,4 @@
-package ch.epfl.xblast.server;
+package ch.epfl.xblast;
 
 import static org.junit.Assert.*;
 
@@ -13,6 +13,8 @@ import ch.epfl.cs108.Sq;
 import ch.epfl.xblast.Cell;
 import ch.epfl.xblast.Direction;
 import ch.epfl.xblast.PlayerID;
+import ch.epfl.xblast.server.Bomb;
+import ch.epfl.xblast.server.Ticks;
 
 /**
  * This test tests the class Bomb.

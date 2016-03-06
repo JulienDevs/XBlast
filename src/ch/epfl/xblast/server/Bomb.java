@@ -117,7 +117,8 @@ public final class Bomb {
      *          containing the state at each tick of each particle of the arm
      *          of the explosion.
      */
-    private Sq<Sq<Cell>> explosionArmTowards(Direction dir){
+    //CHANGER VISIBILITE EN PRIVATE POUR LE RENDU!!!
+    public Sq<Sq<Cell>> explosionArmTowards(Direction dir){
         Sq<Cell> arm = Sq.iterate(this.position, c -> c.neighbor(dir)).limit(range);
         return Sq.repeat(Ticks.EXPLOSION_TICKS, arm);
     }
