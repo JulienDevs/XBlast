@@ -270,13 +270,13 @@ public final class Player {
         }
 
         /**
-         * Predicate telling if the player can move
-         * 
-         * @return true if the player's state allow him to move
+         * @return <b>true</b> if state of the player let's him move (i.e. invulnerable or vulnerable),
+         *         <b>false</b> otherwise
          */
-
-        Predicate<LifeState> canMove = LifeState -> (LifeState.state == State.INVULNERABLE
-                || LifeState.state == State.VULNERABLE);
+        
+        public boolean canMove(){
+            return (state == State.INVULNERABLE || state == State.VULNERABLE);
+        }
 
         /**
          * All the States that a player can take
