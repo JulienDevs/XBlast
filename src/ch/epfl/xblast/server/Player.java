@@ -346,8 +346,7 @@ public final class Player {
          * @return an infinite sequence of Directed Positions
          */
         public static Sq<DirectedPosition> moving(DirectedPosition p) {
-            return Sq
-                    .iterate(p,
+            return Sq.iterate(p,
                             u -> new DirectedPosition(
                                     u.position.neighbor(u.direction),
                                     u.direction));
