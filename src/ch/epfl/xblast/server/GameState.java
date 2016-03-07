@@ -103,7 +103,11 @@ public final class GameState {
     }
     
     public Optional<PlayerID> winner(){
-        
+        if(alivePlayers().size() == 1 && !isGameOver()){
+            return Optional.of(alivePlayers().get(0).id());
+        } else {
+            return Optional.empty();
+        }
     }
     
     public Board board(){
@@ -123,4 +127,28 @@ public final class GameState {
         
         return alivePlayers;
     }
+    
+    public GameState next(){
+        
+    }
+    
+    private static 
+    
+    private static List<Sq<Cell>> nextBlasts(List<Sq<Cell>> blasts0, Board board0, List<Sq<Sq<Cell>>> explosions0){
+        List<Sq<Cell>> blasts1 = new ArrayList<Sq<Cell>>();
+        
+        for(Sq<Cell> blast : blasts0){
+           if (board0.blocksAt(blast.head()).head().isFree() && !blast.tail().isEmpty()){
+               blasts1.add(blast.tail());
+           }
+        }
+        
+        for(Sq<Sq<Cell>> explosion : explosions0){
+            blasts1.add(explosion.head());
+        }
+        
+        return blasts1;
+    }
+    
+    private static List<Player> nextPlayers()
 }

@@ -110,7 +110,7 @@ public final class Bomb {
     }
     
     /**
-     * Returns arm of the explosion going in the dir Direction.
+     * Returns arm of the explosion going in the direction dir.
      * @param dir
      *          Direction in which the arm will be going
      * @return arm of the explosion as a sequence of sequence of cells,

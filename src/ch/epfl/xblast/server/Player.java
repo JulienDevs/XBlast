@@ -8,7 +8,6 @@ import ch.epfl.xblast.Direction;
 import ch.epfl.xblast.PlayerID;
 import ch.epfl.xblast.SubCell;
 import ch.epfl.xblast.server.Player.LifeState.State;
-import java.util.function.*;
 
 /**
  * Immutable class. Handles the representation of a Player
@@ -27,7 +26,7 @@ public final class Player {
 
     /**
      * Main constructor. Constructs a Player given his id, LifeStates, sequence
-     * of Directed Positions, the maximum of bombs he can drop and the range of
+     * of Directed Positions, the maximum number of bombs he can drop and the range of
      * his bombs.
      *
      * @param id
