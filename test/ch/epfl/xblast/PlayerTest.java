@@ -295,10 +295,11 @@ public class PlayerTest {
     }
     
 //    // Mettre completeSqOfStatesForNextLife en public pour le test
-//    @Test
-//    public void completeSqOfStatesForNextLifeTestDEAD() {
-//          assertEquals(State.DEAD, Player.completeSqOfStatesForNextLife(0).head().state());
-//          assertEquals(State.VULNERABLE, Player.completeSqOfStatesForNextLife(1).tail().tail().tail().tail().tail().tail().tail().tail().tail().tail().tail().tail().tail().tail().tail().tail().tail().tail().tail().tail().tail().tail().tail().tail().tail().tail().tail().tail().tail().tail().tail().tail().tail().tail().tail().tail().tail().tail().tail().tail().tail().tail().tail().tail().tail().tail().tail().tail().tail().tail().tail().tail().tail().tail().tail().tail().tail().tail().tail().tail().tail().tail().tail().tail().tail().head().state());
-//          assertEquals(State.INVULNERABLE, Player.completeSqOfStatesForNextLife(1).head().state());
-//    }
+    /** @Test
+    public void completeSqOfStatesForNextLifeTestDEAD() {
+          assertEquals(State.DEAD, Player.createLifeStates(0).head().state());
+          assertEquals(State.VULNERABLE, Player.createLifeStates(1).tail().tail().tail().tail().tail().tail().tail().tail().tail().tail().tail().tail().tail().tail().tail().tail().tail().tail().tail().tail().tail().tail().tail().tail().tail().tail().tail().tail().tail().tail().tail().tail().tail().tail().tail().tail().tail().tail().tail().tail().tail().tail().tail().tail().tail().tail().tail().tail().tail().tail().tail().tail().tail().tail().tail().tail().tail().tail().tail().tail().tail().tail().tail().tail().tail().head().state());
+          assertEquals(State.INVULNERABLE, Player.createLifeStates(1).head().state());
+    }
+    **/
 }
