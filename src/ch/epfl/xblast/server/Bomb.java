@@ -12,6 +12,8 @@ import ch.epfl.xblast.PlayerID;
 /**
  * Immutable class.
  * Handles the state of the bombs on the board and their explosions.
+ * A bomb explodes if it's fuse length is over, or if the blast of
+ * another explosion hits it.
  * 
  * @author Yaron Dibner (257145)
  * @author Julien Malka (259041)
@@ -117,8 +119,7 @@ public final class Bomb {
      *          containing the state at each tick of each particle of the arm
      *          of the explosion.
      */
-    //CHANGER VISIBILITE EN PRIVATE POUR LE RENDU!!!
-    public Sq<Sq<Cell>> explosionArmTowards(Direction dir){
+    private Sq<Sq<Cell>> explosionArmTowards(Direction dir){
         Sq<Cell> arm = Sq.iterate(this.position, c -> c.neighbor(dir)).limit(range);
         return Sq.repeat(Ticks.EXPLOSION_TICKS, arm);
     }
