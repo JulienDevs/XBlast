@@ -1,5 +1,7 @@
 package ch.epfl.xblast.server;
 
+import ch.epfl.xblast.Time;
+
 /**
  * @author Yaron Dibner (257145)
  * @author Julien Malka (259041)
@@ -11,4 +13,7 @@ public interface Ticks {
     public final static int EXPLOSION_TICKS = 30;
     public final static int WALL_CRUMBLING_TICKS = 30;
     public final static int BONUS_DISAPPEARING_TICKS = 30;
+    public final static int TICKS_PER_SECOND = 20;
+    public final static int TICK_NANOSECOND_DURATION = (1/TICKS_PER_SECOND)*Time.NS_PER_S;
+    public final static int TOTAL_TICKS = TICKS_PER_SECOND*60*2;
 }

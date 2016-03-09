@@ -1,5 +1,7 @@
 package ch.epfl.xblast.server;
 
+import java.util.NoSuchElementException;
+
 /**
  * Different types of blocks of the board.
  * 
@@ -7,7 +9,20 @@ package ch.epfl.xblast.server;
  * @author Julien Malka (259041)
  */
 public enum Block {
-    FREE, INDESTRUCTIBLE_WALL, DESTRUCTIBLE_WALL, CRUMBLING_WALL;
+    FREE, INDESTRUCTIBLE_WALL, DESTRUCTIBLE_WALL, CRUMBLING_WALL, BONUS_BOMB(Bonus.INC_BOMB), BONUS_RANGE(Bonus.INC_RANGE);
+    
+    private Bonus maybeAssociatedBonus;
+    
+    
+    private Block(Bonus maybeAssociatedBonus) {
+        this.maybeAssociatedBonus = maybeAssociatedBonus;
+      }
+    
+    private Block() {
+         this.maybeAssociatedBonus = null;
+      }
+    
+    
 
     /**
      * Returns true if and only if a block is free.
@@ -26,7 +41,7 @@ public enum Block {
      *         <b>false</b> otherwise
      */
     public boolean canHostPlayer() {
-        return this.isFree();
+        return (this.isFree() || this.isBonus());
     }
 
     /**
@@ -39,5 +54,17 @@ public enum Block {
     public boolean castsShadow() {
         return (this == INDESTRUCTIBLE_WALL || this == DESTRUCTIBLE_WALL
                 || this == CRUMBLING_WALL);
+    }
+    
+    public boolean isBonus(){
+        return(this == BONUS_BOMB || this== BONUS_RANGE);
+    }
+    
+    public Bonus associatedBonus() throws NoSuchElementException{
+      if(maybeAssociatedBonus==null){
+          throw new NoSuchElementException();
+      }  else{
+          return maybeAssociatedBonus;
+      }
     }
 }
