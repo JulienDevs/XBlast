@@ -26,8 +26,8 @@ public final class Player {
 
     /**
      * Main constructor. Constructs a Player given his id, LifeStates, sequence
-     * of Directed Positions, the maximum number of bombs he can drop and the range of
-     * his bombs.
+     * of Directed Positions, the maximum number of bombs he can drop and the
+     * range of his bombs.
      *
      * @param id
      *            id of the player
@@ -269,11 +269,11 @@ public final class Player {
         }
 
         /**
-         * @return <b>true</b> if state of the player let's him move (i.e. invulnerable or vulnerable),
-         *         <b>false</b> otherwise
+         * @return <b>true</b> if state of the player let's him move (i.e.
+         *         invulnerable or vulnerable), <b>false</b> otherwise
          */
-        
-        public boolean canMove(){
+
+        public boolean canMove() {
             return (state == State.INVULNERABLE || state == State.VULNERABLE);
         }
 
@@ -345,7 +345,8 @@ public final class Player {
          * @return an infinite sequence of Directed Positions
          */
         public static Sq<DirectedPosition> moving(DirectedPosition p) {
-            return Sq.iterate(p,
+            return Sq
+                    .iterate(p,
                             u -> new DirectedPosition(
                                     u.position.neighbor(u.direction),
                                     u.direction));

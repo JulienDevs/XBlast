@@ -28,18 +28,15 @@ public final class Cell {
     public static final List<Cell> SPIRAL_ORDER = Collections
             .unmodifiableList(rowSpiralOrder());
 
-    
-    
-    
     public Cell(int x, int y) {
         this.x = Math.floorMod(x, COLUMNS);
         this.y = Math.floorMod(y, ROWS);
 
     }
 
-    
     /**
      * Returns a list of the cells in the reading order
+     * 
      * @return Object of type ArrayList of Cells.
      */
     private static ArrayList<Cell> rowMajorOrder() {
@@ -55,10 +52,9 @@ public final class Cell {
 
     }
 
-    
-    
     /**
      * Returns a list of the cells in the spiral order
+     * 
      * @return Object of type ArrayList of Cells.
      */
     private static ArrayList<Cell> rowSpiralOrder() {
@@ -89,10 +85,10 @@ public final class Cell {
             i2.remove(0);
             for (int c1 : i1) {
                 if (horizontal) {
-                    result.add(ROW_MAJOR_ORDER.get(c2*COLUMNS+c1));
+                    result.add(ROW_MAJOR_ORDER.get(c2 * COLUMNS + c1));
 
                 } else {
-                    result.add(ROW_MAJOR_ORDER.get(c1*COLUMNS+c2));
+                    result.add(ROW_MAJOR_ORDER.get(c1 * COLUMNS + c2));
                 }
             }
             horizontal = !horizontal;
@@ -102,13 +98,13 @@ public final class Cell {
         return result;
     }
 
-    
     /**
      * @return column of the cell.
      */
     public int x() {
         return x;
     }
+
     /**
      * @return row of the cell.
      */
@@ -128,16 +124,16 @@ public final class Cell {
         return 0;
 
     }
-    
+
     /**
-     * Returns the neighbor cell in a given direction, with respect to the property that a border subcell's
-     * neighbor is on the opposite border. 
+     * Returns the neighbor cell in a given direction, with respect to the
+     * property that a border subcell's neighbor is on the opposite border.
      * 
-     * @param dir - direction to the neighbor.
+     * @param dir
+     *            - direction to the neighbor.
      * @return The neighbor cell in the direction d.
      */
     public Cell neighbor(Direction dir) {
-       
 
         switch (dir) {
         case N:
@@ -162,16 +158,17 @@ public final class Cell {
         }
 
     }
-    
+
     @Override
-    public boolean equals(Object that){
-        if(that == null){
+    public boolean equals(Object that) {
+        if (that == null) {
             return false;
         } else {
-            if(that.getClass() != getClass()){
+            if (that.getClass() != getClass()) {
                 return false;
             } else {
-                return (this.x == ((Cell) that).x() && this.y == ((Cell) that).y());
+                return (this.x == ((Cell) that).x()
+                        && this.y == ((Cell) that).y());
             }
         }
     }
