@@ -102,8 +102,8 @@ public final class GameState {
             if (p.isAlive())
                 nbAlivePlayers++;
         }
-        if (ticks == Ticks.TOTAL_TICKS || nbAlivePlayers <= 1)
-            return true;
+        return (ticks == Ticks.TOTAL_TICKS || nbAlivePlayers <= 1);
+            
     }
 
     public double remainingTime() {
@@ -137,9 +137,10 @@ public final class GameState {
         return alivePlayers;
     }
 
-    public GameState next() {
+   /** public GameState next() {
 
     }
+    **/
 
     private static List<Sq<Cell>> nextBlasts(List<Sq<Cell>> blasts0,
             Board board0, List<Sq<Sq<Cell>>> explosions0) {
