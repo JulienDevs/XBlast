@@ -190,5 +190,15 @@ public final class Board {
         }
 
     }
-
+    
+    
+    public static Board boardForTestWithOnlyFreeBlocks(){
+        List<Sq<Block>> boardTest = new ArrayList<Sq<Block>>();
+        for(int i = 0 ; i < Cell.COUNT ; i++){
+            boardTest.add(Sq.constant(Block.FREE));
+        }
+        
+        return new Board(boardTest);
+    }
+    
 }

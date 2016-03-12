@@ -1,5 +1,7 @@
 package ch.epfl.xblast.server;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import ch.epfl.cs108.Sq;
 import ch.epfl.xblast.ArgumentChecker;
@@ -219,6 +221,71 @@ public final class Player {
         }
 
     }
+    
+    
+    
+    /* ----------------------------------------------------------
+     *              TO REMOVE. ONLY FOR TEST PURPOSE.
+       ----------------------------------------------------------
+     */
+    
+    
+
+    
+    public static List<Player> fourPlayersForTest(){
+        List<Player> testPlayers = new ArrayList<Player>();
+        
+        testPlayers.add(new Player(PlayerID.PLAYER_1, 3, new Cell(0, 0), 5, 25));
+        testPlayers.add(new Player(PlayerID.PLAYER_2, 3, new Cell(0, 0), 5, 25));
+        testPlayers.add(new Player(PlayerID.PLAYER_3, 3, new Cell(0, 0), 5, 25));
+        testPlayers.add(new Player(PlayerID.PLAYER_4, 3, new Cell(0, 0), 5, 25));
+        
+        return testPlayers;
+    }
+    
+    public static List<Player> threePlayersForTest(){
+        List<Player> testPlayers = new ArrayList<Player>();
+        
+        testPlayers.add(new Player(PlayerID.PLAYER_1, 3, new Cell(0, 0), 5, 25));
+        testPlayers.add(new Player(PlayerID.PLAYER_2, 3, new Cell(0, 0), 5, 25));
+        testPlayers.add(new Player(PlayerID.PLAYER_3, 3, new Cell(0, 0), 5, 25));
+        
+        return testPlayers;
+    }
+    
+    public static List<Player> oneAlivePlayerForTest(){
+        List<Player> testPlayers = new ArrayList<Player>();
+        
+        testPlayers.add(new Player(PlayerID.PLAYER_1, 1, new Cell(0, 0), 5, 25));
+        testPlayers.add(new Player(PlayerID.PLAYER_2, 0, new Cell(0, 0), 5, 25));
+        testPlayers.add(new Player(PlayerID.PLAYER_3, 0, new Cell(0, 0), 5, 25));
+        testPlayers.add(new Player(PlayerID.PLAYER_4, 0, new Cell(0, 0), 5, 25));        
+        
+        return testPlayers;
+    }
+    
+    public static List<Player> fourDeadPlayersForTest(){
+        List<Player> testPlayers = new ArrayList<Player>();
+        
+        testPlayers.add(new Player(PlayerID.PLAYER_1, 0, new Cell(0, 0), 5, 25));
+        testPlayers.add(new Player(PlayerID.PLAYER_2, 0, new Cell(0, 0), 5, 25));
+        testPlayers.add(new Player(PlayerID.PLAYER_3, 0, new Cell(0, 0), 5, 25));
+        testPlayers.add(new Player(PlayerID.PLAYER_4, 0, new Cell(0, 0), 5, 25));
+        
+        
+        return testPlayers;
+    }
+   
+    /*
+     * ----------------------------------------------------------------
+     * ---------------------------------------------------------------
+     */
+    
+    
+    
+    
+    
+    
 
     /**
      * Immutable class. Handles the representation of a LifeState as two
@@ -390,6 +457,8 @@ public final class Player {
         public DirectedPosition withDirection(Direction newDirection) {
             return new DirectedPosition(position, newDirection);
         }
+        
+        
 
     }
 
