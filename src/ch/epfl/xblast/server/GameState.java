@@ -86,6 +86,11 @@ public final class GameState {
                 new ArrayList<Sq<Sq<Cell>>>(), new ArrayList<Sq<Cell>>());
     }
 
+    /**
+     * Returns the current time of the game.
+     * 
+     * @return current ticks (representing the current time of the game)
+     */
     public int ticks() {
         return ticks;
     }
@@ -103,14 +108,26 @@ public final class GameState {
                 nbAlivePlayers++;
         }
         return (ticks == Ticks.TOTAL_TICKS || nbAlivePlayers <= 1);
-            
+
     }
 
+    /**
+     * Returns the remaining time in the game (in seconds).
+     * 
+     * @return remaining time in seconds
+     */
     public double remainingTime() {
         return ((double) (Ticks.TOTAL_TICKS - ticks))
                 / ((double) Ticks.TICKS_PER_SECOND);
     }
 
+    /**
+     * Returns the winner of the game if there is one, or an optional empty
+     * value if there is no winner.
+     * 
+     * @return winner of the game if there is one, or an optional empty value if
+     *         there is no winner
+     */
     public Optional<PlayerID> winner() {
         if (alivePlayers().size() == 1) {
             return Optional.of(alivePlayers().get(0).id());
@@ -119,14 +136,29 @@ public final class GameState {
         }
     }
 
+    /**
+     * Returns the board of the game.
+     * 
+     * @return board of the game
+     */
     public Board board() {
         return board;
     }
 
+    /**
+     * Returns all the 4 players of the game (dead or alive).
+     * 
+     * @return list of all 4 players of the game (dead or alive)
+     */
     public List<Player> players() {
         return players;
     }
 
+    /**
+     * Returns all alive players, i.e. all with players with at least one life.
+     * 
+     * @return all alive players
+     */
     public List<Player> alivePlayers() {
         List<Player> alivePlayers = new ArrayList<Player>();
         for (Player p : players) {
@@ -137,11 +169,24 @@ public final class GameState {
         return alivePlayers;
     }
 
-   /** public GameState next() {
+    /**
+     * public GameState next() {
+     * 
+     * }
+     **/
 
-    }
-    **/
-
+    /**
+     * Determines the state of all the blasts on time t+1, given the state of
+     * the blasts, bombs and explosions on time t.
+     * 
+     * @param blasts0
+     *            blasts on time t
+     * @param board0
+     *            board on time t
+     * @param explosions0
+     *            explosions on time t
+     * @return blasts on time t+1
+     */
     private static List<Sq<Cell>> nextBlasts(List<Sq<Cell>> blasts0,
             Board board0, List<Sq<Sq<Cell>>> explosions0) {
         List<Sq<Cell>> blasts1 = new ArrayList<Sq<Cell>>();
@@ -160,6 +205,7 @@ public final class GameState {
         return blasts1;
     }
 
+    /*
     private static List<Player> nextPlayers(List<Player> players0,
             List<Sq<Cell>> blasts0) {
         List<Player> players1 = new ArrayList<Player>();
@@ -208,4 +254,5 @@ public final class GameState {
 
         return explosions1;
     }
+    */
 }
