@@ -144,12 +144,8 @@ public class GameStateTest {
     @Test
     public void gameIsOverWithZeroPlayers() {
         GameState gameOver = new GameState(4, testBoard,
-<<<<<<< HEAD
-                Player.fourDeadPlayersForTest(), testBombs, testExplosions,
+                fourDeadPlayersForTest(), testBombs, testExplosions,
                 testBlasts);
-=======
-                fourDeadPlayersForTest(), testBombs, testExplosions, testBlasts);
->>>>>>> origin/master
 
         assertTrue(gameOver.isGameOver());
     }
@@ -177,7 +173,7 @@ public class GameStateTest {
     @Test
     public void winnerReturnsEmptyOptionalObjectWhenFourPlayersAlive() {
         GameState game = new GameState(5, testBoard,
-                Player.fourPlayersForTest(), testBombs, testExplosions,
+                fourPlayersForTest(), testBombs, testExplosions,
                 testBlasts);
         Optional<PlayerID> actual = game.winner();
         Optional<PlayerID> expected = Optional.empty();
@@ -188,7 +184,7 @@ public class GameStateTest {
     @Test
     public void winnerReturnsTheWinnerWhenOneAlivePlayer() {
         GameState game = new GameState(5, testBoard,
-                Player.oneAlivePlayerForTest(), testBombs, testExplosions,
+                oneAlivePlayerForTest(), testBombs, testExplosions,
                 testBlasts);
         Optional<PlayerID> actual = game.winner();
         Optional<PlayerID> expected = Optional.of(PlayerID.PLAYER_1);
@@ -199,7 +195,7 @@ public class GameStateTest {
     @Test
     public void winnerReturnsEmptyOptionalObjectWhenFourDeadPlayers() {
         GameState game = new GameState(5, testBoard,
-                Player.fourDeadPlayersForTest(), testBombs, testExplosions,
+                fourDeadPlayersForTest(), testBombs, testExplosions,
                 testBlasts);
         Optional<PlayerID> actual = game.winner();
         Optional<PlayerID> expected = Optional.empty();
@@ -210,7 +206,7 @@ public class GameStateTest {
     @Test
     public void boardGetterWorks() {
         GameState game = new GameState(5, testBoard,
-                Player.fourDeadPlayersForTest(), testBombs, testExplosions,
+                fourDeadPlayersForTest(), testBombs, testExplosions,
                 testBlasts);
 
         assertEquals(game.board(), testBoard);
@@ -230,18 +226,22 @@ public class GameStateTest {
     @Test
     public void alivePlayersWorksWithOneAlivePlayer() {
         GameState game = new GameState(5, testBoard,
-                Player.oneAlivePlayerForTest(), testBombs, testExplosions,
+                oneAlivePlayerForTest(), testBombs, testExplosions,
                 testBlasts);
 
         List<Player> actual = game.alivePlayers();
         List<Player> expected = new ArrayList<Player>();
-        expected.add(Player.oneAlivePlayerForTest().get(0));
+        expected.add(oneAlivePlayerForTest().get(0));
 
         boolean b = true;
 
         for (int i = 0; i < actual.size(); i++) {
-            if()
+            if(actual.get(i).id() != actual.get(i).id()){
+                b = false;
+            }
         }
+        
+        assertTrue(b);
     }
 
     @Test
