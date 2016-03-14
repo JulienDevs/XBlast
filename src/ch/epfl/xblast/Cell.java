@@ -172,5 +172,9 @@ public final class Cell {
             }
         }
     }
+    @Override
+    public int hashCode(){
+      return rowMajorIndex();  
+    }
 
 }

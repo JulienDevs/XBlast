@@ -143,5 +143,10 @@ public final class SubCell {
     public int y() {
         return this.y;
     }
+    
+    @Override
+    public int hashCode(){
+        return y*COLUMNS+x;
+    }
 
 }
