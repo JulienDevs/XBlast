@@ -56,9 +56,18 @@ public enum Block {
                 || this == CRUMBLING_WALL);
     }
     
+    /**
+     * Return true if the block is a bonuss 
+     * @return true if the block is a bonus
+     */
     public boolean isBonus(){
         return(this == BONUS_BOMB || this== BONUS_RANGE);
     }
+    
+    /**
+     * @return wich type of bonus the block is 
+     * @throws NoSuchElementException if the block is not a bonus
+     */
     
     public Bonus associatedBonus() throws NoSuchElementException{
       if(maybeAssociatedBonus==null){
