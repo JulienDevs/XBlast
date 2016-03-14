@@ -4,6 +4,7 @@ import static org.junit.Assert.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.junit.Test;
 
@@ -97,7 +98,8 @@ public class GameStateTest {
     @Test
     public void gameIsOverWithZeroPlayers() {
         GameState gameOver = new GameState(4, testBoard,
-                Player.fourDeadPlayersForTest(), testBombs, testExplosions, testBlasts);
+                Player.fourDeadPlayersForTest(), testBombs, testExplosions,
+                testBlasts);
 
         assertTrue(gameOver.isGameOver());
     }
@@ -105,7 +107,8 @@ public class GameStateTest {
     @Test
     public void remaingTimeOnBeginningIsTOTALTICKS() {
         GameState beginning = new GameState(testBoard, testPlayers);
-        double expected = ((double)Ticks.TOTAL_TICKS )/((double)(Ticks.TICKS_PER_SECOND));
+        double expected = ((double) Ticks.TOTAL_TICKS)
+                / ((double) (Ticks.TICKS_PER_SECOND));
         double actual = beginning.remainingTime();
 
         assertTrue(expected == actual);
@@ -120,6 +123,85 @@ public class GameStateTest {
 
         assertTrue(expected == actual);
     }
-    
-    
+
+    @Test
+    public void winnerReturnsEmptyOptionalObjectWhenFourPlayersAlive() {
+        GameState game = new GameState(5, testBoard,
+                Player.fourPlayersForTest(), testBombs, testExplosions,
+                testBlasts);
+        Optional<PlayerID> actual = game.winner();
+        Optional<PlayerID> expected = Optional.empty();
+
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    public void winnerReturnsTheWinnerWhenOneAlivePlayer() {
+        GameState game = new GameState(5, testBoard,
+                Player.oneAlivePlayerForTest(), testBombs, testExplosions,
+                testBlasts);
+        Optional<PlayerID> actual = game.winner();
+        Optional<PlayerID> expected = Optional.of(PlayerID.PLAYER_1);
+
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    public void winnerReturnsEmptyOptionalObjectWhenFourDeadPlayers() {
+        GameState game = new GameState(5, testBoard,
+                Player.fourDeadPlayersForTest(), testBombs, testExplosions,
+                testBlasts);
+        Optional<PlayerID> actual = game.winner();
+        Optional<PlayerID> expected = Optional.empty();
+
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    public void boardGetterWorks() {
+        GameState game = new GameState(5, testBoard,
+                Player.fourDeadPlayersForTest(), testBombs, testExplosions,
+                testBlasts);
+
+        assertEquals(game.board(), testBoard);
+    }
+
+    @Test
+    public void playersGetterWorks() {
+        GameState game = new GameState(5, testBoard, testPlayers, testBombs,
+                testExplosions, testBlasts);
+
+        assertEquals(testPlayers, game.players());
+    }
+
+    /**
+     * Only players' id are tested, as there's no equals method in Player.
+     */
+    @Test
+    public void alivePlayersWorksWithOneAlivePlayer() {
+        GameState game = new GameState(5, testBoard,
+                Player.oneAlivePlayerForTest(), testBombs, testExplosions,
+                testBlasts);
+
+        List<Player> actual = game.alivePlayers();
+        List<Player> expected = new ArrayList<Player>();
+        expected.add(Player.oneAlivePlayerForTest().get(0));
+
+        boolean b = true;
+
+        for (int i = 0; i < actual.size(); i++) {
+            if()
+        }
+    }
+
+    @Test
+    public void alivePlayersWorksWithFourAlivePlayers() {
+        GameState game = new GameState(5, testBoard, testPlayers, testBombs,
+                testExplosions, testBlasts);
+
+        List<Player> actual = game.alivePlayers();
+        List<Player> expected = testPlayers;
+
+        assertEquals(expected, actual);
+    }
 }
