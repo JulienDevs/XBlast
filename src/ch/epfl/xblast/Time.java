@@ -1,6 +1,8 @@
 package ch.epfl.xblast;
 
 /**
+ * Contains constants about the time
+ * 
  * @author Yaron Dibner (257145)
  * @author Julien Malka (259041)
 **/
