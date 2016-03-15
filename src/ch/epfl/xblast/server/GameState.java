@@ -217,7 +217,19 @@ public final class GameState {
 
         Board board1 = nextBoard(board, consumedBonuses, blastedCells);
 
-        return null;
+        List<Sq<Sq<Cell>>> explosions1 = nextExplosions(explosions);
+        
+        
+        Set<Cell> bombedCellsSet = new HashSet<Cell>();
+        Map<Bomb, Cell> bombedCellsMap = new HashMap<Bomb, Cell>();
+        
+        for(int i = 0 ; i < bombedCells().size() ; i++){
+            bombedCellsSet.add(bombedCellsMap.get(i));
+        }
+        
+        List<Player> players1 = nextPlayers(players, playerBonuses, bombedCellsSet, board1, blastedCells(), speedChangeEvents);
+
+        return new GameState(ticks + 1, board1, players1, null, explosions1, blasts1 );
     }
 
     /**
@@ -297,8 +309,8 @@ public final class GameState {
         return null;
     }
 
-    private static List<Sq<Sq<Cell>>> nextExplosions(List<Bomb> bombs0,
-            List<Sq<Sq<Cell>>> explosions0, List<Sq<Cell>> blasts0) {
+    private static List<Sq<Sq<Cell>>> nextExplosions(
+            List<Sq<Sq<Cell>>> explosions0) {
         List<Sq<Sq<Cell>>> explosions1 = new ArrayList<Sq<Sq<Cell>>>();
 
         for (Sq<Sq<Cell>> e : explosions0) {
