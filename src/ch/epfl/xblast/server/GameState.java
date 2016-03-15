@@ -1,16 +1,19 @@
 package ch.epfl.xblast.server;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Random;
 import java.util.Set;
 
 import ch.epfl.cs108.Sq;
 import ch.epfl.xblast.Cell;
 import ch.epfl.xblast.Direction;
+import ch.epfl.xblast.Lists;
 import ch.epfl.xblast.PlayerID;
 
 /**
@@ -27,6 +30,13 @@ public final class GameState {
     private final List<Bomb> bombs;
     private final List<Sq<Sq<Cell>>> explosions;
     private final List<Sq<Cell>> blasts;
+
+    private static final List<List<Integer>> PERMUTATION = Lists
+            .permutations(Arrays.asList(1, 2, 3, 4));
+    private static final Random RANDOM = new Random(2016);
+    private static final int BOMB = 0;
+    private static final int RANGE = 1;
+    private static final int FREE = 2;
 
     /**
      * Main constructor.
@@ -174,11 +184,11 @@ public final class GameState {
         return alivePlayers;
     }
 
-    /**
-     * public GameState next() {
-     * 
-     * }
-     **/
+    public GameState next(Map<PlayerID, Optional<Direction>> speedChangeEvents,
+            Set<PlayerID> bombDropEvents) {
+        // TODO
+        return null;
+    }
 
     /**
      * Determines the state of all the blasts on time t+1, given the state of
@@ -210,6 +220,66 @@ public final class GameState {
         return blasts1;
     }
 
+    private static List<Player> nextPlayers(List<Player> players0,
+            Map<PlayerID, Bonus> playerBonuses, Set<Cell> bombedCells1,
+            Board board1, Set<Cell> blastedCells1,
+            Map<PlayerID, Optional<Direction>> speedChangeEvents) {
+
+        return null; // TODO
+    }
+
+    private static Board nextBoard(Board board0, Set<Cell> consumedBonuses,
+            Set<Cell> blastedCells1) {
+        List<Sq<Block>> blocks1 = new ArrayList<Sq<Block>>();
+        
+        for(Cell c : Cell.ROW_MAJOR_ORDER){
+            if(consumedBonuses.contains(c)){
+                blocks1.add(Sq.constant(Block.FREE));
+            } else if(blastedCells1.contains(c)){
+                if(board0.blockAt(c) == Block.DESTRUCTIBLE_WALL){
+                    blocks1.add(Sq.repeat(Ticks.WALL_CRUMBLING_TICKS, Block.CRUMBLING_WALL));
+                    
+                    int n = RANDOM.nextInt(3);
+                    
+                    switch(n){
+                    case BOMB :
+                        blocks1.add(Sq.constant(Block.BONUS_BOMB));
+                        break;
+                        
+                    case RANGE :
+                        blocks1.add(Sq.constant(Block.BONUS_RANGE));
+                        break;
+                        
+                    default:
+                        blocks1.add(Sq.constant(Block.FREE));
+                    }
+                } else if(board0.blockAt(c).isBonus()){
+                    Sq<Block> b = board0.blocksAt(c);
+                    boolean alreadyBlasted = false;
+                    
+                    for(int i = 0 ; i < Ticks.WALL_CRUMBLING_TICKS && b.head() != Block.FREE; i++){
+                        b = b.tail();
+                        if(b.head() == Block.FREE){
+                            alreadyBlasted = true;
+                        }
+                    }
+                    
+                    if(!alreadyBlasted){
+                        blocks1.add(Sq.repeat(Ticks.BONUS_DISAPPEARING_TICKS, board0.blockAt(c)));
+                        blocks1.add(Sq.constant(Block.FREE));
+                    }
+                }
+                
+            } else {
+                blocks1.add(board0.blocksAt(c));
+            }
+        }
+        
+        
+        
+        return null;
+    }
+
     public Map<Cell, Bomb> bombedCells() {
         Map<Cell, Bomb> bombCells = new HashMap<Cell, Bomb>();
 
@@ -230,17 +300,6 @@ public final class GameState {
         return blastCells;
     }
 
-    public GameState next(Map<PlayerID, Optional<Direction>> speedChangeEvents,
-            Set<PlayerID> bombDropEvents) {
-        return null;
-    }
-
-    List<Player> nextPlayers(List<Player> players0,
-            Map<PlayerID, Bonus> playerBonuses, Set<Cell> bombedCells1,
-            Board board1, Set<Cell> blastedCells1,
-            Map<PlayerID, Optional<Direction>> speedChangeEvents) {
-      return null; //TODO
-    }
     /*
      * private static List<Player> nextPlayers(List<Player> players0,
      * List<Sq<Cell>> blasts0) { List<Player> players1 = new

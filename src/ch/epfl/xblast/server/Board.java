@@ -191,7 +191,10 @@ public final class Board {
 
     }
     
-    
+    /*---------------------------------------------------
+     *                  FOR TEST
+     * --------------------------------------------------
+     */
     public static Board boardForTestWithOnlyFreeBlocks(){
         List<Sq<Block>> boardTest = new ArrayList<Sq<Block>>();
         for(int i = 0 ; i < Cell.COUNT ; i++){
