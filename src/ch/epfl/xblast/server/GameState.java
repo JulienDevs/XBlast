@@ -210,7 +210,6 @@ public final class GameState {
         return blasts1;
     }
 
-<<<<<<< HEAD
     public Map<Cell, Bomb> bombedCells() {
         Map<Cell, Bomb> bombCells = new HashMap<Cell, Bomb>();
 
