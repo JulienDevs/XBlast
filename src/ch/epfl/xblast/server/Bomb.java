@@ -18,10 +18,10 @@ import ch.epfl.xblast.PlayerID;
  * @author Julien Malka (259041)
  */
 public final class Bomb {
-    public final PlayerID ownerId;
-    public final Cell position;
-    public final Sq<Integer> fuseLengths;
-    public final int range;
+    private final PlayerID ownerId;
+    private final Cell position;
+    private final Sq<Integer> fuseLengths;
+    private final int range;
 
     /**
      * Main constructor. Constructs a bomb given its owner, position, fuse

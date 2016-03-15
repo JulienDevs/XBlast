@@ -1,11 +1,16 @@
 package ch.epfl.xblast.server;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 
 import ch.epfl.cs108.Sq;
 import ch.epfl.xblast.Cell;
+import ch.epfl.xblast.Direction;
 import ch.epfl.xblast.PlayerID;
 
 /**
@@ -205,54 +210,62 @@ public final class GameState {
         return blasts1;
     }
 
+    public Map<Cell, Bomb> bombedCells() {
+        Map<Cell, Bomb> bombCells = new HashMap<Cell, Bomb>();
+
+        for (Bomb b : bombs) {
+            bombCells.put(b.position(), b);
+        }
+
+        return bombCells;
+    }
+
+    public Set<Cell> blastedCells() {
+        Set<Cell> blastCells = new HashSet<Cell>();
+
+        for (Sq<Cell> b : blasts) {
+            blastCells.add(b.head());
+        }
+
+        return blastCells;
+    }
+
+    public GameState next(Map<PlayerID, Optional<Direction>> speedChangeEvents,
+            Set<PlayerID> bombDropEvents) {
+        return null;
+    }
+
     /*
-    private static List<Player> nextPlayers(List<Player> players0,
-            List<Sq<Cell>> blasts0) {
-        List<Player> players1 = new ArrayList<Player>();
-
-        for (Player p : players0) {
-            for (Sq<Cell> b : blasts0) {
-                if (p.position().containingCell().equals(b.head())) {
-                    players1.add(new Player(p.id(), p.statesForNextLife(),
-                            p.directedPositions().tail(), p.maxBombs(),
-                            p.bombRange()));
-                }
-            }
-
-            players1.add(new Player(p.id(), p.lifeStates().tail(),
-                    p.directedPositions().tail(), p.maxBombs(), p.bombRange()));
-
-        }
-
-        return players1;
-    }
-
-    private static List<Sq<Sq<Cell>>> nextExplosions(List<Bomb> bombs0,
-            List<Sq<Sq<Cell>>> explosions0, List<Sq<Cell>> blasts0) {
-        List<Sq<Sq<Cell>>> explosions1 = new ArrayList<Sq<Sq<Cell>>>();
-
-        for (Sq<Sq<Cell>> e : explosions0) {
-            if (!e.tail().isEmpty())
-                explosions1.add(e.tail());
-        }
-
-        for (Bomb bomb : bombs0) {
-            if (bomb.fuseLength() == 1) {
-                for (Sq<Sq<Cell>> arm : bomb.explosion()) {
-                    explosions1.add(arm);
-                }
-            }
-
-            for (Sq<Cell> blast : blasts0) {
-                if (bomb.position().equals(blast.head())) {
-                    for (Sq<Sq<Cell>> arm : bomb.explosion()) {
-                        explosions1.add(arm);
-                    }
-                }
-            }
-        }
-
-        return explosions1;
-    }
-    */
+     * private static List<Player> nextPlayers(List<Player> players0,
+     * List<Sq<Cell>> blasts0) { List<Player> players1 = new
+     * ArrayList<Player>();
+     * 
+     * for (Player p : players0) { for (Sq<Cell> b : blasts0) { if
+     * (p.position().containingCell().equals(b.head())) { players1.add(new
+     * Player(p.id(), p.statesForNextLife(), p.directedPositions().tail(),
+     * p.maxBombs(), p.bombRange())); } }
+     * 
+     * players1.add(new Player(p.id(), p.lifeStates().tail(),
+     * p.directedPositions().tail(), p.maxBombs(), p.bombRange()));
+     * 
+     * }
+     * 
+     * return players1; }
+     * 
+     * private static List<Sq<Sq<Cell>>> nextExplosions(List<Bomb> bombs0,
+     * List<Sq<Sq<Cell>>> explosions0, List<Sq<Cell>> blasts0) {
+     * List<Sq<Sq<Cell>>> explosions1 = new ArrayList<Sq<Sq<Cell>>>();
+     * 
+     * for (Sq<Sq<Cell>> e : explosions0) { if (!e.tail().isEmpty())
+     * explosions1.add(e.tail()); }
+     * 
+     * for (Bomb bomb : bombs0) { if (bomb.fuseLength() == 1) { for
+     * (Sq<Sq<Cell>> arm : bomb.explosion()) { explosions1.add(arm); } }
+     * 
+     * for (Sq<Cell> blast : blasts0) { if
+     * (bomb.position().equals(blast.head())) { for (Sq<Sq<Cell>> arm :
+     * bomb.explosion()) { explosions1.add(arm); } } } }
+     * 
+     * return explosions1; }
+     */
 }
