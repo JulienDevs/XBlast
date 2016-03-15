@@ -9,20 +9,18 @@ import java.util.NoSuchElementException;
  * @author Julien Malka (259041)
  */
 public enum Block {
-    FREE, INDESTRUCTIBLE_WALL, DESTRUCTIBLE_WALL, CRUMBLING_WALL, BONUS_BOMB(Bonus.INC_BOMB), BONUS_RANGE(Bonus.INC_RANGE);
-    
+    FREE, INDESTRUCTIBLE_WALL, DESTRUCTIBLE_WALL, CRUMBLING_WALL, BONUS_BOMB(
+            Bonus.INC_BOMB), BONUS_RANGE(Bonus.INC_RANGE);
+
     private Bonus maybeAssociatedBonus;
-    
-    
+
     private Block(Bonus maybeAssociatedBonus) {
         this.maybeAssociatedBonus = maybeAssociatedBonus;
-      }
-    
+    }
+
     private Block() {
-         this.maybeAssociatedBonus = null;
-      }
-    
-    
+        this.maybeAssociatedBonus = null;
+    }
 
     /**
      * Returns true if and only if a block is free.
@@ -55,25 +53,27 @@ public enum Block {
         return (this == INDESTRUCTIBLE_WALL || this == DESTRUCTIBLE_WALL
                 || this == CRUMBLING_WALL);
     }
-    
+
     /**
-     * Return true if the block is a bonuss 
-     * @return true if the block is a bonus
+     * Return true if the block is a bonus.
+     * 
+     * @return true if the block is a bonus, false otherwise
      */
-    public boolean isBonus(){
-        return(this == BONUS_BOMB || this== BONUS_RANGE);
+    public boolean isBonus() {
+        return (this == BONUS_BOMB || this == BONUS_RANGE);
     }
-    
+
     /**
-     * @return wich type of bonus the block is 
-     * @throws NoSuchElementException if the block is not a bonus
+     * @return which type of bonus the block is
+     * @throws NoSuchElementException
+     *             if the block is not a bonus
      */
-    
-    public Bonus associatedBonus() throws NoSuchElementException{
-      if(maybeAssociatedBonus==null){
-          throw new NoSuchElementException();
-      }  else{
-          return maybeAssociatedBonus;
-      }
+
+    public Bonus associatedBonus() throws NoSuchElementException {
+        if (maybeAssociatedBonus == null) {
+            throw new NoSuchElementException();
+        } else {
+            return maybeAssociatedBonus;
+        }
     }
 }

@@ -34,9 +34,8 @@ public final class GameState {
     private static final List<List<Integer>> PERMUTATION = Lists
             .permutations(Arrays.asList(1, 2, 3, 4));
     private static final Random RANDOM = new Random(2016);
-    private static final int BOMB = 0;
-    private static final int RANGE = 1;
-    private static final int FREE = 2;
+    private static final Block[] PROBABILITY_BLOCKS = { Block.BONUS_BOMB,
+            Block.BONUS_RANGE, Block.FREE };
 
     /**
      * Main constructor.
@@ -186,7 +185,38 @@ public final class GameState {
 
     public GameState next(Map<PlayerID, Optional<Direction>> speedChangeEvents,
             Set<PlayerID> bombDropEvents) {
-        // TODO
+        List<Sq<Cell>> blasts1 = nextBlasts(blasts, board, explosions);
+
+        Set<Cell> consumedBonuses = new HashSet<Cell>();
+        Map<PlayerID, Bonus> playerBonuses = new HashMap<PlayerID, Bonus>();
+        Set<Cell> takenBonuses = new HashSet<Cell>(); // Bonuses already taken
+                                                      // by players. Used to
+                                                      // avoid that two players
+                                                      // take the same bonus.
+
+        Cell c;
+        for (Integer i : PERMUTATION.get(Math.floorMod(RANDOM.nextInt(), 24))) {
+            c = players.get(i).position().containingCell();
+
+            if (board.blockAt(c).isBonus()) {
+                consumedBonuses.add(c);
+
+                if (!takenBonuses.contains(c)) {
+                    playerBonuses.put(players.get(i).id(),
+                            board.blockAt(c).associatedBonus());
+                    takenBonuses.add(c);
+                }
+            }
+        }
+
+        Set<Cell> blastedCells = new HashSet<Cell>();
+
+        for (Sq<Cell> b : blasts) {
+            blastedCells.add(b.head());
+        }
+
+        Board board1 = nextBoard(board, consumedBonuses, blastedCells);
+
         return null;
     }
 
@@ -231,53 +261,52 @@ public final class GameState {
     private static Board nextBoard(Board board0, Set<Cell> consumedBonuses,
             Set<Cell> blastedCells1) {
         List<Sq<Block>> blocks1 = new ArrayList<Sq<Block>>();
-        
-        for(Cell c : Cell.ROW_MAJOR_ORDER){
-            if(consumedBonuses.contains(c)){
+
+        for (Cell c : Cell.ROW_MAJOR_ORDER) {
+            if (consumedBonuses.contains(c)) {
                 blocks1.add(Sq.constant(Block.FREE));
-            } else if(blastedCells1.contains(c)){
-                if(board0.blockAt(c) == Block.DESTRUCTIBLE_WALL){
-                    blocks1.add(Sq.repeat(Ticks.WALL_CRUMBLING_TICKS, Block.CRUMBLING_WALL));
-                    
-                    int n = RANDOM.nextInt(3);
-                    
-                    switch(n){
-                    case BOMB :
-                        blocks1.add(Sq.constant(Block.BONUS_BOMB));
-                        break;
-                        
-                    case RANGE :
-                        blocks1.add(Sq.constant(Block.BONUS_RANGE));
-                        break;
-                        
-                    default:
-                        blocks1.add(Sq.constant(Block.FREE));
-                    }
-                } else if(board0.blockAt(c).isBonus()){
+            } else if (blastedCells1.contains(c)) {
+                if (board0.blockAt(c) == Block.DESTRUCTIBLE_WALL) {
+                    blocks1.add((Sq.repeat(Ticks.WALL_CRUMBLING_TICKS,
+                            Block.CRUMBLING_WALL)).concat(Sq.constant(
+                                    PROBABILITY_BLOCKS[RANDOM.nextInt(3)])));
+                } else if (board0.blockAt(c).isBonus()) {
                     Sq<Block> b = board0.blocksAt(c);
                     boolean alreadyBlasted = false;
-                    
-                    for(int i = 0 ; i < Ticks.WALL_CRUMBLING_TICKS && b.head() != Block.FREE; i++){
+
+                    for (int i = 0; i < Ticks.WALL_CRUMBLING_TICKS
+                            && b.head() != Block.FREE; i++) {
                         b = b.tail();
-                        if(b.head() == Block.FREE){
+                        if (b.head() == Block.FREE) {
                             alreadyBlasted = true;
                         }
                     }
-                    
-                    if(!alreadyBlasted){
-                        blocks1.add(Sq.repeat(Ticks.BONUS_DISAPPEARING_TICKS, board0.blockAt(c)));
+
+                    if (!alreadyBlasted) {
+                        blocks1.add(Sq.repeat(Ticks.BONUS_DISAPPEARING_TICKS,
+                                board0.blockAt(c)));
                         blocks1.add(Sq.constant(Block.FREE));
                     }
                 }
-                
+
             } else {
                 blocks1.add(board0.blocksAt(c));
             }
         }
-        
-        
-        
+
         return null;
+    }
+
+    private static List<Sq<Sq<Cell>>> nextExplosions(List<Bomb> bombs0,
+            List<Sq<Sq<Cell>>> explosions0, List<Sq<Cell>> blasts0) {
+        List<Sq<Sq<Cell>>> explosions1 = new ArrayList<Sq<Sq<Cell>>>();
+
+        for (Sq<Sq<Cell>> e : explosions0) {
+            if (!e.tail().isEmpty())
+                explosions1.add(e.tail());
+        }
+
+        return explosions1;
     }
 
     public Map<Cell, Bomb> bombedCells() {
@@ -317,20 +346,6 @@ public final class GameState {
      * 
      * return players1; }
      * 
-     * private static List<Sq<Sq<Cell>>> nextExplosions(List<Bomb> bombs0,
-     * List<Sq<Sq<Cell>>> explosions0, List<Sq<Cell>> blasts0) {
-     * List<Sq<Sq<Cell>>> explosions1 = new ArrayList<Sq<Sq<Cell>>>();
      * 
-     * for (Sq<Sq<Cell>> e : explosions0) { if (!e.tail().isEmpty())
-     * explosions1.add(e.tail()); }
-     * 
-     * for (Bomb bomb : bombs0) { if (bomb.fuseLength() == 1) { for
-     * (Sq<Sq<Cell>> arm : bomb.explosion()) { explosions1.add(arm); } }
-     * 
-     * for (Sq<Cell> blast : blasts0) { if
-     * (bomb.position().equals(blast.head())) { for (Sq<Sq<Cell>> arm :
-     * bomb.explosion()) { explosions1.add(arm); } } } }
-     * 
-     * return explosions1; }
      */
 }
