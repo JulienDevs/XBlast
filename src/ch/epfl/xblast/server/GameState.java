@@ -210,6 +210,7 @@ public final class GameState {
         return blasts1;
     }
 
+<<<<<<< HEAD
     public Map<Cell, Bomb> bombedCells() {
         Map<Cell, Bomb> bombCells = new HashMap<Cell, Bomb>();
 
@@ -235,6 +236,12 @@ public final class GameState {
         return null;
     }
 
+    List<Player> nextPlayers(List<Player> players0,
+            Map<PlayerID, Bonus> playerBonuses, Set<Cell> bombedCells1,
+            Board board1, Set<Cell> blastedCells1,
+            Map<PlayerID, Optional<Direction>> speedChangeEvents) {
+      return null; //TODO
+    }
     /*
      * private static List<Player> nextPlayers(List<Player> players0,
      * List<Sq<Cell>> blasts0) { List<Player> players1 = new
