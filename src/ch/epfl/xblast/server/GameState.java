@@ -32,7 +32,8 @@ public final class GameState {
     private final List<Sq<Cell>> blasts;
 
     private static final List<List<PlayerID>> PERMUTATION = Lists
-            .permutations(Arrays.asList(PlayerID.PLAYER_1, PlayerID.PLAYER_2, PlayerID.PLAYER_3, PlayerID.PLAYER_4));
+            .permutations(Arrays.asList(PlayerID.PLAYER_1, PlayerID.PLAYER_2,
+                    PlayerID.PLAYER_3, PlayerID.PLAYER_4));
     private static final Random RANDOM = new Random(2016);
     private static final Block[] PROBABILITY_BLOCKS = { Block.BONUS_BOMB,
             Block.BONUS_RANGE, Block.FREE };
@@ -183,6 +184,16 @@ public final class GameState {
         return alivePlayers;
     }
 
+    /**
+     * Generates a new GameState on time t+1 given the state of the game on time
+     * t.
+     * 
+     * @param speedChangeEvents
+     *            changes in players directions on time t
+     * @param bombDropEvents
+     *            bombs dropped by players on time t
+     * @return GameState on time t+1
+     */
     public GameState next(Map<PlayerID, Optional<Direction>> speedChangeEvents,
             Set<PlayerID> bombDropEvents) {
         List<Sq<Cell>> blasts1 = nextBlasts(blasts, board, explosions);
@@ -194,16 +205,17 @@ public final class GameState {
                                                       // avoid that two players
                                                       // take the same bonus.
 
-        //We sort the players in the order of the current permutation
+        // We sort the players in the order of the current permutation
         List<Player> players0 = new ArrayList<Player>();
-        for(PlayerID id : PERMUTATION.get(Math.floorMod(RANDOM.nextInt(), PERMUTATION.size()))){
-            for(Player p : players){
-                if(p.id() == id){
+        for (PlayerID id : PERMUTATION
+                .get(Math.floorMod(RANDOM.nextInt(), PERMUTATION.size()))) {
+            for (Player p : players) {
+                if (p.id() == id) {
                     players0.add(p);
                 }
             }
         }
-        
+
         Cell c;
         for (Player p : players0) {
             c = p.position().containingCell();
@@ -228,18 +240,19 @@ public final class GameState {
         Board board1 = nextBoard(board, consumedBonuses, blastedCells);
 
         List<Sq<Sq<Cell>>> explosions1 = nextExplosions(explosions);
-        
-        
+
         Set<Cell> bombedCellsSet = new HashSet<Cell>();
         Map<Bomb, Cell> bombedCellsMap = new HashMap<Bomb, Cell>();
-        
-        for(int i = 0 ; i < bombedCells().size() ; i++){
+
+        for (int i = 0; i < bombedCells().size(); i++) {
             bombedCellsSet.add(bombedCellsMap.get(i));
         }
-        
-        List<Player> players1 = nextPlayers(players, playerBonuses, bombedCellsSet, board1, blastedCells(), speedChangeEvents);
 
-        return new GameState(ticks + 1, board1, players1, null, explosions1, blasts1 );
+        List<Player> players1 = nextPlayers(players, playerBonuses,
+                bombedCellsSet, board1, blastedCells(), speedChangeEvents);
+
+        return new GameState(ticks + 1, board1, players1, null, explosions1,
+                blasts1);
     }
 
     /**
@@ -272,6 +285,16 @@ public final class GameState {
         return blasts1;
     }
 
+    /**
+     * 
+     * @param players0
+     * @param playerBonuses
+     * @param bombedCells1
+     * @param board1
+     * @param blastedCells1
+     * @param speedChangeEvents
+     * @return
+     */
     private static List<Player> nextPlayers(List<Player> players0,
             Map<PlayerID, Bonus> playerBonuses, Set<Cell> bombedCells1,
             Board board1, Set<Cell> blastedCells1,
@@ -280,6 +303,18 @@ public final class GameState {
         return null; // TODO
     }
 
+    /**
+     * Determines the state of the board on time t+1, given the state of the
+     * board, consumed bonuses and blasted cells on time t.
+     * 
+     * @param board0
+     *            board on time t
+     * @param consumedBonuses
+     *            bonuses consumed by players on time t
+     * @param blastedCells1
+     *            cells containing a blast on time t
+     * @return board on time t+1
+     */
     private static Board nextBoard(Board board0, Set<Cell> consumedBonuses,
             Set<Cell> blastedCells1) {
         List<Sq<Block>> blocks1 = new ArrayList<Sq<Block>>();
@@ -319,6 +354,15 @@ public final class GameState {
         return null;
     }
 
+    /**
+     * Handles the aging of the explosions (and their aging only). The
+     * explosions coming from exploding bombs is handled in next().
+     * 
+     * @param explosions0
+     *            explosions on time t
+     * @return explosions on time t+1, not including those created by exploding
+     *         bombs.
+     */
     private static List<Sq<Sq<Cell>>> nextExplosions(
             List<Sq<Sq<Cell>>> explosions0) {
         List<Sq<Sq<Cell>>> explosions1 = new ArrayList<Sq<Sq<Cell>>>();
@@ -331,6 +375,12 @@ public final class GameState {
         return explosions1;
     }
 
+    /**
+     * Returns a map containing all cells that have a bomb on it and the
+     * associated bombs.
+     * 
+     * @return map of cells that have a bomb on it, and the associated bombs
+     */
     public Map<Cell, Bomb> bombedCells() {
         Map<Cell, Bomb> bombCells = new HashMap<Cell, Bomb>();
 
@@ -341,6 +391,11 @@ public final class GameState {
         return bombCells;
     }
 
+    /**
+     * Returns a set with all the cells that have a blast on it.
+     * 
+     * @return set with all the cells that have a blast on it
+     */
     public Set<Cell> blastedCells() {
         Set<Cell> blastCells = new HashSet<Cell>();
 
