@@ -31,8 +31,8 @@ public final class GameState {
     private final List<Sq<Sq<Cell>>> explosions;
     private final List<Sq<Cell>> blasts;
 
-    private static final List<List<Integer>> PERMUTATION = Lists
-            .permutations(Arrays.asList(1, 2, 3, 4));
+    private static final List<List<PlayerID>> PERMUTATION = Lists
+            .permutations(Arrays.asList(PlayerID.PLAYER_1, PlayerID.PLAYER_2, PlayerID.PLAYER_3, PlayerID.PLAYER_4));
     private static final Random RANDOM = new Random(2016);
     private static final Block[] PROBABILITY_BLOCKS = { Block.BONUS_BOMB,
             Block.BONUS_RANGE, Block.FREE };
@@ -194,15 +194,25 @@ public final class GameState {
                                                       // avoid that two players
                                                       // take the same bonus.
 
+        //We sort the players in the order of the current permutation
+        List<Player> players0 = new ArrayList<Player>();
+        for(PlayerID id : PERMUTATION.get(Math.floorMod(RANDOM.nextInt(), PERMUTATION.size()))){
+            for(Player p : players){
+                if(p.id() == id){
+                    players0.add(p);
+                }
+            }
+        }
+        
         Cell c;
-        for (Integer i : PERMUTATION.get(Math.floorMod(RANDOM.nextInt(), 24))) {
-            c = players.get(i).position().containingCell();
+        for (Player p : players0) {
+            c = p.position().containingCell();
 
             if (board.blockAt(c).isBonus()) {
                 consumedBonuses.add(c);
 
                 if (!takenBonuses.contains(c)) {
-                    playerBonuses.put(players.get(i).id(),
+                    playerBonuses.put(p.id(),
                             board.blockAt(c).associatedBonus());
                     takenBonuses.add(c);
                 }
