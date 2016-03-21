@@ -196,7 +196,14 @@ public final class GameState {
      */
     public GameState next(Map<PlayerID, Optional<Direction>> speedChangeEvents,
             Set<PlayerID> bombDropEvents) {
+        
+        
+        //1. Evolution of blast
+        
         List<Sq<Cell>> blasts1 = nextBlasts(blasts, board, explosions);
+        
+        
+        //2 Evolution of the board in function of the bonus and the blasted cells
 
         Set<Cell> consumedBonuses = new HashSet<Cell>();
         Map<PlayerID, Bonus> playerBonuses = new HashMap<PlayerID, Bonus>();
@@ -232,14 +239,26 @@ public final class GameState {
         }
 
         Set<Cell> blastedCells = new HashSet<Cell>();
+        
 
         for (Sq<Cell> b : blasts) {
             blastedCells.add(b.head());
         }
 
         Board board1 = nextBoard(board, consumedBonuses, blastedCells);
+        
+        
+        
+        
+        
+        
+        //3. Evolution of the explosions
+        
+        
 
         List<Sq<Sq<Cell>>> explosions1 = nextExplosions(explosions);
+        
+        //4. Evolution of the bombs
 
         Set<Cell> bombedCellsSet = new HashSet<Cell>();
         Map<Bomb, Cell> bombedCellsMap = new HashMap<Bomb, Cell>();
@@ -247,6 +266,8 @@ public final class GameState {
         for (int i = 0; i < bombedCells().size(); i++) {
             bombedCellsSet.add(bombedCellsMap.get(i));
         }
+        
+        //5. Evolution of the Players
 
         List<Player> players1 = nextPlayers(players, playerBonuses,
                 bombedCellsSet, board1, blastedCells(), speedChangeEvents);
