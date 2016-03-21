@@ -405,6 +405,48 @@ public final class GameState {
 
         return blastCells;
     }
+    
+
+    private static List<Bomb> newlyDroppedBombs(List<Player> players0, Set<PlayerID> bombDropEvents, List<Bomb> bombs0){
+        List<Bomb> bombs1 = new ArrayList<Bomb>();
+        
+       for(Player player : players0){
+           if(bombDropEvents.contains(player.id()) && player.isAlive()){
+               Player bestPlayer = player;
+               for(Player player2 : players0){
+                   if(player2.position() == bestPlayer.position()&& bombDropEvents.contains(player2.id())&& player2.isAlive()){
+                       if(players0.indexOf(player2)<players0.indexOf(bestPlayer)){
+                           bestPlayer = player2;
+                       }
+                       
+                   }
+                   
+               }
+               
+              boolean okay = true; 
+              int nbOfBombs=0;
+                for(Bomb bomb : bombs0){
+                    if(bomb.position()==bestPlayer.position().containingCell()){
+                    okay=false;
+                    }
+                    if(bomb.ownerId()==bestPlayer.id()){
+                        nbOfBombs++;
+                    }
+                    
+                }   
+                   
+              if(okay && bestPlayer.maxBombs()>=nbOfBombs+1){
+                  bombs1.add(new Bomb(bestPlayer.id(),bestPlayer.position().containingCell(),Ticks.BOMB_FUSE_TICKS,bestPlayer.bombRange()));
+              } 
+           }
+       }
+        
+     return bombs1;   
+    }
+    
+    
+    
+    
 
     /*
      * private static List<Player> nextPlayers(List<Player> players0,
