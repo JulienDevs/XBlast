@@ -197,14 +197,13 @@ public final class GameState {
      */
     public GameState next(Map<PlayerID, Optional<Direction>> speedChangeEvents,
             Set<PlayerID> bombDropEvents) {
-        
-        
-        //1. Evolution of blast
-        
+
+        // 1. Evolution of blast
+
         List<Sq<Cell>> blasts1 = nextBlasts(blasts, board, explosions);
-        
-        
-        //2 Evolution of the board in function of the bonus and the blasted cells
+
+        // 2 Evolution of the board in function of the bonus and the blasted
+        // cells
 
         Set<Cell> consumedBonuses = new HashSet<Cell>();
         Map<PlayerID, Bonus> playerBonuses = new HashMap<PlayerID, Bonus>();
@@ -215,6 +214,7 @@ public final class GameState {
 
         // We sort the players in the order of the current permutation
         List<Player> players0 = new ArrayList<Player>();
+
         for (PlayerID id : PERMUTATION
                 .get(Math.floorMod(RANDOM.nextInt(), PERMUTATION.size()))) {
             for (Player p : players) {
@@ -225,6 +225,7 @@ public final class GameState {
         }
 
         Cell c;
+
         for (Player p : players0) {
             c = p.position().containingCell();
 
@@ -240,58 +241,50 @@ public final class GameState {
         }
 
         Set<Cell> blastedCells = new HashSet<Cell>();
-        
 
         for (Sq<Cell> b : blasts1) {
             blastedCells.add(b.head());
         }
 
         Board board1 = nextBoard(board, consumedBonuses, blastedCells);
-        
-        
-        
-        
-        
-        
-        //3. Evolution of the explosions
-        
-        
+
+        // 3. Evolution of the explosions
 
         List<Sq<Sq<Cell>>> explosions1 = nextExplosions(explosions);
-        
-        //4. Evolution of the bombs
-        
-        List<Bomb> bombs0 = newlyDroppedBombs(players, bombDropEvents,bombs);
+
+        // 4. Evolution of the bombs
+
+        List<Bomb> bombs0 = newlyDroppedBombs(players, bombDropEvents, bombs);
         List<Bomb> bombs1 = new ArrayList<Bomb>();
         Set<Cell> blastedCells1 = new HashSet<Cell>();
 
         for (Sq<Cell> b : blasts1) {
             blastedCells1.add(b.head());
         }
-        
+
         bombs0.addAll(bombs);
-        for(Bomb bomb : bombs0){
-            if(bomb.fuseLength()==0 || blastedCells1.contains(bomb.position())){
+        for (Bomb bomb : bombs0) {
+            if (bomb.fuseLength() == 0
+                    || blastedCells1.contains(bomb.position())) {
                 explosions1.addAll(bomb.explosion());
-                
-            }else{
-                bombs1.add(new Bomb(bomb.ownerId(),bomb.position(),bomb.fuseLengths().tail(),bomb.range()));
-                
+
+            } else {
+                bombs1.add(new Bomb(bomb.ownerId(), bomb.position(),
+                        bomb.fuseLengths().tail(), bomb.range()));
+
             }
-            
-            
+
         }
-        
-        
-        
-        
-        //5. Evolution of the Players
 
-        List<Player> players1 = nextPlayers(players, playerBonuses,
-                bombedCellsSet, board1, blastedCells(), speedChangeEvents);
-
-        return new GameState(ticks + 1, board1, players1, bombs1, explosions1,
-                blasts1);
+        // 5. Evolution of the Players
+        /*
+         * List<Player> players1 = nextPlayers(players, playerBonuses,
+         * bombedCellsSet, board1, blastedCells(), speedChangeEvents);
+         * 
+         * return new GameState(ticks + 1, board1, players1, bombs1,
+         * explosions1, blasts1);
+         */
+        return null;
     }
 
     /**
@@ -456,43 +449,49 @@ public final class GameState {
 
         return blastCells;
     }
-    
 
-    private static List<Bomb> newlyDroppedBombs(List<Player> players0, Set<PlayerID> bombDropEvents, List<Bomb> bombs0){
+    private static List<Bomb> newlyDroppedBombs(List<Player> players0,
+            Set<PlayerID> bombDropEvents, List<Bomb> bombs0) {
         List<Bomb> bombs1 = new ArrayList<Bomb>();
-        
-       for(Player player : players0){
-           if(bombDropEvents.contains(player.id()) && player.isAlive()){
-               Player bestPlayer = player;
-               for(Player player2 : players0){
-                   if(player2.position() == bestPlayer.position()&& bombDropEvents.contains(player2.id())&& player2.isAlive()){
-                       if(players0.indexOf(player2)<players0.indexOf(bestPlayer)){
-                           bestPlayer = player2;
-                       }
-                       
-                   }
-                   
-               }
-               
-              boolean okay = true; 
-              int nbOfBombs=0;
-                for(Bomb bomb : bombs0){
-                    if(bomb.position()==bestPlayer.position().containingCell()){
-                    okay=false;
+
+        for (Player player : players0) {
+            if (bombDropEvents.contains(player.id()) && player.isAlive()) {
+                Player bestPlayer = player;
+                for (Player player2 : players0) {
+                    if (player2.position() == bestPlayer.position()
+                            && bombDropEvents.contains(player2.id())
+                            && player2.isAlive()) {
+                        if (players0.indexOf(player2) < players0
+                                .indexOf(bestPlayer)) {
+                            bestPlayer = player2;
+                        }
+
                     }
-                    if(bomb.ownerId()==bestPlayer.id()){
+
+                }
+
+                boolean okay = true;
+                int nbOfBombs = 0;
+                for (Bomb bomb : bombs0) {
+                    if (bomb.position() == bestPlayer.position()
+                            .containingCell()) {
+                        okay = false;
+                    }
+                    if (bomb.ownerId() == bestPlayer.id()) {
                         nbOfBombs++;
                     }
-                    
-                }   
-                   
-              if(okay && bestPlayer.maxBombs()>=nbOfBombs+1){
-                  bombs1.add(new Bomb(bestPlayer.id(),bestPlayer.position().containingCell(),Ticks.BOMB_FUSE_TICKS,bestPlayer.bombRange()));
-              } 
-           }
-       }
-        
-     return bombs1;   
+
+                }
+
+                if (okay && bestPlayer.maxBombs() >= nbOfBombs + 1) {
+                    bombs1.add(new Bomb(bestPlayer.id(),
+                            bestPlayer.position().containingCell(),
+                            Ticks.BOMB_FUSE_TICKS, bestPlayer.bombRange()));
+                }
+            }
+        }
+
+        return bombs1;
     }
 
 }
