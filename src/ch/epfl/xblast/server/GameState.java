@@ -15,6 +15,7 @@ import ch.epfl.xblast.Cell;
 import ch.epfl.xblast.Direction;
 import ch.epfl.xblast.Lists;
 import ch.epfl.xblast.PlayerID;
+import ch.epfl.xblast.server.Player.LifeState.State;
 
 /**
  * Immutable class. Handles representation of the game state (its players, bombs
@@ -337,8 +338,20 @@ public final class GameState {
             Map<PlayerID, Bonus> playerBonuses, Set<Cell> bombedCells1,
             Board board1, Set<Cell> blastedCells1,
             Map<PlayerID, Optional<Direction>> speedChangeEvents) {
+        List<Player> players1 = new ArrayList<Player>();
+        
+        for(Player player : players0){
+           if(speedChangeEvents.containsKey(player)&& (player.lifeState().state()==State.VULNERABLE||player.lifeState().state()==State.INVULNERABLE)){
+             Player.DirectedPosition lol =  player.directedPositions().findFirst(p->player.position().isCentral());
+               
+           } 
+            
+            
+        }
+        
+        
 
-        return null; // TODO
+  return players1;
     }
 
     /**
