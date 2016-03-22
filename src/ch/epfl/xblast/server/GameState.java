@@ -259,20 +259,37 @@ public final class GameState {
         List<Sq<Sq<Cell>>> explosions1 = nextExplosions(explosions);
         
         //4. Evolution of the bombs
+        
+        List<Bomb> bombs0 = newlyDroppedBombs(players, bombDropEvents,bombs);
+        List<Bomb> bombs1 = new ArrayList<Bomb>();
+        Set<Cell> blastedCells1 = new HashSet<Cell>();
 
-        Set<Cell> bombedCellsSet = new HashSet<Cell>();
-        Map<Bomb, Cell> bombedCellsMap = new HashMap<Bomb, Cell>();
-
-        for (int i = 0; i < bombedCells().size(); i++) {
-            bombedCellsSet.add(bombedCellsMap.get(i));
+        for (Sq<Cell> b : blasts1) {
+            blastedCells1.add(b.head());
         }
+        
+        bombs0.addAll(bombs);
+        for(Bomb bomb : bombs0){
+            if(bomb.fuseLength()==0 || blastedCells1.contains(bomb.position())){
+                explosions1.addAll(bomb.explosion());
+                
+            }else{
+                bombs1.add(new Bomb(bomb.ownerId(),bomb.position(),bomb.fuseLengths().tail(),bomb.range()));
+                
+            }
+            
+            
+        }
+        
+        
+        
         
         //5. Evolution of the Players
 
         List<Player> players1 = nextPlayers(players, playerBonuses,
                 bombedCellsSet, board1, blastedCells(), speedChangeEvents);
 
-        return new GameState(ticks + 1, board1, players1, null, explosions1,
+        return new GameState(ticks + 1, board1, players1, bombs1, explosions1,
                 blasts1);
     }
 
@@ -464,28 +481,5 @@ public final class GameState {
         
      return bombs1;   
     }
-    
-    
-    
-    
 
-    /*
-     * private static List<Player> nextPlayers(List<Player> players0,
-     * List<Sq<Cell>> blasts0) { List<Player> players1 = new
-     * ArrayList<Player>();
-     * 
-     * for (Player p : players0) { for (Sq<Cell> b : blasts0) { if
-     * (p.position().containingCell().equals(b.head())) { players1.add(new
-     * Player(p.id(), p.statesForNextLife(), p.directedPositions().tail(),
-     * p.maxBombs(), p.bombRange())); } }
-     * 
-     * players1.add(new Player(p.id(), p.lifeStates().tail(),
-     * p.directedPositions().tail(), p.maxBombs(), p.bombRange()));
-     * 
-     * }
-     * 
-     * return players1; }
-     * 
-     * 
-     */
 }
