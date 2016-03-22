@@ -113,15 +113,7 @@ public final class Cell {
     }
 
     public int rowMajorIndex() {
-        for (int i = 0; i < ROW_MAJOR_ORDER.size(); i++) {
-            if (ROW_MAJOR_ORDER.get(i).x == x
-                    && ROW_MAJOR_ORDER.get(i).y == y) {
-
-                return i;
-            }
-
-        }
-        return 0;
+        return y*COLUMNS+x;
 
     }
 

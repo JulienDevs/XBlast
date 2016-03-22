@@ -241,7 +241,7 @@ public final class GameState {
         Set<Cell> blastedCells = new HashSet<Cell>();
         
 
-        for (Sq<Cell> b : blasts) {
+        for (Sq<Cell> b : blasts1) {
             blastedCells.add(b.head());
         }
 
