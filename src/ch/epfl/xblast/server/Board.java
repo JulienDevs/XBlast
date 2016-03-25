@@ -115,20 +115,22 @@ public final class Board {
         for (int m = 0; m < quadrantNWBBlocks.size(); m++) {
             quadrantNWBBlocks.set(m, Lists.mirrored(quadrantNWBBlocks.get(m)));
         }
-        quadrantNWBBlocks.addAll(Lists.mirrored(quadrantNWBBlocks));
+        quadrantNWBBlocks = Lists.mirrored(quadrantNWBBlocks);
 
-        for (int i = 0; i < quadrantNWBBlocks.size() + 2; i++) {
-            for (int j = 0; j < quadrantNWBBlocks.get(i).size() + 2; j++) {
-                if (i == 0 || j == 0 || i == quadrantNWBBlocks.size() + 2
-                        || j == quadrantNWBBlocks.get(i).size() + 2) {
+        for (int i = 0; i < quadrantNWBBlocks.size()+2; i++) {
+            for (int j = 0; j < quadrantNWBBlocks.get(2).size() + 2; j++) {
+                if (i == 0 || j == 0 || i == quadrantNWBBlocks.size() + 1
+                        || j == quadrantNWBBlocks.get(2).size() + 1) {
                     symmetricBlocks.add(Sq.constant(Block.INDESTRUCTIBLE_WALL));
                 } else {
                     symmetricBlocks
-                            .add(Sq.constant(quadrantNWBBlocks.get(i).get(j)));
+                            .add(Sq.constant(quadrantNWBBlocks.get(i-1)
+                                    .get(j-1)));
                 }
             }
         }
-
+        System.out.println(symmetricBlocks.size());
+      
         return new Board(symmetricBlocks);
     }
 
