@@ -277,14 +277,19 @@ public final class GameState {
         }
 
         // 5. Evolution of the Players
-        /*
-         * List<Player> players1 = nextPlayers(players, playerBonuses,
-         * bombedCellsSet, board1, blastedCells(), speedChangeEvents);
-         * 
-         * return new GameState(ticks + 1, board1, players1, bombs1,
-         * explosions1, blasts1);
-         */
-        return null;
+        
+        Set<Cell> bombedCellsSet = new HashSet<Cell>();
+        for (Bomb b : bombs1) {
+            bombedCellsSet.add(b.position());
+        }
+        
+          List<Player> players1 = nextPlayers(players, playerBonuses,
+         bombedCellsSet, board1, blastedCells1, speedChangeEvents);
+          
+          return new GameState(ticks + 1, board1, players1, bombs1,
+          explosions1, blasts1);
+         
+        
     }
 
     /**
@@ -325,7 +330,7 @@ public final class GameState {
      * @param board1
      * @param blastedCells1
      * @param speedChangeEvents
-     * @return
+     * @return 
      */
     private static List<Player> nextPlayers(List<Player> players0,
             Map<PlayerID, Bonus> playerBonuses, Set<Cell> bombedCells1,
@@ -334,10 +339,85 @@ public final class GameState {
         List<Player> players1 = new ArrayList<Player>();
         
         for(Player player : players0){
-           if(speedChangeEvents.containsKey(player)&& (player.lifeState().state()==State.VULNERABLE||player.lifeState().state()==State.INVULNERABLE)){
-             Player.DirectedPosition lol =  player.directedPositions().findFirst(p->player.position().isCentral());
-               
-           } 
+            
+            Player.DirectedPosition actualDirection = player.directedPositions().head();
+            Sq<Player.DirectedPosition> futurePositions;
+            
+            if(speedChangeEvents.containsKey(player)){
+                Optional<Direction> choice = speedChangeEvents.get(player);
+                if(choice==null||((player.lifeState().state()==State.VULNERABLE||player.lifeState().state()==State.INVULNERABLE))){
+                    futurePositions = Player.DirectedPosition.stopped(actualDirection); 
+                    
+                }else{
+                    Player.DirectedPosition cell = player.directedPositions().findFirst(p->p.position().isCentral());   
+                    Sq<Player.DirectedPosition> debut =  player.directedPositions().takeWhile(p->!p.position().isCentral());
+                    Sq<Player.DirectedPosition> fin = Player.DirectedPosition.moving(new Player.DirectedPosition(cell.position(), choice.orElse(Direction.E)));
+                    futurePositions = debut.concat(fin);
+                    
+                    
+                    Player.DirectedPosition stopPosition = futurePositions.findFirst((Player.DirectedPosition p)->
+                    (
+                            (bombedCells1.contains(p.position().containingCell())&&p.position().distanceToCentral()==6&&p.position().neighbor(p.direction()).distanceToCentral()==5)
+                            ||(board1.blockAt(p.position().containingCell().neighbor(p.direction())).castsShadow()&&p.position().isCentral())
+                            ));
+                    
+                    
+                    
+                   debut = futurePositions.takeWhile((Player.DirectedPosition p)->
+                    !(
+                            (bombedCells1.contains(p.position().containingCell())&&p.position().distanceToCentral()==6&&p.position().neighbor(p.direction()).distanceToCentral()==5)
+                            ||(board1.blockAt(p.position().containingCell().neighbor(p.direction())).castsShadow()&&p.position().isCentral())
+                            ));
+                    
+                    
+                    fin = Player.DirectedPosition.stopped(stopPosition);
+                    futurePositions = debut.concat(fin);
+                    
+                }
+                
+                
+                
+            }else{
+                futurePositions = Player.DirectedPosition.moving(actualDirection);
+                
+                
+                Player.DirectedPosition stopPosition = futurePositions.findFirst((Player.DirectedPosition p)->
+                (
+                        (bombedCells1.contains(p.position().containingCell())&&p.position().distanceToCentral()==6&&p.position().neighbor(p.direction()).distanceToCentral()==5)
+                        ||(board1.blockAt(p.position().containingCell().neighbor(p.direction())).castsShadow()&&p.position().isCentral())
+                        ));
+                
+                
+                
+                Sq<Player.DirectedPosition> debut = futurePositions.takeWhile((Player.DirectedPosition p)->
+                !(
+                        (bombedCells1.contains(p.position().containingCell())&&p.position().distanceToCentral()==6&&p.position().neighbor(p.direction()).distanceToCentral()==5)
+                        ||(board1.blockAt(p.position().containingCell().neighbor(p.direction())).castsShadow()&&p.position().isCentral())
+                        ));
+                
+                
+                Sq<Player.DirectedPosition> fin = Player.DirectedPosition.stopped(stopPosition);
+                futurePositions = debut.concat(fin);
+                
+                
+            }
+            
+            Sq<Player.LifeState> futureLifeStates;
+            if(blastedCells1.contains(futurePositions.head())){
+             futureLifeStates = player.statesForNextLife(); 
+            }else{
+                futureLifeStates = player.lifeStates();
+            }
+            
+            if(playerBonuses.containsKey(player.id())){
+                player = playerBonuses.get(player.id()).applyTo(player);
+                
+            }
+            
+            players1.add(new Player(player.id(),futureLifeStates,futurePositions,player.maxBombs(),player.bombRange()));
+            
+            
+            
             
             
         }
