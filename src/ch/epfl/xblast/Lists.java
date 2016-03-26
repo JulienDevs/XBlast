@@ -69,7 +69,7 @@ public final class Lists {
        }
           
       }
-      if(newLists.size()==fact){
+      if(newLists.size() == fact){
           return newLists;
       }else{
           System.out.println(newLists);
