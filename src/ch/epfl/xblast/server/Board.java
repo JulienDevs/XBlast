@@ -142,6 +142,7 @@ public final class Board {
      * @return sequence of blocks of c
      */
     public Sq<Block> blocksAt(Cell c) {
+        
         return this.blocks.get(c.rowMajorIndex());
     }
 

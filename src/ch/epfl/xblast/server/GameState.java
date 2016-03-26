@@ -264,7 +264,7 @@ public final class GameState {
 
         bombs0.addAll(bombs);
         for (Bomb bomb : bombs0) {
-            if (bomb.fuseLength() == 0
+            if (bomb.fuseLengths().isEmpty()
                     || blastedCells1.contains(bomb.position())) {
                 explosions1.addAll(bomb.explosion());
 
@@ -336,8 +336,12 @@ public final class GameState {
             Board board1, Set<Cell> blastedCells1,
             Map<PlayerID, Optional<Direction>> speedChangeEvents) {
         List<Player> players1 = new ArrayList<Player>();
-
+        System.out.println(speedChangeEvents);
         for (Player player : players0) {
+            System.out.println(player.id());
+            System.out.println(player.direction());
+            System.out.println(speedChangeEvents.get(player));
+            
 
             Player.DirectedPosition actualDirection = player.directedPositions()
                     .head();
@@ -345,7 +349,8 @@ public final class GameState {
 
             if (speedChangeEvents.containsKey(player)) {
                 Optional<Direction> choice = speedChangeEvents.get(player);
-                if (choice == null || ((player.lifeState()
+                System.out.println(choice.isPresent());
+                if (choice ==null || ((player.lifeState()
                         .state() == State.VULNERABLE
                         || player.lifeState().state() == State.INVULNERABLE))) {
                     futurePositions = Player.DirectedPosition
@@ -402,16 +407,18 @@ public final class GameState {
                         .moving(actualDirection);
 
                 Player.DirectedPosition stopPosition = futurePositions
-                        .findFirst((Player.DirectedPosition p) -> ((bombedCells1
+                        .findFirst(p -> (bombedCells1
                                 .contains(p.position().containingCell())
                                 && p.position().distanceToCentral() == 6
                                 && p.position().neighbor(p.direction())
-                                        .distanceToCentral() == 5)
-                                || (board1
-                                        .blockAt(p.position().containingCell()
-                                                .neighbor(p.direction()))
-                                        .castsShadow()
-                                        && p.position().isCentral())));
+                                        .distanceToCentral() == 5||(board1
+                                                
+                                                .blockAt(
+                                                        p.position()
+                                                        .containingCell()
+                                                        .neighbor(p.direction()))
+                                                .castsShadow()
+                                                && p.position().isCentral())));
 
                 Sq<Player.DirectedPosition> debut = futurePositions.takeWhile(
                         (Player.DirectedPosition p) -> !((bombedCells1
@@ -499,7 +506,7 @@ public final class GameState {
             }
         }
 
-        return null;
+        return new Board(blocks1);
     }
 
     /**
