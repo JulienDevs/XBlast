@@ -435,9 +435,9 @@ public final class GameState {
                 Sq<Player.DirectedPosition> fin = Player.DirectedPosition
                         .stopped(stopPosition);
                 futurePositions = debut.concat(fin);
-
+                futurePositions = futurePositions.tail();
             }
-
+            
             Sq<Player.LifeState> futureLifeStates;
             if (blastedCells1.contains(futurePositions.head())) {
                 futureLifeStates = player.statesForNextLife();

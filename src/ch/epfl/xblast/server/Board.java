@@ -27,6 +27,7 @@ public final class Board {
      */
     public Board(List<Sq<Block>> blocks) throws IllegalArgumentException {
         if (blocks == null || blocks.size() != Cell.COUNT) {
+            System.out.println(blocks.size());
             throw new IllegalArgumentException();
         }
         this.blocks = blocks;
