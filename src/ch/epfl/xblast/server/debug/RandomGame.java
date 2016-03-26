@@ -21,12 +21,12 @@ public class RandomGame {
         
         List<List<Block>> board = new ArrayList<List<Block>>(
                 Arrays.asList(
-                        Arrays.asList(Block.FREE, Block.FREE, Block.FREE, Block.FREE , Block.FREE, Block.BONUS_BOMB, Block.FREE),
-                        Arrays.asList(Block.FREE, Block.INDESTRUCTIBLE_WALL, Block.BONUS_BOMB, Block.INDESTRUCTIBLE_WALL, Block.BONUS_BOMB, Block.INDESTRUCTIBLE_WALL, Block.BONUS_BOMB),
-                        Arrays.asList(Block.FREE, Block.BONUS_RANGE, Block.FREE, Block.FREE, Block.FREE, Block.BONUS_BOMB, Block.FREE),
-                        Arrays.asList(Block.BONUS_RANGE, Block.INDESTRUCTIBLE_WALL, Block.FREE, Block.INDESTRUCTIBLE_WALL, Block.INDESTRUCTIBLE_WALL, Block.INDESTRUCTIBLE_WALL, Block.INDESTRUCTIBLE_WALL),
-                        Arrays.asList(Block.FREE, Block.BONUS_BOMB, Block.FREE, Block.BONUS_BOMB, Block.FREE, Block.FREE, Block.FREE),
-                        Arrays.asList(Block.BONUS_RANGE, Block.INDESTRUCTIBLE_WALL, Block.BONUS_RANGE, Block.INDESTRUCTIBLE_WALL, Block.BONUS_RANGE, Block.INDESTRUCTIBLE_WALL, Block.FREE)
+                        Arrays.asList(Block.FREE, Block.FREE, Block.FREE, Block.FREE , Block.FREE, Block.DESTRUCTIBLE_WALL, Block.FREE),
+                        Arrays.asList(Block.FREE, Block.INDESTRUCTIBLE_WALL, Block.DESTRUCTIBLE_WALL, Block.INDESTRUCTIBLE_WALL, Block.DESTRUCTIBLE_WALL, Block.INDESTRUCTIBLE_WALL, Block.DESTRUCTIBLE_WALL),
+                        Arrays.asList(Block.FREE, Block.DESTRUCTIBLE_WALL, Block.FREE, Block.FREE, Block.FREE, Block.DESTRUCTIBLE_WALL, Block.FREE),
+                        Arrays.asList(Block.DESTRUCTIBLE_WALL, Block.INDESTRUCTIBLE_WALL, Block.FREE, Block.INDESTRUCTIBLE_WALL, Block.INDESTRUCTIBLE_WALL, Block.INDESTRUCTIBLE_WALL, Block.INDESTRUCTIBLE_WALL),
+                        Arrays.asList(Block.FREE, Block.DESTRUCTIBLE_WALL, Block.FREE, Block.DESTRUCTIBLE_WALL, Block.FREE, Block.FREE, Block.FREE),
+                        Arrays.asList(Block.DESTRUCTIBLE_WALL, Block.INDESTRUCTIBLE_WALL, Block.DESTRUCTIBLE_WALL, Block.INDESTRUCTIBLE_WALL, Block.DESTRUCTIBLE_WALL, Block.INDESTRUCTIBLE_WALL, Block.FREE)
                         )
                 );
         
