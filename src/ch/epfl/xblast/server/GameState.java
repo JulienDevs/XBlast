@@ -264,7 +264,7 @@ public final class GameState {
 
         bombs0.addAll(bombs);
         for (Bomb bomb : bombs0) {
-            if (bomb.fuseLengths().isEmpty()
+            if (bomb.fuseLengths().tail().isEmpty()
                     || blastedCells1.contains(bomb.position())) {
                 explosions1.addAll(bomb.explosion());
 
