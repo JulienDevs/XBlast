@@ -402,7 +402,7 @@ public final class GameState {
 
                 }
 
-            } else {
+            } else { //J'ai pas encore décidé si ce block else était vraiment utile :))))
                 futurePositions = Player.DirectedPosition
                         .moving(actualDirection);
 
