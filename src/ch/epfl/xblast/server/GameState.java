@@ -63,7 +63,7 @@ public final class GameState {
     public GameState(int ticks, Board board, List<Player> players,
             List<Bomb> bombs, List<Sq<Sq<Cell>>> explosions,
             List<Sq<Cell>> blasts)
-            throws IllegalArgumentException, NullPointerException {
+                    throws IllegalArgumentException, NullPointerException {
 
         if (blasts == null || explosions == null || bombs == null
                 || players == null || board == null) {
@@ -337,11 +337,12 @@ public final class GameState {
             Map<PlayerID, Optional<Direction>> speedChangeEvents) {
         List<Player> players1 = new ArrayList<Player>();
         System.out.println(speedChangeEvents);
+
+        // On parcours les joueurs
         for (Player player : players0) {
             System.out.println(player.id());
             System.out.println(player.direction());
             System.out.println(speedChangeEvents.get(player));
-            
 
             Player.DirectedPosition actualDirection = player.directedPositions()
                     .head();
@@ -350,13 +351,13 @@ public final class GameState {
             if (speedChangeEvents.containsKey(player)) {
                 Optional<Direction> choice = speedChangeEvents.get(player);
                 System.out.println(choice.isPresent());
-                if (choice ==null || ((player.lifeState()
-                        .state() == State.VULNERABLE
-                        || player.lifeState().state() == State.INVULNERABLE))) {
+
+                // Si le joueur ne veut pas tourner, ou qu'il ne peut pas bouger.
+                if (choice == null || !player.lifeState().canMove()) {
                     futurePositions = Player.DirectedPosition
                             .stopped(actualDirection);
-
-                } else {
+                
+                } else { //Si le joueur veut tourner et qu'il peut bouger
                     Player.DirectedPosition cell = player.directedPositions()
                             .findFirst(p -> p.position().isCentral());
                     Sq<Player.DirectedPosition> debut = player
@@ -378,15 +379,17 @@ public final class GameState {
                                                     .neighbor(p.direction())
                                                     .distanceToCentral() == 5)
                                             || (board1.blockAt(p.position()
-                                                    .containingCell().neighbor(
-                                                            p.direction()))
+                                                    .containingCell()
+                                                    .neighbor(p.direction()))
                                                     .castsShadow()
                                                     && p.position()
                                                             .isCentral())));
 
-                    debut = futurePositions.takeWhile(
-                            (Player.DirectedPosition p) -> !((bombedCells1
-                                    .contains(p.position().containingCell())
+                    debut = futurePositions
+                            .takeWhile(
+                                    (Player.DirectedPosition p) -> !((bombedCells1
+                                            .contains(p.position()
+                                                    .containingCell())
                                     && p.position().distanceToCentral() == 6
                                     && p.position().neighbor(p.direction())
                                             .distanceToCentral() == 5)
@@ -411,14 +414,12 @@ public final class GameState {
                                 .contains(p.position().containingCell())
                                 && p.position().distanceToCentral() == 6
                                 && p.position().neighbor(p.direction())
-                                        .distanceToCentral() == 5||(board1
-                                                
-                                                .blockAt(
-                                                        p.position()
-                                                        .containingCell()
-                                                        .neighbor(p.direction()))
-                                                .castsShadow()
-                                                && p.position().isCentral())));
+                                        .distanceToCentral() == 5
+                                || (board1
+
+                .blockAt(p.position().containingCell().neighbor(p.direction()))
+                                        .castsShadow()
+                                        && p.position().isCentral())));
 
                 Sq<Player.DirectedPosition> debut = futurePositions.takeWhile(
                         (Player.DirectedPosition p) -> !((bombedCells1
@@ -437,7 +438,7 @@ public final class GameState {
                 futurePositions = debut.concat(fin);
                 futurePositions = futurePositions.tail();
             }
-            
+
             Sq<Player.LifeState> futureLifeStates;
             if (blastedCells1.contains(futurePositions.head())) {
                 futureLifeStates = player.statesForNextLife();
@@ -498,7 +499,11 @@ public final class GameState {
                         blocks1.add(Sq.repeat(Ticks.BONUS_DISAPPEARING_TICKS,
                                 board0.blockAt(c)));
                         blocks1.add(Sq.constant(Block.FREE));
+                    } else {
+                        blocks1.add(board0.blocksAt(c));
                     }
+                } else {
+                    blocks1.add(board0.blocksAt(c));
                 }
 
             } else {
