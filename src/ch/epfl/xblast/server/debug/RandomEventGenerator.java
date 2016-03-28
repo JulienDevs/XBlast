@@ -37,6 +37,8 @@ public final class RandomEventGenerator {
             if (rng.nextInt(speedChangeProb) == 0)
                 events.put(pId, possibleSpeeds.get(rng.nextInt(possibleSpeeds.size())));
         }
+        System.out.println(events.keySet());
+        System.out.println(events.values());
         return Collections.unmodifiableMap(events);
     }
 
