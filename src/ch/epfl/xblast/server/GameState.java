@@ -604,9 +604,7 @@ public final class GameState {
             if (bombDropEvents.contains(player.id()) && player.isAlive()
                     && !bombedCells.contains(player.position().containingCell())
                     && player.maxBombs() > nbBombs) {
-                bombs1.add(new Bomb(player.id(),
-                        player.position().containingCell(),
-                        Ticks.BOMB_FUSE_TICKS, player.bombRange()));
+                bombs1.add(player.newBomb());
                 bombedCells.add(player.position().containingCell());
             }
         }
