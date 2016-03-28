@@ -339,8 +339,8 @@ public final class GameState {
 
         // On parcours les joueurs
         for (Player player : players0) {
-            System.out.println(player.id());
-            System.out.println(player.direction());
+            System.out.print(player.id() + " ");
+            System.out.print(player.direction() + " ");
             System.out.println(speedChangeEvents.get(player));
 
             Player.DirectedPosition actualDirection = player.directedPositions()
@@ -352,14 +352,16 @@ public final class GameState {
                 System.out.println(choice.isPresent());
 
                 // Si le joueur ne veut pas tourner, ou qu'il ne peut pas
-                // bouger, on l'arrete.
+                // bouger, on lui passe la queue de sa sequence de
+                // directedPositions du tick precedent.
                 if (choice == null || !player.lifeState().canMove()) {
-                    futurePositions = Player.DirectedPosition
-                            .stopped(actualDirection);
+                    futurePositions = player.directedPositions().tail();
 
                 } else { // Si le joueur veut tourner et qu'il peut bouger
+
                     // La prochaine sous-case central dans le chemin du joueur
-                    Player.DirectedPosition cell = player.directedPositions()
+                    Player.DirectedPosition centralSubCell = player
+                            .directedPositions()
                             .findFirst(p -> p.position().isCentral());
 
                     // Sequence de DirectedPosition jusqu'a la prochaine
@@ -369,17 +371,19 @@ public final class GameState {
                             .takeWhile(p -> !p.position().isCentral());
 
                     // Sequence de DirectedPosition en partant de la prochaine
-                    // sous-case central dans le chemin du joueure et allant
+                    // sous-case (inclus) central dans le chemin du joueure et
+                    // allant
                     // dans la direction dans laquelle le joueur veut tourner
                     Sq<Player.DirectedPosition> end = Player.DirectedPosition
-                            .moving(new Player.DirectedPosition(cell.position(),
-                                    choice.get()));
+                            .moving(new Player.DirectedPosition(
+                                    centralSubCell.position(), choice.get()));
 
                     futurePositions = start.concat(end);
 
-                    // La position d'arret du joueur. C-a-d:
+                    // La position d'arret du joueur. C-a-d si:
                     // - Cette position est à 6 sous-cases de la sous-case
                     // central de la case ou est posée une bombe
+                    // ou
                     // - Cette position est à une sous-case central, dont la
                     // case voisine est un mur, et le joueur regarde ce mur
                     Player.DirectedPosition stopPosition = futurePositions
@@ -399,20 +403,9 @@ public final class GameState {
                                                     && p.position()
                                                             .isCentral())));
 
-                    start = futurePositions
-                            .takeWhile(
-                                    (Player.DirectedPosition p) -> !((bombedCells1
-                                            .contains(p.position()
-                                                    .containingCell())
-                                    && p.position().distanceToCentral() == 6
-                                    && p.position().neighbor(choice.get())
-                                            .distanceToCentral() == 5)
-                                    || (board1
-                                            .blockAt(p.position()
-                                                    .containingCell()
-                                                    .neighbor(choice.get()))
-                                            .castsShadow()
-                                            && p.position().isCentral())));
+                    start = futurePositions.takeWhile(
+                            (Player.DirectedPosition p) -> p.position()
+                                    .equals(stopPosition.position()));
 
                     end = Player.DirectedPosition.stopped(stopPosition);
                     futurePositions = start.concat(end);
