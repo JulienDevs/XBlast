@@ -201,7 +201,7 @@ public final class GameState {
 
         List<Sq<Cell>> blasts1 = nextBlasts(blasts, board, explosions);
 
-        // 2 Evolution of the board in function of the bonus and the blasted
+        // 2 Evolution of the board in function of the bonuses and the blasted
         // cells
 
         Set<Cell> consumedBonuses = new HashSet<Cell>();
@@ -253,7 +253,7 @@ public final class GameState {
 
         // 4. Evolution of the bombs
 
-        List<Bomb> bombs0 = newlyDroppedBombs(players, bombDropEvents, bombs);
+        List<Bomb> bombs0 = newlyDroppedBombs(players0, bombDropEvents, bombs);
         List<Bomb> bombs1 = new ArrayList<Bomb>();
         Set<Cell> blastedCells1 = new HashSet<Cell>();
 
@@ -419,7 +419,8 @@ public final class GameState {
 
                 }
 
-            } else { //J'ai pas encore décidé si ce block else était vraiment utile :))))
+            } else { // J'ai pas encore décidé si ce block else était vraiment
+                     // utile :))))
                 futurePositions = Player.DirectedPosition
                         .moving(actualDirection);
 
@@ -583,41 +584,30 @@ public final class GameState {
     private static List<Bomb> newlyDroppedBombs(List<Player> players0,
             Set<PlayerID> bombDropEvents, List<Bomb> bombs0) {
         List<Bomb> bombs1 = new ArrayList<Bomb>();
+        List<Cell> bombedCells = new ArrayList<Cell>();
+
+        for (Bomb b : bombs0) {
+            bombedCells.add(b.position());
+        }
+
+        int nbBombs;
 
         for (Player player : players0) {
-            if (bombDropEvents.contains(player.id()) && player.isAlive()) {
-                Player bestPlayer = player;
-                for (Player player2 : players0) {
-                    if (player2.position() == bestPlayer.position()
-                            && bombDropEvents.contains(player2.id())
-                            && player2.isAlive()) {
-                        if (players0.indexOf(player2) < players0
-                                .indexOf(bestPlayer)) {
-                            bestPlayer = player2;
-                        }
+            nbBombs = 0;
 
-                    }
-
+            for (Bomb b : bombs0) {
+                if (b.ownerId() == player.id()) {
+                    nbBombs++;
                 }
+            }
 
-                boolean okay = true;
-                int nbOfBombs = 0;
-                for (Bomb bomb : bombs0) {
-                    if (bomb.position() == bestPlayer.position()
-                            .containingCell()) {
-                        okay = false;
-                    }
-                    if (bomb.ownerId() == bestPlayer.id()) {
-                        nbOfBombs++;
-                    }
-
-                }
-
-                if (okay && bestPlayer.maxBombs() >= nbOfBombs + 1) {
-                    bombs1.add(new Bomb(bestPlayer.id(),
-                            bestPlayer.position().containingCell(),
-                            Ticks.BOMB_FUSE_TICKS, bestPlayer.bombRange()));
-                }
+            if (bombDropEvents.contains(player.id()) && player.isAlive()
+                    && !bombedCells.contains(player.position().containingCell())
+                    && player.maxBombs() > nbBombs) {
+                bombs1.add(new Bomb(player.id(),
+                        player.position().containingCell(),
+                        Ticks.BOMB_FUSE_TICKS, player.bombRange()));
+                bombedCells.add(player.position().containingCell());
             }
         }
 
