@@ -587,6 +587,8 @@ public final class GameState {
         List<Bomb> bombs1 = new ArrayList<Bomb>();
         List<Cell> bombedCells = new ArrayList<Cell>();
 
+        System.out.println(bombDropEvents);
+        
         for (Bomb b : bombs0) {
             bombedCells.add(b.position());
         }
