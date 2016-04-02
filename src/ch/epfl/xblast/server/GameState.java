@@ -380,7 +380,14 @@ public final class GameState {
                             .stopped(centralSubCell);
 
                     futurePositions = start.concat(end);
-                } else { // Si le joueur veut tourner et qu'il peut bouger
+                } else {
+                    Sq<Player.DirectedPosition> start;
+                    Sq<Player.DirectedPosition> end;
+                    if(choice.isParallelTo(player.direction())){
+                      futurePositions= Player.DirectedPosition.moving(new Player.DirectedPosition(player.position(), choice));  
+                    }else{
+                    
+                    // Si le joueur veut tourner et qu'il peut bouger
 
                     // La prochaine sous-case central dans le chemin du joueur
                     Player.DirectedPosition centralSubCell = player
@@ -392,7 +399,7 @@ public final class GameState {
 
                     // Sequence de DirectedPosition jusqu'a la prochaine
                     // sous-case centrale (non-inclus) dans le chemin du joueur
-                    Sq<Player.DirectedPosition> start = player
+                   start = player
                             .directedPositions().takeWhile(p -> !p.position()
                                     .equals(centralSubCell.position()));
 
@@ -402,11 +409,12 @@ public final class GameState {
                     // sous-case (inclus) central dans le chemin du joueur et
                     // allant
                     // dans la direction dans laquelle le joueur veut tourner
-                    Sq<Player.DirectedPosition> end = Player.DirectedPosition
+                    end = Player.DirectedPosition
                             .moving(new Player.DirectedPosition(
                                     centralSubCell.position(), choice));
 
                     futurePositions = start.concat(end);
+                    }
 
                     // La position d'arret du joueur. C-a-d si:
                     // - Cette position est à 6 sous-cases de la sous-case
@@ -508,17 +516,17 @@ public final class GameState {
                                 board0.blockAt(c)));
                         blocks1.add(Sq.constant(Block.FREE));
                     } else {
-                        blocks1.add(board0.blocksAt(c));
+                        blocks1.add(board0.blocksAt(c).tail());
                     }
                 } else {
-                    blocks1.add(board0.blocksAt(c));
+                    blocks1.add(board0.blocksAt(c).tail());
                 }
 
             } else {
-                blocks1.add(board0.blocksAt(c));
+                blocks1.add(board0.blocksAt(c).tail());
             }
         }
-
+        System.out.println("taille: "+blocks1.size());
         return new Board(blocks1);
     }
 
