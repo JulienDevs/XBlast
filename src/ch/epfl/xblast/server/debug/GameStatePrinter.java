@@ -1,15 +1,10 @@
 package ch.epfl.xblast.server.debug;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Set;
-
-import com.sun.javafx.collections.MappingChange.Map;
 
 import ch.epfl.xblast.Cell;
 import ch.epfl.xblast.server.Block;
 import ch.epfl.xblast.server.Board;
-import ch.epfl.xblast.server.Bomb;
 import ch.epfl.xblast.server.GameState;
 import ch.epfl.xblast.server.Player;
 
@@ -30,7 +25,7 @@ public final class GameStatePrinter {
                     }
                 }
                 Block b = board.blockAt(c);
-                System.out.print(stringForBlock(b, s.bombedCells().getOrDefault(c, null), s.blastedCells(), c));
+                System.out.print(stringForBlock(b));
             }
             System.out.println();
         }
@@ -48,20 +43,15 @@ public final class GameStatePrinter {
         return b.toString();
     }
 
-    private static String stringForBlock(Block b, Bomb bomb, Set<Cell> blasts, Cell c) {
-        if(bomb != null){
-            return "XX";
-        } else if(blasts.contains(c)){
-            return "**";
-        } else {
-            switch (b) {
-            case FREE: return "  ";
-            case INDESTRUCTIBLE_WALL: return "##";
-            case DESTRUCTIBLE_WALL: return "??";
-            case CRUMBLING_WALL: return "¿¿";
-            case BONUS_BOMB: return "+b";
-            case BONUS_RANGE: return "+r";
-            default: throw new Error();
+    private static String stringForBlock(Block b) {
+        switch (b) {
+        case FREE: return "  ";
+        case INDESTRUCTIBLE_WALL: return "##";
+        case DESTRUCTIBLE_WALL: return "??";
+        case CRUMBLING_WALL: return "¿¿";
+        case BONUS_BOMB: return "+b";
+        case BONUS_RANGE: return "+r";
+        default: throw new Error();
         }
     }
 }
