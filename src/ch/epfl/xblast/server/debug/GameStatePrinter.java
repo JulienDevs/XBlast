@@ -54,5 +54,5 @@ public final class GameStatePrinter {
         default: throw new Error();
         }
     }
-}
+
 }

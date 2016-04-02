@@ -434,7 +434,8 @@ public final class GameState {
                     end = Player.DirectedPosition.stopped(stopPosition);
                     futurePositions = start.concat(end);
                 }
-            }
+            } else
+                futurePositions = player.directedPositions();
 
             if (bombedCells1.contains(player.position().containingCell())
                     && player.position().distanceToCentral() == 6
@@ -447,9 +448,9 @@ public final class GameState {
 
             Sq<Player.LifeState> futureLifeStates;
             if (blastedCells1.contains(futurePositions.head())) {
-                futureLifeStates = player.statesForNextLife();
+                futureLifeStates = player.statesForNextLife().tail();
             } else {
-                futureLifeStates = player.lifeStates();
+                futureLifeStates = player.lifeStates().tail();
             }
 
             if (playerBonuses.containsKey(player.id())) {
