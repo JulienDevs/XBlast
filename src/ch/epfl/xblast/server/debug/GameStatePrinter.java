@@ -38,7 +38,9 @@ public final class GameStatePrinter {
 
     private static String stringForPlayer(Player p) {
         StringBuilder b = new StringBuilder();
+        if(System.getProperty("os.name").equals("Mac OS X")){
         b.append("\u001b[106m");
+        }
         b.append(p.id().ordinal() + 1);
         switch (p.direction()) {
         case N: b.append('↑'); break;
@@ -51,6 +53,10 @@ public final class GameStatePrinter {
 
 
     private static String stringForBlock(Block b, Bomb bomb, Set<Cell> blasts, Cell c) {
+       if(System.getProperty("os.name").equals("Mac OS X")){
+        
+        
+        
         if(bomb != null){
             return "XX";
         } else if(blasts.contains(c)){
@@ -67,5 +73,22 @@ public final class GameStatePrinter {
 
         }
     }
-}
+}else{
+    if(bomb != null){
+        return "XX";
+    } else if(blasts.contains(c)){
+        return "**";
+    } else {
+        switch (b) {
+        case FREE: return "  ";
+        case INDESTRUCTIBLE_WALL: return "##";
+        case DESTRUCTIBLE_WALL: return "??";
+        case CRUMBLING_WALL: return "¿¿";
+        case BONUS_BOMB: return "+b";
+        case BONUS_RANGE: return "+r";
+        default: throw new Error();
+    }
+    
+    
+}}}
 }
