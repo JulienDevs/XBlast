@@ -346,6 +346,7 @@ public final class GameState {
             System.out.println("Position du joueur " + player.id() + " : "
                     + player.position().toString() + "   "
                     + player.position().isCentral());
+            System.out.println("Lives " + player.lives());
 
             Player.DirectedPosition actualDirection = player.directedPositions()
                     .head();
@@ -447,8 +448,8 @@ public final class GameState {
             }
 
             Sq<Player.LifeState> futureLifeStates;
-            if (blastedCells1.contains(futurePositions.head())) {
-                futureLifeStates = player.statesForNextLife().tail();
+            if (blastedCells1.contains(futurePositions.head().position().containingCell())) {
+                futureLifeStates = player.statesForNextLife();
             } else {
                 futureLifeStates = player.lifeStates().tail();
             }
