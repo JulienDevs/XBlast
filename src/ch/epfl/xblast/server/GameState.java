@@ -362,9 +362,11 @@ public final class GameState {
                 } else if (choice == null) { // Si le joueur veut s'arreter, on
                                              // l'arrete à la prochaine
                                              // sous-case centrale
+
                     Player.DirectedPosition centralSubCell = player
                             .directedPositions()
-                            .findFirst(p -> p.position().isCentral());
+
+                    .findFirst(p -> p.position().isCentral());
 
                     System.out.println("Central subcell of the player: "
                             + centralSubCell.position().toString());
@@ -413,14 +415,7 @@ public final class GameState {
                     // case voisine est un mur, et le joueur regarde ce mur
                     Player.DirectedPosition stopPosition = futurePositions
                             .findFirst(
-                                    (Player.DirectedPosition p) -> ((bombedCells1
-                                            .contains(p.position()
-                                                    .containingCell())
-                                            && p.position()
-                                                    .distanceToCentral() == 6
-                                            && p.position().neighbor(choice)
-                                                    .distanceToCentral() == 5)
-                                            || (p.position().isCentral()
+                                    (Player.DirectedPosition p) -> ((p.position().isCentral()
                                                     && !board1
                                                             .blockAt(
                                                                     p.position()
@@ -439,9 +434,15 @@ public final class GameState {
                     end = Player.DirectedPosition.stopped(stopPosition);
                     futurePositions = start.concat(end);
                 }
+            }
 
+            if (bombedCells1.contains(player.position().containingCell())
+                    && player.position().distanceToCentral() == 6
+                    && player.position()
+                            .neighbor(player.direction()).distanceToCentral() == 5) {
+                futurePositions = player.directedPositions();
             } else {
-                futurePositions = player.directedPositions().tail();
+                futurePositions = futurePositions.tail();
             }
 
             Sq<Player.LifeState> futureLifeStates;
