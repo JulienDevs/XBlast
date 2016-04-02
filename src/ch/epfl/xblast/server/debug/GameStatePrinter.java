@@ -48,6 +48,10 @@ public final class GameStatePrinter {
         case S: b.append('↓'); break;
         case W: b.append('←'); break;
         }
+        if(System.getProperty("os.name").equals("Mac OS X")){
+            b.append("\u001b[49m");
+            }
+       
         return b.toString();
     }
 
