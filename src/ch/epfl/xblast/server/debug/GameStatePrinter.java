@@ -33,22 +33,23 @@ public final class GameStatePrinter {
 
     private static String stringForPlayer(Player p) {
         StringBuilder b = new StringBuilder();
+        b.append("\u001b[106m");
         b.append(p.id().ordinal() + 1);
         switch (p.direction()) {
-        case N: b.append('^'); break;
-        case E: b.append('>'); break;
-        case S: b.append('v'); break;
-        case W: b.append('<'); break;
+        case N: b.append('↑'); break;
+        case E: b.append('→'); break;
+        case S: b.append('↓'); break;
+        case W: b.append('←'); break;
         }
         return b.toString();
     }
 
     private static String stringForBlock(Block b) {
         switch (b) {
-        case FREE: return "  ";
-        case INDESTRUCTIBLE_WALL: return "##";
-        case DESTRUCTIBLE_WALL: return "??";
-        case CRUMBLING_WALL: return "¿¿";
+        case FREE: return "\u001b[43m  \u001b[49m";
+        case INDESTRUCTIBLE_WALL: return "\u001b[40m  \u001b[49m";
+        case DESTRUCTIBLE_WALL: return "\u001b[40m\u001b[97m??\u001b[39m\u001b[49m";
+        case CRUMBLING_WALL: return "\u001b[40m\u001b[97m¿¿\u001b[39m\u001b[49m";
         case BONUS_BOMB: return "+b";
         case BONUS_RANGE: return "+r";
         default: throw new Error();

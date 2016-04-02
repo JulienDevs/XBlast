@@ -16,7 +16,7 @@ import ch.epfl.xblast.server.Player;
  * @author Julien Malka (259041)
  */
 public class RandomGame {
-    public static void main(String []args){
+    public static void main(String []args) throws InterruptedException{
         RandomEventGenerator randomEvent = new RandomEventGenerator(2016, 30, 100);
         
         List<List<Block>> board = new ArrayList<List<Block>>(
@@ -44,6 +44,7 @@ public class RandomGame {
         while(!game.isGameOver()){
             GameStatePrinter.printGameState(game);
             game = game.next(randomEvent.randomSpeedChangeEvents(), randomEvent.randomBombDropEvents());
+            Thread.sleep(50);
         }
     }
 }
