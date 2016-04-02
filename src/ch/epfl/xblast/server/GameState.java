@@ -525,7 +525,7 @@ public final class GameState {
                 blocks1.add(board0.blocksAt(c).tail());
             }
         }
-        System.out.println("taille: "+blocks1.size());
+        //System.out.println("taille: "+blocks1.size());
         return new Board(blocks1);
     }
 
