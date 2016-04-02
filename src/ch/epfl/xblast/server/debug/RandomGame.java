@@ -44,7 +44,7 @@ public class RandomGame {
         while(!game.isGameOver()){
             GameStatePrinter.printGameState(game);
             game = game.next(randomEvent.randomSpeedChangeEvents(), randomEvent.randomBombDropEvents());
-            Thread.sleep(50);
+            Thread.sleep(20);
         }
     }
 }

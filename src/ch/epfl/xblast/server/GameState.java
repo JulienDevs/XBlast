@@ -503,8 +503,8 @@ public final class GameState {
                     Sq<Block> b = board0.blocksAt(c);
                     boolean alreadyBlasted = false;
 
-                    for (int i = 0; i < Ticks.WALL_CRUMBLING_TICKS
-                            && b.head() != Block.FREE; i++) {
+                    for (int i = 0; i < Ticks.BONUS_DISAPPEARING_TICKS
+                            ; i++) {
                         b = b.tail();
                         if (b.head() == Block.FREE) {
                             alreadyBlasted = true;
@@ -513,8 +513,7 @@ public final class GameState {
 
                     if (!alreadyBlasted) {
                         blocks1.add(Sq.repeat(Ticks.BONUS_DISAPPEARING_TICKS,
-                                board0.blockAt(c)));
-                        blocks1.add(Sq.constant(Block.FREE));
+                                board0.blockAt(c)).concat(Sq.constant(Block.FREE)));
                     } else {
                         blocks1.add(board0.blocksAt(c).tail());
                     }
