@@ -63,7 +63,7 @@ public final class GameState {
     public GameState(int ticks, Board board, List<Player> players,
             List<Bomb> bombs, List<Sq<Sq<Cell>>> explosions,
             List<Sq<Cell>> blasts)
-            throws IllegalArgumentException, NullPointerException {
+                    throws IllegalArgumentException, NullPointerException {
 
         if (blasts == null || explosions == null || bombs == null
                 || players == null || board == null) {
@@ -350,7 +350,6 @@ public final class GameState {
 
         System.out.println(speedChangeEvents);
 
-     // On parcours les joueurs
         for (Player player : players0) {
             if (player.isAlive()) {
                 System.out.print(player.id() + " ");
@@ -361,9 +360,6 @@ public final class GameState {
                         + player.position().isCentral());
                 System.out.println("Lives " + player.lives() + " State: "
                         + player.lifeState().state().toString());
-
-                Player.DirectedPosition actualDirection = player
-                        .directedPositions().head();
                 Sq<Player.DirectedPosition> futurePositions;
 
                 if (speedChangeEvents.containsKey(player.id())) {
@@ -371,19 +367,17 @@ public final class GameState {
                             .orElse(null);
                     System.out.println(choice);
 
-                    // Si le joueur ne peut pas bouger, on l'arrete
+                    // If the player can't move, the evolution of its directed
+                    // positions is stopped.
                     if (!player.lifeState().canMove()) {
-
                         futurePositions = player.directedPositions();
-                    } else if (choice == null) { // Si le joueur veut s'arreter,
-                                                 // on
-                                                 // l'arrete à la prochaine
-                                                 // sous-case centrale
+                    } else if (choice == null) { // If the player wants to stop,
+                                                 // he stops at the first
+                                                 // central subcell in his path.
 
                         System.out.println("LOLOLLOOLL");
                         Player.DirectedPosition centralSubCell = player
                                 .directedPositions()
-
                                 .findFirst(p -> p.position().isCentral());
 
                         System.out.println("Central subcell of the player: "
@@ -451,11 +445,10 @@ public final class GameState {
                         // case voisine est un mur, et le joueur regarde ce mur
                         Player.DirectedPosition stopPosition = futurePositions
                                 .findFirst((Player.DirectedPosition p) -> ((p
-                                        .position().isCentral() && !board1
-                                                .blockAt(p.position()
-                                                        .containingCell()
-                                                        .neighbor(choice))
-                                                .canHostPlayer())));
+                                        .position().isCentral()
+                                        && !(board1.blockAt(p.position()
+                                                .containingCell().neighbor(
+                                                        choice)) == Block.INDESTRUCTIBLE_WALL))));
 
                         System.out.println("Stop position:"
                                 + stopPosition.position().toString());
@@ -467,14 +460,26 @@ public final class GameState {
                         end = Player.DirectedPosition.stopped(stopPosition);
                         futurePositions = start.concat(end);
                     }
-                } else
+                } else {
                     futurePositions = player.directedPositions();
+                }
 
-                if (!(bombedCells1.contains(player.position().containingCell())
+                // If the player is blocked by a bomb, a destructible wall or a
+                // crumbling wall or if he can't move, we stop the evolution of
+                // its directed positions. Otherwise, if the bomb exploded or
+                // the wall was destroyed, the player's directed positions
+                // evolve again as he can move.
+                if ((!(bombedCells1.contains(player.position().containingCell())
                         && player.position().distanceToCentral() == 6
                         && player.position().neighbor(player.direction())
                                 .distanceToCentral() == 5)
-                        || player.lifeState().canMove()) {
+                        || !(board1.blockAt(
+                                player.position().containingCell().neighbor(
+                                        player.direction())) == Block.DESTRUCTIBLE_WALL)
+                        || !(board1.blockAt(
+                                player.position().containingCell().neighbor(
+                                        player.direction())) == Block.CRUMBLING_WALL))
+                        && player.lifeState().canMove()) {
                     futurePositions = futurePositions.tail();
                 }
 
@@ -554,7 +559,7 @@ public final class GameState {
                 blocks1.add(board0.blocksAt(c).tail());
             }
         }
-        
+
         return new Board(blocks1);
     }
 
