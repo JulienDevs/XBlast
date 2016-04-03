@@ -116,6 +116,7 @@ public final class Player {
      * @return player's sequence of LifeStates for next life
      */
     public Sq<LifeState> statesForNextLife() {
+        System.out.println(this.id);
         Sq<LifeState> init = Sq.repeat(Ticks.PLAYER_DYING_TICKS,
                 new LifeState(lives(), State.DYING));
         return init.concat(createLifeStates(lives() - 1));
