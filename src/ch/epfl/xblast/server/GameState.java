@@ -446,9 +446,9 @@ public final class GameState {
                         Player.DirectedPosition stopPosition = futurePositions
                                 .findFirst((Player.DirectedPosition p) -> ((p
                                         .position().isCentral()
-                                        && !(board1.blockAt(p.position()
+                                        && board1.blockAt(p.position()
                                                 .containingCell().neighbor(
-                                                        choice)) == Block.INDESTRUCTIBLE_WALL))));
+                                                        choice)) == Block.INDESTRUCTIBLE_WALL)));
 
                         System.out.println("Stop position:"
                                 + stopPosition.position().toString());
@@ -473,12 +473,13 @@ public final class GameState {
                         && player.position().distanceToCentral() == 6
                         && player.position().neighbor(player.direction())
                                 .distanceToCentral() == 5)
-                        || !(board1.blockAt(
+                        || (!(board1.blockAt(
                                 player.position().containingCell().neighbor(
                                         player.direction())) == Block.DESTRUCTIBLE_WALL)
-                        || !(board1.blockAt(
-                                player.position().containingCell().neighbor(
-                                        player.direction())) == Block.CRUMBLING_WALL))
+                                || !(board1.blockAt(player.position()
+                                        .containingCell().neighbor(
+                                                player.direction())) == Block.CRUMBLING_WALL))
+                                && player.position().isCentral())
                         && player.lifeState().canMove()) {
                     futurePositions = futurePositions.tail();
                 }

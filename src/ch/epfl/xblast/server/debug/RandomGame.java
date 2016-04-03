@@ -50,7 +50,6 @@ public class RandomGame {
                 players);
 
         while (!game.isGameOver()) {
-            Thread.sleep(1000);
             GameStatePrinter.printGameState(game);
             game = game.next(randomEvent.randomSpeedChangeEvents(),
                     randomEvent.randomBombDropEvents());
