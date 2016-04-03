@@ -369,8 +369,7 @@ public final class GameState {
 
                 // If the player can't move, he stops immediately
                 if (!player.lifeState().canMove()) {
-                    futurePositions = Player.DirectedPosition
-                            .stopped(actualDirection);
+                    futurePositions = player.directedPositions();
                 } else if (choice == null) { // If the player wants to stop and
                                              // he can move, we
                                              // stop him at the next central
@@ -384,7 +383,7 @@ public final class GameState {
                             + centralSubCell.position().toString());
 
                     Sq<Player.DirectedPosition> start = player
-                            .directedPositions().takeWhile(p -> p.position()
+                            .directedPositions().takeWhile(p -> !p.position()
                                     .equals(centralSubCell.position()));
 
                     Sq<Player.DirectedPosition> end = Player.DirectedPosition
@@ -428,12 +427,12 @@ public final class GameState {
                         futurePositions = start.concat(end);
                     }
 
-                    // The position where the player will stop. E.g.:
-                    // - Cette position est à 6 sous-cases de la sous-case
-                    // central de la case ou est posée une bombe
-                    // ou
-                    // - Cette position est une sous-case central, dont la
-                    // case voisine est un mur, et le joueur regarde ce mur
+                    // The position where the player will stop. I.e.:
+                    // - This position is 6 subcells of distance from the
+                    // central subcell of a bombed cell
+                    // or
+                    // - This position is a central subcell, and the player
+                    // looks at a neighbor cell which is a wall
                     Player.DirectedPosition stopPosition = futurePositions
                             .findFirst((Player.DirectedPosition p) -> ((p
                                     .position().isCentral()
@@ -453,8 +452,9 @@ public final class GameState {
                     end = Player.DirectedPosition.stopped(stopPosition);
                     futurePositions = start.concat(end);
                 }
-            } else
+            } else {
                 futurePositions = player.directedPositions();
+            }
 
             if (bombedCells1.contains(player.position().containingCell())
                     && player.position().distanceToCentral() == 6
@@ -537,7 +537,6 @@ public final class GameState {
                 blocks1.add(board0.blocksAt(c).tail());
             }
         }
-        System.out.println("taille: " + blocks1.size());
         return new Board(blocks1);
     }
 
