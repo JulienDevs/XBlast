@@ -14,12 +14,9 @@ import ch.epfl.xblast.Direction;
 import ch.epfl.xblast.PlayerID;
 
 public final class RandomEventGenerator {
-    private static final List<Optional<Direction>> possibleSpeeds =
-            Arrays.asList(
-                    Optional.empty(),
-                    Optional.of(Direction.N),
-                    Optional.of(Direction.E),
-                    Optional.of(Direction.S),
+    private static final List<Optional<Direction>> possibleSpeeds = Arrays
+            .asList(Optional.empty(), Optional.of(Direction.N),
+                    Optional.of(Direction.E), Optional.of(Direction.S),
                     Optional.of(Direction.W));
 
     private final Random rng;
@@ -32,19 +29,19 @@ public final class RandomEventGenerator {
     }
 
     public Map<PlayerID, Optional<Direction>> randomSpeedChangeEvents() {
-        Map<PlayerID, Optional<Direction>> events = new EnumMap<>(PlayerID.class);
-        for (PlayerID pId: PlayerID.values()) {
+        Map<PlayerID, Optional<Direction>> events = new EnumMap<>(
+                PlayerID.class);
+        for (PlayerID pId : PlayerID.values()) {
             if (rng.nextInt(speedChangeProb) == 0)
-                events.put(pId, possibleSpeeds.get(rng.nextInt(possibleSpeeds.size())));
+                events.put(pId,
+                        possibleSpeeds.get(rng.nextInt(possibleSpeeds.size())));
         }
-        System.out.println(events.keySet());
-        System.out.println(events.values());
         return Collections.unmodifiableMap(events);
     }
 
     public Set<PlayerID> randomBombDropEvents() {
         Set<PlayerID> events = EnumSet.noneOf(PlayerID.class);
-        for (PlayerID pID: PlayerID.values()) {
+        for (PlayerID pID : PlayerID.values()) {
             if (rng.nextInt(bombProb) == 0)
                 events.add(pID);
         }

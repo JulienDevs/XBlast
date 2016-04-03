@@ -27,7 +27,6 @@ public final class Board {
      */
     public Board(List<Sq<Block>> blocks) throws IllegalArgumentException {
         if (blocks == null || blocks.size() != Cell.COUNT) {
-            System.out.println(blocks.size());
             throw new IllegalArgumentException();
         }
         this.blocks = blocks;
@@ -118,20 +117,18 @@ public final class Board {
         }
         quadrantNWBBlocks = Lists.mirrored(quadrantNWBBlocks);
 
-        for (int i = 0; i < quadrantNWBBlocks.size()+2; i++) {
+        for (int i = 0; i < quadrantNWBBlocks.size() + 2; i++) {
             for (int j = 0; j < quadrantNWBBlocks.get(2).size() + 2; j++) {
                 if (i == 0 || j == 0 || i == quadrantNWBBlocks.size() + 1
                         || j == quadrantNWBBlocks.get(2).size() + 1) {
                     symmetricBlocks.add(Sq.constant(Block.INDESTRUCTIBLE_WALL));
                 } else {
-                    symmetricBlocks
-                            .add(Sq.constant(quadrantNWBBlocks.get(i-1)
-                                    .get(j-1)));
+                    symmetricBlocks.add(Sq
+                            .constant(quadrantNWBBlocks.get(i - 1).get(j - 1)));
                 }
             }
         }
-        System.out.println(symmetricBlocks.size());
-      
+
         return new Board(symmetricBlocks);
     }
 
@@ -143,7 +140,7 @@ public final class Board {
      * @return sequence of blocks of c
      */
     public Sq<Block> blocksAt(Cell c) {
-        
+
         return this.blocks.get(c.rowMajorIndex());
     }
 
@@ -194,18 +191,4 @@ public final class Board {
         }
 
     }
-    
-    /*---------------------------------------------------
-     *                  FOR TEST
-     * --------------------------------------------------
-     */
-    public static Board boardForTestWithOnlyFreeBlocks(){
-        List<Sq<Block>> boardTest = new ArrayList<Sq<Block>>();
-        for(int i = 0 ; i < Cell.COUNT ; i++){
-            boardTest.add(Sq.constant(Block.FREE));
-        }
-        
-        return new Board(boardTest);
-    }
-    
 }

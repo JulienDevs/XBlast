@@ -17,50 +17,43 @@ import ch.epfl.xblast.server.Player;
  */
 public class RandomGame {
     public static void main(String[] args) throws InterruptedException {
+        List<List<Block>> board = new ArrayList<List<Block>>(Arrays.asList(
+                Arrays.asList(Block.FREE, Block.FREE, Block.FREE, Block.FREE,
+                        Block.FREE, Block.DESTRUCTIBLE_WALL, Block.FREE),
+                Arrays.asList(Block.FREE, Block.INDESTRUCTIBLE_WALL,
+                        Block.DESTRUCTIBLE_WALL, Block.INDESTRUCTIBLE_WALL,
+                        Block.DESTRUCTIBLE_WALL, Block.INDESTRUCTIBLE_WALL,
+                        Block.DESTRUCTIBLE_WALL),
+                Arrays.asList(Block.FREE, Block.DESTRUCTIBLE_WALL, Block.FREE,
+                        Block.FREE, Block.FREE, Block.DESTRUCTIBLE_WALL,
+                        Block.FREE),
+                Arrays.asList(Block.DESTRUCTIBLE_WALL,
+                        Block.INDESTRUCTIBLE_WALL, Block.FREE,
+                        Block.INDESTRUCTIBLE_WALL, Block.INDESTRUCTIBLE_WALL,
+                        Block.INDESTRUCTIBLE_WALL, Block.INDESTRUCTIBLE_WALL),
+                Arrays.asList(Block.FREE, Block.DESTRUCTIBLE_WALL, Block.FREE,
+                        Block.DESTRUCTIBLE_WALL, Block.FREE, Block.FREE,
+                        Block.FREE),
+                Arrays.asList(Block.DESTRUCTIBLE_WALL,
+                        Block.INDESTRUCTIBLE_WALL, Block.DESTRUCTIBLE_WALL,
+                        Block.INDESTRUCTIBLE_WALL, Block.DESTRUCTIBLE_WALL,
+                        Block.INDESTRUCTIBLE_WALL, Block.FREE)));
+        List<Player> players = new ArrayList<Player>(Arrays
+                .asList(new Player(PlayerID.PLAYER_1, 3, new Cell(1, 1), 2, 3),
+                        new Player(PlayerID.PLAYER_2, 3, new Cell(13, 1), 2, 3),
+                        new Player(PlayerID.PLAYER_3, 3, new Cell(13, 11), 2,
+                                3),
+                new Player(PlayerID.PLAYER_4, 3, new Cell(1, 11), 2, 3)));
+        RandomEventGenerator randomEvent = new RandomEventGenerator(2016, 30,
+                100);
+        GameState game = new GameState(Board.ofQuadrantNWBlocksWalled(board),
+                players);
 
-        
-
-        List<List<Block>> board;
-        List<Player> players;
-        for (int i = 0; i < 3000; ++i) {
-            board = new ArrayList<List<Block>>(Arrays.asList(
-                    Arrays.asList(Block.FREE, Block.FREE, Block.FREE, Block.FREE,
-                            Block.FREE, Block.DESTRUCTIBLE_WALL, Block.FREE),
-                    Arrays.asList(Block.FREE, Block.INDESTRUCTIBLE_WALL,
-                            Block.DESTRUCTIBLE_WALL, Block.INDESTRUCTIBLE_WALL,
-                            Block.DESTRUCTIBLE_WALL, Block.INDESTRUCTIBLE_WALL,
-                            Block.DESTRUCTIBLE_WALL),
-                    Arrays.asList(Block.FREE, Block.DESTRUCTIBLE_WALL, Block.FREE,
-                            Block.FREE, Block.FREE, Block.DESTRUCTIBLE_WALL,
-                            Block.FREE),
-                    Arrays.asList(Block.DESTRUCTIBLE_WALL,
-                            Block.INDESTRUCTIBLE_WALL, Block.FREE,
-                            Block.INDESTRUCTIBLE_WALL, Block.INDESTRUCTIBLE_WALL,
-                            Block.INDESTRUCTIBLE_WALL, Block.INDESTRUCTIBLE_WALL),
-                    Arrays.asList(Block.FREE, Block.DESTRUCTIBLE_WALL, Block.FREE,
-                            Block.DESTRUCTIBLE_WALL, Block.FREE, Block.FREE,
-                            Block.FREE),
-                    Arrays.asList(Block.DESTRUCTIBLE_WALL,
-                            Block.INDESTRUCTIBLE_WALL, Block.DESTRUCTIBLE_WALL,
-                            Block.INDESTRUCTIBLE_WALL, Block.DESTRUCTIBLE_WALL,
-                            Block.INDESTRUCTIBLE_WALL, Block.FREE)));
-            players = new ArrayList<Player>(Arrays.asList(
-                    new Player(PlayerID.PLAYER_1, 3, new Cell(1, 1), 2, 3),
-                    new Player(PlayerID.PLAYER_2, 3, new Cell(13, 1), 2, 3),
-                    new Player(PlayerID.PLAYER_3, 3, new Cell(13, 11), 2, 3),
-                    new Player(PlayerID.PLAYER_4, 3, new Cell(1, 11), 2, 3)));
-            RandomEventGenerator randomEvent = new RandomEventGenerator(0, 30, 100);
-            GameState game = new GameState(Board.ofQuadrantNWBlocksWalled(board),
-                    players);
-            randomEvent = new RandomEventGenerator(i, 30, 100);
-
-            while (!game.isGameOver()) {
-                System.out.println("Seed: " + i);
-                GameStatePrinter.printGameState(game);
-                game = game.next(randomEvent.randomSpeedChangeEvents(),
-                        randomEvent.randomBombDropEvents());
-
-            }
+        while (!game.isGameOver()) {
+            Thread.sleep(1000);
+            GameStatePrinter.printGameState(game);
+            game = game.next(randomEvent.randomSpeedChangeEvents(),
+                    randomEvent.randomBombDropEvents());
         }
     }
 }

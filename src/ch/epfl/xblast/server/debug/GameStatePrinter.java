@@ -1,10 +1,8 @@
 package ch.epfl.xblast.server.debug;
 
-import java.util.HashMap;
+
 import java.util.List;
 import java.util.Set;
-
-import com.sun.javafx.collections.MappingChange.Map;
 
 import ch.epfl.xblast.Cell;
 import ch.epfl.xblast.server.Block;

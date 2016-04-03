@@ -15,6 +15,14 @@ public final class SubCell {
 
     private final int x, y;
 
+    /**
+     * Constructor of subcell.
+     * 
+     * @param x
+     *            - horizontal position
+     * @param y
+     *            - vertical position
+     */
     public SubCell(int x, int y) {
         this.x = Math.floorMod(x, COLUMNS);
         this.y = Math.floorMod(y, ROWS);
@@ -24,7 +32,7 @@ public final class SubCell {
      * Returns the central subcell of a given cell.
      * 
      * @param cell
-     *            cell of which the central subcell is returned.
+     *            - cell of which the central subcell is returned.
      * @return subcell central subcell of the given cell.
      */
 
@@ -143,10 +151,10 @@ public final class SubCell {
     public int y() {
         return this.y;
     }
-    
+
     @Override
-    public int hashCode(){
-        return y*COLUMNS+x;
+    public int hashCode() {
+        return y * COLUMNS + x;
     }
 
 }

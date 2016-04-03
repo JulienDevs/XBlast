@@ -116,7 +116,6 @@ public final class Player {
      * @return player's sequence of LifeStates for next life
      */
     public Sq<LifeState> statesForNextLife() {
-        System.out.println(this.id);
         Sq<LifeState> init = Sq.repeat(Ticks.PLAYER_DYING_TICKS,
                 new LifeState(lives(), State.DYING));
         return init.concat(createLifeStates(lives() - 1));
@@ -222,8 +221,6 @@ public final class Player {
         }
 
     }
-    
-
 
     /**
      * Immutable class. Handles the representation of a LifeState as two
@@ -395,8 +392,6 @@ public final class Player {
         public DirectedPosition withDirection(Direction newDirection) {
             return new DirectedPosition(position, newDirection);
         }
-        
-        
 
     }
 

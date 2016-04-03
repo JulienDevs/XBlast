@@ -28,6 +28,14 @@ public final class Cell {
     public static final List<Cell> SPIRAL_ORDER = Collections
             .unmodifiableList(rowSpiralOrder());
 
+    /**
+     * Constructor of Cell.
+     * 
+     * @param x
+     *            - horizontal position
+     * @param y
+     *            - vertical position
+     */
     public Cell(int x, int y) {
         this.x = Math.floorMod(x, COLUMNS);
         this.y = Math.floorMod(y, ROWS);
@@ -112,8 +120,13 @@ public final class Cell {
         return y;
     }
 
+    /**
+     * Returns the index of the cell in reading order.
+     * 
+     * @return - the index of the cell in reading order
+     */
     public int rowMajorIndex() {
-        return y*COLUMNS+x;
+        return y * COLUMNS + x;
 
     }
 
@@ -164,9 +177,10 @@ public final class Cell {
             }
         }
     }
+
     @Override
-    public int hashCode(){
-      return rowMajorIndex();  
+    public int hashCode() {
+        return rowMajorIndex();
     }
 
 }
