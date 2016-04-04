@@ -2,6 +2,7 @@ package ch.epfl.xblast.server.debug;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.event.KeyEvent;
@@ -23,6 +24,7 @@ import javax.swing.JPanel;
 import ch.epfl.xblast.Cell;
 import ch.epfl.xblast.Direction;
 import ch.epfl.xblast.PlayerID;
+import ch.epfl.xblast.SubCell;
 import ch.epfl.xblast.server.Block;
 import ch.epfl.xblast.server.Board;
 import ch.epfl.xblast.server.GameState;
@@ -60,7 +62,7 @@ public class WindowPrinter implements Runnable {
         window.setLocation(0, 0);
         window.setVisible(true);
         window.setContentPane(container);
-        window.setSize(new Dimension(1020, 624));
+        window.setSize(new Dimension(1920, 1080));
         window.addKeyListener(keyb);
     }
 
@@ -117,6 +119,19 @@ public class WindowPrinter implements Runnable {
         g.fillRect(1080, 0, 500, 500);
         g.setColor(Color.BLACK);
         g.drawString("" + gameState.ticks(), 1080, 64);
+        
+        g.setColor(container.getBackground());
+        g.fillRect(990, 0, 1000, 1000);
+
+        g.setColor(Color.BLUE);
+        g.setFont(new Font("Lucida", Font.PLAIN, 15));
+
+        for (Player p : gameState.alivePlayers()) {
+            for (int i = 0; i < 4; i++) {
+                g.drawString(getInfosPlayers(p, i), 970,
+                        (i * 20) + (p.id().ordinal() + 1) * 100);
+            }
+        }
     }
 
     @Override
@@ -153,6 +168,28 @@ public class WindowPrinter implements Runnable {
             }
             gameState = gameState.next(map, set);
             keyb.reset();
+        }
+    }
+    
+    private String getInfosPlayers(Player p, int i) {
+        Cell c = p.position().containingCell();
+        switch (i) {
+        case 0:
+            return "J" + (p.id().ordinal() + 1) + " : " + p.lives() + " vies ("
+                    + p.lifeState().state() + ")";
+        case 1:
+            return "Bombes max : " + p.maxBombs() + ", portée : "
+                    + p.bombRange() + ", direction empruntée : "
+                    + p.direction();
+        case 2:
+            return "Position : " + c + " ± " + p.position().distanceToCentral()
+                    + " sous case : " + p.position();
+        case 3:
+            return "Sous case centrale : " + SubCell.centralSubCellOf(c)
+                    + ", distance to central : "
+                    + p.position().distanceToCentral();
+        default:
+            throw new Error();
         }
     }
 
