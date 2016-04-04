@@ -423,32 +423,6 @@ public final class GameState {
 
                                 futurePositions = start.concat(end);
                             }
-
-                            // Stop position of the player. I.e.:
-                            // - This position is 6 subcells of distance from
-                            // the
-                            // central subcell of a bombed cell
-                            // or
-                            // - This position is a central subcell, and the
-                            // player
-                            // is looking towards a neighbor cell which contains
-                            // a wall
-                            Player.DirectedPosition stopPosition = futurePositions
-                                    .findFirst(
-                                            (Player.DirectedPosition p) -> ((p
-                                                    .position().isCentral()
-                                                    && board1.blockAt(p
-                                                            .position()
-                                                            .containingCell()
-                                                            .neighbor(
-                                                                    choice)) == Block.INDESTRUCTIBLE_WALL)));
-
-                            start = futurePositions.takeWhile(
-                                    (Player.DirectedPosition p) -> !p.position()
-                                            .equals(stopPosition.position()));
-
-                            end = Player.DirectedPosition.stopped(stopPosition);
-                            futurePositions = start.concat(end);
                         }
                     }
                 } else {
@@ -464,13 +438,11 @@ public final class GameState {
                         && player.position().distanceToCentral() == 6
                         && player.position().neighbor(player.direction())
                                 .distanceToCentral() == 5)
-                        || (!(board1.blockAt(
-                                player.position().containingCell().neighbor(
-                                        player.direction())) == Block.DESTRUCTIBLE_WALL)
-                                || !(board1.blockAt(player.position()
-                                        .containingCell().neighbor(
-                                                player.direction())) == Block.CRUMBLING_WALL))
-                                && player.position().isCentral())
+                        || (!(board1
+                                .blockAt(player.position().containingCell()
+                                        .neighbor(player.direction()))
+                                .canHostPlayer())
+                                && player.position().isCentral()))
                         && player.lifeState().canMove()) {
                     futurePositions = futurePositions.tail();
                 }
