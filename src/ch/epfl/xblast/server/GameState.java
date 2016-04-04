@@ -429,20 +429,22 @@ public final class GameState {
                     futurePositions = player.directedPositions();
                 }
 
+                boolean isBlockedByBomb = bombedCells1
+                        .contains(player.position().containingCell())
+                        && player.position().distanceToCentral() == 6
+                        && player.position().neighbor(player.direction())
+                                .distanceToCentral() == 5;
+                boolean isBlockedByWall = board1
+                        .blockAt(player.position().containingCell()
+                                .neighbor(player.direction()))
+                        .castsShadow() && player.position().isCentral();
+
                 // If the player is blocked by a bomb, a destructible wall or a
                 // crumbling wall or if he can't move, we stop the evolution of
                 // its directed positions. Otherwise, if the bomb exploded or
                 // the wall was destroyed, the player's directed positions
                 // evolve again as he can move
-                if ((!(bombedCells1.contains(player.position().containingCell())
-                        && player.position().distanceToCentral() == 6
-                        && player.position().neighbor(player.direction())
-                                .distanceToCentral() == 5)
-                        && (board1
-                                .blockAt(player.position().containingCell()
-                                        .neighbor(player.direction()))
-                                .canHostPlayer()
-                                && !player.position().isCentral()))
+                if (!isBlockedByBomb && !isBlockedByWall
                         && player.lifeState().canMove()) {
                     futurePositions = futurePositions.tail();
                 }
