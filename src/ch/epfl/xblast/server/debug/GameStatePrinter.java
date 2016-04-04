@@ -27,6 +27,9 @@ public final class GameStatePrinter {
                         System.out.print(stringForPlayer(p));
                         continue xLoop;
                     }
+                    if(s.board().blockAt(p.position().containingCell()).castsShadow()){
+                        throw new Error("Player on wall");
+                    }
                 }
                 Block b = board.blockAt(c);
                 System.out.print(
@@ -38,15 +41,6 @@ public final class GameStatePrinter {
             }
             System.out.println();
         }
-        /*
-         * System.out.print(player.id() + " ");
-         * System.out.print(player.direction() + " ");
-         * System.out.println(speedChangeEvents.get(player.id()));
-         * System.out.println("Position du joueur " + player.id() + " : " +
-         * player.position().toString() + "   " +
-         * player.position().isCentral()); System.out.println("Lives " +
-         * player.lives() + " State: " + player.lifeState().state().toString());
-         */
     }
 
     private static String stringForStats(Player p, int j) {
@@ -61,7 +55,7 @@ public final class GameStatePrinter {
             Cell c = p.position().containingCell();
             return  p.position().distanceToCentral() + " sous case : "
                     + p.position() + " sous case centrale : "
-                    + SubCell.centralSubCellOf(c);
+                    + p.position().isCentral();
         default:
             throw new Error();
         }

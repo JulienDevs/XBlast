@@ -438,11 +438,11 @@ public final class GameState {
                         && player.position().distanceToCentral() == 6
                         && player.position().neighbor(player.direction())
                                 .distanceToCentral() == 5)
-                        || (!(board1
+                        && (board1
                                 .blockAt(player.position().containingCell()
                                         .neighbor(player.direction()))
-                                .canHostPlayer())
-                                && player.position().isCentral()))
+                                .canHostPlayer()
+                                && !player.position().isCentral()))
                         && player.lifeState().canMove()) {
                     futurePositions = futurePositions.tail();
                 }
