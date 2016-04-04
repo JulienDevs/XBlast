@@ -348,18 +348,8 @@ public final class GameState {
             Map<PlayerID, Optional<Direction>> speedChangeEvents) {
         List<Player> players1 = new ArrayList<Player>();
 
-        System.out.println(speedChangeEvents);
-
         for (Player player : players0) {
             if (player.isAlive()) {
-                System.out.print(player.id() + " ");
-                System.out.print(player.direction() + " ");
-                System.out.println(speedChangeEvents.get(player.id()));
-                System.out.println("Position du joueur " + player.id() + " : "
-                        + player.position().toString() + "   "
-                        + player.position().isCentral());
-                System.out.println("Lives " + player.lives() + " State: "
-                        + player.lifeState().state().toString());
                 Sq<Player.DirectedPosition> futurePositions;
 
                 // If the player wants to turn or stop
@@ -378,9 +368,6 @@ public final class GameState {
                             Player.DirectedPosition centralSubCell = player
                                     .directedPositions()
                                     .findFirst(p -> p.position().isCentral());
-
-                            System.out.println("Central subcell of the player: "
-                                    + centralSubCell.position().toString());
 
                             Sq<Player.DirectedPosition> start = player
                                     .directedPositions()
@@ -414,11 +401,6 @@ public final class GameState {
                                         .directedPositions().findFirst(
                                                 p -> p.position().isCentral());
 
-                                System.out.println(
-                                        "Central subcell of the player: "
-                                                + centralSubCell.position()
-                                                        .toString());
-
                                 // Sequence of directed positions until the
                                 // first
                                 // subcell (not included) in the path of the
@@ -426,9 +408,6 @@ public final class GameState {
                                 start = player.directedPositions()
                                         .takeWhile(p -> !p.position().equals(
                                                 centralSubCell.position()));
-
-                                System.out.println(
-                                        "Start isEmpty" + start.isEmpty());
 
                                 // Sequence of directed positions starting at
                                 // the
@@ -463,9 +442,6 @@ public final class GameState {
                                                             .containingCell()
                                                             .neighbor(
                                                                     choice)) == Block.INDESTRUCTIBLE_WALL)));
-
-                            System.out.println("Stop position:"
-                                    + stopPosition.position().toString());
 
                             start = futurePositions.takeWhile(
                                     (Player.DirectedPosition p) -> !p.position()
@@ -653,8 +629,6 @@ public final class GameState {
             Set<PlayerID> bombDropEvents, List<Bomb> bombs0) {
         List<Bomb> bombs1 = new ArrayList<Bomb>();
         List<Cell> bombedCells = new ArrayList<Cell>();
-
-        System.out.println(bombDropEvents);
 
         for (Bomb b : bombs0) {
             bombedCells.add(b.position());

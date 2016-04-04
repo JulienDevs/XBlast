@@ -1,10 +1,10 @@
 package ch.epfl.xblast.server.debug;
 
-
 import java.util.List;
 import java.util.Set;
 
 import ch.epfl.xblast.Cell;
+import ch.epfl.xblast.SubCell;
 import ch.epfl.xblast.server.Block;
 import ch.epfl.xblast.server.Board;
 import ch.epfl.xblast.server.Bomb;
@@ -33,7 +33,37 @@ public final class GameStatePrinter {
                         stringForBlock(b, s.bombedCells().getOrDefault(c, null),
                                 s.blastedCells(), c));
             }
+            if (y / 3 <= 3) {
+                System.out.print(stringForStats(s.players().get(y / 3), y % 3));
+            }
             System.out.println();
+        }
+        /*
+         * System.out.print(player.id() + " ");
+         * System.out.print(player.direction() + " ");
+         * System.out.println(speedChangeEvents.get(player.id()));
+         * System.out.println("Position du joueur " + player.id() + " : " +
+         * player.position().toString() + "   " +
+         * player.position().isCentral()); System.out.println("Lives " +
+         * player.lives() + " State: " + player.lifeState().state().toString());
+         */
+    }
+
+    private static String stringForStats(Player p, int j) {
+        switch (j) {
+        case 0:
+            return "J" + (p.id().ordinal() + 1) + " : " + p.lives() + " vies ("
+                    + p.lifeState().state() + ")";
+        case 1:
+            return "\t bombes max : " + p.maxBombs() + ", portée : "
+                    + p.bombRange();
+        case 2:
+            Cell c = p.position().containingCell();
+            return  p.position().distanceToCentral() + " sous case : "
+                    + p.position() + " sous case centrale : "
+                    + SubCell.centralSubCellOf(c);
+        default:
+            throw new Error();
         }
     }
 

@@ -2,9 +2,15 @@ package ch.epfl.xblast.server.debug;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
 
 import ch.epfl.xblast.Cell;
+import ch.epfl.xblast.Direction;
 import ch.epfl.xblast.PlayerID;
 import ch.epfl.xblast.server.Block;
 import ch.epfl.xblast.server.Board;
@@ -49,10 +55,18 @@ public class RandomGame {
         GameState game = new GameState(Board.ofQuadrantNWBlocksWalled(board),
                 players);
 
+        Map<PlayerID, Optional<Direction>> randomSpeedChange = new HashMap<>();
+        Set<PlayerID> randomBombDrops = new HashSet<>();
         while (!game.isGameOver()) {
+            randomSpeedChange = randomEvent.randomSpeedChangeEvents();
+            randomBombDrops = randomEvent.randomBombDropEvents();
+            
+            System.out.println("Speed changes: " + randomSpeedChange);
+            System.out.println("Bomb drops: " + randomBombDrops);
+            
             GameStatePrinter.printGameState(game);
-            game = game.next(randomEvent.randomSpeedChangeEvents(),
-                    randomEvent.randomBombDropEvents());
+            game = game.next(randomSpeedChange,
+                    randomBombDrops);
         }
     }
 }
