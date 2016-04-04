@@ -485,8 +485,11 @@ public final class GameState {
                 }
 
                 Sq<Player.LifeState> futureLifeStates;
-                if (blastedCells1.contains(
-                        futurePositions.head().position().containingCell())) {
+                if (blastedCells1
+                        .contains(futurePositions.head().position()
+                                .containingCell())
+                        && player.lifeState()
+                                .state() == Player.LifeState.State.VULNERABLE) {
                     futureLifeStates = player.statesForNextLife();
                 } else {
                     futureLifeStates = player.lifeStates().tail();
