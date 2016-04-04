@@ -362,49 +362,19 @@ public final class GameState {
                         + player.lifeState().state().toString());
                 Sq<Player.DirectedPosition> futurePositions;
 
+                // If the player wants to turn or stop
                 if (speedChangeEvents.containsKey(player.id())) {
-                    Direction choice = speedChangeEvents.get(player.id())
-                            .orElse(null);
-                    System.out.println(choice);
 
                     // If the player can't move, the evolution of its directed
                     // positions is stopped.
                     if (!player.lifeState().canMove()) {
                         futurePositions = player.directedPositions();
-                    } else if (choice == null) { // If the player wants to stop,
-                                                 // he stops at the first
-                                                 // central subcell in his path.
-
-                        System.out.println("LOLOLLOOLL");
-                        Player.DirectedPosition centralSubCell = player
-                                .directedPositions()
-                                .findFirst(p -> p.position().isCentral());
-
-                        System.out.println("Central subcell of the player: "
-                                + centralSubCell.position().toString());
-
-                        Sq<Player.DirectedPosition> start = player
-                                .directedPositions()
-                                .takeWhile(p -> !p.position()
-                                        .equals(centralSubCell.position()));
-
-                        Sq<Player.DirectedPosition> end = Player.DirectedPosition
-                                .stopped(centralSubCell);
-
-                        futurePositions = start.concat(end);
                     } else {
-                        Sq<Player.DirectedPosition> start;
-                        Sq<Player.DirectedPosition> end;
-                        if (choice.isParallelTo(player.direction())) {
-                            futurePositions = Player.DirectedPosition
-                                    .moving(new Player.DirectedPosition(
-                                            player.position(), choice));
-                        } else {
+                        if (!speedChangeEvents.get(player.id()).isPresent()) {
+                            // If the player wants to stop, he stops at the
+                            // first
+                            // central subcell in his path.
 
-                            // Si le joueur veut tourner et qu'il peut bouger
-
-                            // La prochaine sous-case central dans le chemin du
-                            // joueur
                             Player.DirectedPosition centralSubCell = player
                                     .directedPositions()
                                     .findFirst(p -> p.position().isCentral());
@@ -412,53 +382,98 @@ public final class GameState {
                             System.out.println("Central subcell of the player: "
                                     + centralSubCell.position().toString());
 
-                            // Sequence de DirectedPosition jusqu'a la prochaine
-                            // sous-case centrale (non-inclus) dans le chemin du
-                            // joueur
-                            start = player.directedPositions()
+                            Sq<Player.DirectedPosition> start = player
+                                    .directedPositions()
                                     .takeWhile(p -> !p.position()
                                             .equals(centralSubCell.position()));
 
-                            System.out
-                                    .println("Start isEmpty" + start.isEmpty());
-
-                            // Sequence de DirectedPosition en partant de la
-                            // prochaine
-                            // sous-case (inclus) central dans le chemin du
-                            // joueur
-                            // et
-                            // allant
-                            // dans la direction dans laquelle le joueur veut
-                            // tourner
-                            end = Player.DirectedPosition
-                                    .moving(new Player.DirectedPosition(
-                                            centralSubCell.position(), choice));
+                            Sq<Player.DirectedPosition> end = Player.DirectedPosition
+                                    .stopped(centralSubCell);
 
                             futurePositions = start.concat(end);
+                        } else {
+                            Direction choice = speedChangeEvents
+                                    .get(player.id()).get();
+
+                            Sq<Player.DirectedPosition> start;
+                            Sq<Player.DirectedPosition> end;
+
+                            // If the player wants to turn the parallel
+                            // direction and can move
+                            if (choice.isParallelTo(player.direction())) {
+                                futurePositions = Player.DirectedPosition
+                                        .moving(new Player.DirectedPosition(
+                                                player.position(), choice));
+                            } else {// If the player wants to turn in a
+                                    // perpendicular
+                                    // direction and can move
+
+                                // The first central subcell in the path of the
+                                // player
+                                Player.DirectedPosition centralSubCell = player
+                                        .directedPositions().findFirst(
+                                                p -> p.position().isCentral());
+
+                                System.out.println(
+                                        "Central subcell of the player: "
+                                                + centralSubCell.position()
+                                                        .toString());
+
+                                // Sequence of directed positions until the
+                                // first
+                                // subcell (not included) in the path of the
+                                // player
+                                start = player.directedPositions()
+                                        .takeWhile(p -> !p.position().equals(
+                                                centralSubCell.position()));
+
+                                System.out.println(
+                                        "Start isEmpty" + start.isEmpty());
+
+                                // Sequence of directed positions starting at
+                                // the
+                                // first central subcell in the path of the
+                                // player
+                                // (included) and going in the direction in
+                                // which
+                                // the player wants to turn (to infinity)
+                                end = Player.DirectedPosition
+                                        .moving(new Player.DirectedPosition(
+                                                centralSubCell.position(),
+                                                choice));
+
+                                futurePositions = start.concat(end);
+                            }
+
+                            // Stop position of the player. I.e.:
+                            // - This position is 6 subcells of distance from
+                            // the
+                            // central subcell of a bombed cell
+                            // or
+                            // - This position is a central subcell, and the
+                            // player
+                            // is looking towards a neighbor cell which contains
+                            // a wall
+                            Player.DirectedPosition stopPosition = futurePositions
+                                    .findFirst(
+                                            (Player.DirectedPosition p) -> ((p
+                                                    .position().isCentral()
+                                                    && board1.blockAt(p
+                                                            .position()
+                                                            .containingCell()
+                                                            .neighbor(
+                                                                    choice)) == Block.INDESTRUCTIBLE_WALL)));
+
+                            System.out.println("Stop position:"
+                                    + stopPosition.position().toString());
+
+                            start = futurePositions.takeWhile(
+                                    (Player.DirectedPosition p) -> !p.position()
+                                            .equals(stopPosition.position()));
+
+                            end = Player.DirectedPosition.stopped(stopPosition);
+                            futurePositions = start.concat(end);
                         }
-
-                        // La position d'arret du joueur. C-a-d si:
-                        // - Cette position est à 6 sous-cases de la sous-case
-                        // central de la case ou est posée une bombe
-                        // ou
-                        // - Cette position est une sous-case central, dont la
-                        // case voisine est un mur, et le joueur regarde ce mur
-                        Player.DirectedPosition stopPosition = futurePositions
-                                .findFirst((Player.DirectedPosition p) -> ((p
-                                        .position().isCentral()
-                                        && board1.blockAt(p.position()
-                                                .containingCell().neighbor(
-                                                        choice)) == Block.INDESTRUCTIBLE_WALL)));
-
-                        System.out.println("Stop position:"
-                                + stopPosition.position().toString());
-
-                        start = futurePositions.takeWhile(
-                                (Player.DirectedPosition p) -> !p.position()
-                                        .equals(stopPosition.position()));
-
-                        end = Player.DirectedPosition.stopped(stopPosition);
-                        futurePositions = start.concat(end);
                     }
                 } else {
                     futurePositions = player.directedPositions();
@@ -468,7 +483,7 @@ public final class GameState {
                 // crumbling wall or if he can't move, we stop the evolution of
                 // its directed positions. Otherwise, if the bomb exploded or
                 // the wall was destroyed, the player's directed positions
-                // evolve again as he can move.
+                // evolve again as he can move
                 if ((!(bombedCells1.contains(player.position().containingCell())
                         && player.position().distanceToCentral() == 6
                         && player.position().neighbor(player.direction())
@@ -485,6 +500,9 @@ public final class GameState {
                 }
 
                 Sq<Player.LifeState> futureLifeStates;
+
+                // The player loses a life if a blast is in the same cell as him
+                // and if he's vulnerable
                 if (blastedCells1
                         .contains(futurePositions.head().position()
                                 .containingCell())
