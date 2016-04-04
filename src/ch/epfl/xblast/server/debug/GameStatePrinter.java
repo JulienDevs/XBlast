@@ -26,10 +26,12 @@ public final class GameStatePrinter {
                     if (p.position().containingCell().equals(c)) {
                         System.out.print(stringForPlayer(p));
                         continue xLoop;
-                    }
-                    if(s.board().blockAt(p.position().containingCell()).castsShadow()){
+                    }/*
+                    
+                    if(!s.board().blockAt(p.position().containingCell()).canHostPlayer()){
                         throw new Error("Player on wall");
                     }
+                    */
                 }
                 Block b = board.blockAt(c);
                 System.out.print(
@@ -69,16 +71,16 @@ public final class GameStatePrinter {
         b.append(p.id().ordinal() + 1);
         switch (p.direction()) {
         case N:
-            b.append('↑');
+            b.append('^');
             break;
         case E:
-            b.append('→');
+            b.append('>');
             break;
         case S:
-            b.append('↓');
+            b.append('v');
             break;
         case W:
-            b.append('←');
+            b.append('<');
             break;
         }
         if (System.getProperty("os.name").equals("Mac OS X")) {
