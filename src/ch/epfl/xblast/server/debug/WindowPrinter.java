@@ -219,7 +219,8 @@ public class WindowPrinter implements Runnable {
                 break;
             case KeyEvent.VK_CONTROL:
                 pressed1 = Optional.empty();
-            case KeyEvent.VK_Z:
+                break;
+            case KeyEvent.VK_W:
                 pressed2 = Optional.of(Direction.N);
                 break;
             case KeyEvent.VK_D:
@@ -228,11 +229,12 @@ public class WindowPrinter implements Runnable {
             case KeyEvent.VK_S:
                 pressed2 = Optional.of(Direction.S);
                 break;
-            case KeyEvent.VK_Q:
+            case KeyEvent.VK_A:
                 pressed2 = Optional.of(Direction.W);
                 break;
             case KeyEvent.VK_ALT:
                 pressed2 = Optional.empty();
+                break;
             case KeyEvent.VK_SHIFT:
                 bomb2 = true;
                 break;
