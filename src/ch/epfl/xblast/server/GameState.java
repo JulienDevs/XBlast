@@ -216,7 +216,7 @@ public final class GameState {
         List<Player> players0 = new ArrayList<Player>();
 
         for (PlayerID id : PERMUTATION
-                .get(Math.floorMod(RANDOM.nextInt(), PERMUTATION.size()))) {
+                .get(Math.floorMod(ticks, PERMUTATION.size()))) {
             for (Player p : players) {
                 if (p.id() == id) {
                     players0.add(p);
@@ -609,6 +609,8 @@ public final class GameState {
         }
 
         int nbBombs;
+        
+        System.out.println();
 
         for (Player player : players0) {
             nbBombs = 0;
@@ -623,11 +625,15 @@ public final class GameState {
                     && !bombedCells.contains(player.position().containingCell())
                     && player.maxBombs() > nbBombs) {
                 bombs1.add(player.newBomb());
+                System.out.println("Player that put the bomb: " + player.id());
                 bombedCells.add(player.position().containingCell());
             }
         }
 
         return bombs1;
     }
-
+    
+    public List<PlayerID> getPermutation(){
+        return PERMUTATION.get(ticks);
+    }
 }

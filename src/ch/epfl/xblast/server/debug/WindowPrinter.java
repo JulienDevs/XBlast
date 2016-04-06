@@ -20,6 +20,7 @@ import java.util.Set;
 import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.plaf.synth.SynthSeparatorUI;
 
 import ch.epfl.xblast.Cell;
 import ch.epfl.xblast.Direction;
@@ -119,7 +120,7 @@ public class WindowPrinter implements Runnable {
         g.fillRect(1080, 0, 500, 500);
         g.setColor(Color.BLACK);
         g.drawString("" + gameState.ticks(), 1080, 64);
-        
+
         g.setColor(container.getBackground());
         g.fillRect(990, 0, 1000, 1000);
 
@@ -137,13 +138,15 @@ public class WindowPrinter implements Runnable {
     @Override
     public void run() {
         while (!gameState.isGameOver()) {
+
             System.out.println(gameState.ticks());
             paint();
             try {
-                Thread.sleep(10L);
+                Thread.sleep(1000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
+
             Map<PlayerID, Optional<Direction>> map = new HashMap<>();
             if (keyb.getDirection1() != null) {
                 if (keyb.getDirection1().isPresent()) {
@@ -170,7 +173,7 @@ public class WindowPrinter implements Runnable {
             keyb.reset();
         }
     }
-    
+
     private String getInfosPlayers(Player p, int i) {
         Cell c = p.position().containingCell();
         switch (i) {
