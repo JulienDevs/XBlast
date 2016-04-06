@@ -465,7 +465,14 @@ public final class GameState {
 
                 if (playerBonuses.containsKey(player.id())) {
                     player = playerBonuses.get(player.id()).applyTo(player);
-
+                    System.out.println(player.id() + " gets the bonus.");
+                    /*
+                    class IDReturner {
+                        public PlayerID playerWhoHasBonus() {
+                            return player.id();
+                        }
+                    }
+                    */
                 }
 
                 players1.add(new Player(player.id(), futureLifeStates,
@@ -609,7 +616,7 @@ public final class GameState {
         }
 
         int nbBombs;
-        
+
         System.out.println();
 
         for (Player player : players0) {
@@ -632,8 +639,8 @@ public final class GameState {
 
         return bombs1;
     }
-    
-    public List<PlayerID> getPermutation(){
+
+    public List<PlayerID> getPermutation() {
         return PERMUTATION.get(ticks);
     }
 }

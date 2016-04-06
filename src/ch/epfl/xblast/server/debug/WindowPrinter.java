@@ -142,7 +142,7 @@ public class WindowPrinter implements Runnable {
             System.out.println(gameState.ticks());
             paint();
             try {
-                Thread.sleep(1000);
+                Thread.sleep(1L);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
