@@ -400,6 +400,8 @@ public final class GameState {
                                 Player.DirectedPosition centralSubCell = player
                                         .directedPositions().findFirst(
                                                 p -> p.position().isCentral());
+                                
+                                System.out.println("Central subcell for turn: " + centralSubCell.position().toString());
 
                                 // Sequence of directed positions until the
                                 // first

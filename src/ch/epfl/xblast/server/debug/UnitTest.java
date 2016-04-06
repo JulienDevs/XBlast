@@ -136,6 +136,7 @@ public class UnitTest {
                 players);
         
         do {
+            System.out.println("Tick: " + game.ticks());
             speedChangeEvents = speedChangeEvents(game.ticks());
             bombDropEvents = bombDropEvents(-1);
             GameStatePrinter.printGameState(game);
