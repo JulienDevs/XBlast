@@ -1,6 +1,7 @@
 package ch.epfl.xblast.server;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import ch.epfl.cs108.Sq;
@@ -29,7 +30,7 @@ public final class Board {
         if (blocks == null || blocks.size() != Cell.COUNT) {
             throw new IllegalArgumentException();
         }
-        this.blocks = blocks;
+        this.blocks = Collections.unmodifiableList(new ArrayList<>(blocks));
     }
 
     /**

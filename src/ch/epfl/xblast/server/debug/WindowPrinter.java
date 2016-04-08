@@ -36,7 +36,7 @@ public class WindowPrinter implements Runnable {
     private final static Block XX = Block.INDESTRUCTIBLE_WALL;
     private final static Block xx = Block.DESTRUCTIBLE_WALL;
     private final static List<List<Block>> blockList = Arrays.asList(
-            Arrays.asList(__, __, __, __, __, xx, __),
+            Arrays.asList(__, __, Block.BONUS_BOMB, __, __, xx, __),
             Arrays.asList(__, XX, xx, XX, xx, XX, xx),
             Arrays.asList(__, xx, __, __, __, xx, __),
             Arrays.asList(xx, XX, __, XX, XX, XX, XX),

@@ -2,6 +2,7 @@ package ch.epfl.xblast.server;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -15,6 +16,7 @@ import ch.epfl.xblast.Cell;
 import ch.epfl.xblast.Direction;
 import ch.epfl.xblast.Lists;
 import ch.epfl.xblast.PlayerID;
+import ch.epfl.xblast.SubCell;
 
 /**
  * Immutable class. Handles representation of the game state (its players, bombs
@@ -75,10 +77,11 @@ public final class GameState {
 
         this.ticks = ticks;
         this.board = board;
-        this.players = players;
-        this.bombs = bombs;
-        this.explosions = explosions;
-        this.blasts = blasts;
+        this.players = Collections.unmodifiableList(new ArrayList<>(players));
+        this.bombs = Collections.unmodifiableList(new ArrayList<>(bombs));
+        this.explosions = Collections
+                .unmodifiableList(new ArrayList<>(explosions));
+        this.blasts = Collections.unmodifiableList(new ArrayList<>(blasts));
     }
 
     /**
@@ -190,9 +193,9 @@ public final class GameState {
      * t.
      * 
      * @param speedChangeEvents
-     *            changes in players directions on time t
+     *            - changes in players directions on time t
      * @param bombDropEvents
-     *            bombs dropped by players on time t
+     *            - bombs dropped by players on time t
      * @return GameState on time t+1
      */
     public GameState next(Map<PlayerID, Optional<Direction>> speedChangeEvents,
@@ -224,29 +227,29 @@ public final class GameState {
             }
         }
 
-        Cell c;
+        SubCell c;
 
         for (Player p : players0) {
-            c = p.position().containingCell();
+            c = p.position();
 
-            if (board.blockAt(c).isBonus()) {
-                consumedBonuses.add(c);
+            if (p.position().isCentral()
+                    && board.blockAt(c.containingCell()).isBonus()) {
+                consumedBonuses.add(c.containingCell());
 
-                if (!takenBonuses.contains(c)) {
-                    playerBonuses.put(p.id(),
-                            board.blockAt(c).associatedBonus());
-                    takenBonuses.add(c);
+                if (!takenBonuses.contains(c.containingCell())) {
+                    playerBonuses.put(p.id(), board.blockAt(c.containingCell())
+                            .associatedBonus());
+                    takenBonuses.add(c.containingCell());
                 }
             }
         }
 
-        Set<Cell> blastedCells = new HashSet<Cell>();
-
+        Set<Cell> blastedCells1 = new HashSet<Cell>();
         for (Sq<Cell> b : blasts1) {
-            blastedCells.add(b.head());
+            blastedCells1.add(b.head());
         }
 
-        Board board1 = nextBoard(board, consumedBonuses, blastedCells);
+        Board board1 = nextBoard(board, consumedBonuses, blastedCells1);
 
         // 3. Evolution of the explosions
 
@@ -254,16 +257,12 @@ public final class GameState {
 
         // 4. Evolution of the bombs
 
-        List<Bomb> bombs0 = newlyDroppedBombs(players0, bombDropEvents, bombs);
+        List<Bomb> newBombs = newlyDroppedBombs(players0, bombDropEvents,
+                bombs);
         List<Bomb> bombs1 = new ArrayList<Bomb>();
-        Set<Cell> blastedCells1 = new HashSet<Cell>();
 
-        for (Sq<Cell> b : blasts1) {
-            blastedCells1.add(b.head());
-        }
-
-        bombs0.addAll(bombs);
-        for (Bomb bomb : bombs0) {
+        newBombs.addAll(bombs);
+        for (Bomb bomb : newBombs) {
             if (bomb.fuseLengths().tail().isEmpty()
                     || blastedCells1.contains(bomb.position())) {
                 explosions1.addAll(bomb.explosion());
@@ -362,8 +361,7 @@ public final class GameState {
                     } else {
                         if (!speedChangeEvents.get(player.id()).isPresent()) {
                             // If the player wants to stop, he stops at the
-                            // first
-                            // central subcell in his path.
+                            // first central subcell in his path.
 
                             Player.DirectedPosition centralSubCell = player
                                     .directedPositions()
@@ -391,33 +389,29 @@ public final class GameState {
                                 futurePositions = Player.DirectedPosition
                                         .moving(new Player.DirectedPosition(
                                                 player.position(), choice));
-                            } else {// If the player wants to turn in a
-                                    // perpendicular
-                                    // direction and can move
+
+                            } else {
+                                // If the player wants to turn in a
+                                // perpendicular direction and can move
 
                                 // The first central subcell in the path of the
                                 // player
                                 Player.DirectedPosition centralSubCell = player
                                         .directedPositions().findFirst(
                                                 p -> p.position().isCentral());
-                                
-                                System.out.println("Central subcell for turn: " + centralSubCell.position().toString());
 
                                 // Sequence of directed positions until the
-                                // first
-                                // subcell (not included) in the path of the
-                                // player
+                                // first subcell (not included) in the path of
+                                // the player
                                 start = player.directedPositions()
                                         .takeWhile(p -> !p.position().equals(
                                                 centralSubCell.position()));
 
                                 // Sequence of directed positions starting at
-                                // the
-                                // first central subcell in the path of the
-                                // player
-                                // (included) and going in the direction in
-                                // which
-                                // the player wants to turn (to infinity)
+                                // the first central subcell in the path of the
+                                // player (included) and going in the direction
+                                // in which the player wants to turn (to
+                                // infinity)
                                 end = Player.DirectedPosition
                                         .moving(new Player.DirectedPosition(
                                                 centralSubCell.position(),
@@ -438,7 +432,7 @@ public final class GameState {
                                 .distanceToCentral() == 5;
                 boolean isBlockedByWall = board1
                         .blockAt(player.position().containingCell()
-                                .neighbor(player.direction()))
+                                .neighbor(futurePositions.head().direction()))
                         .castsShadow() && player.position().isCentral();
 
                 // If the player is blocked by a bomb, a destructible wall or a
@@ -467,14 +461,6 @@ public final class GameState {
 
                 if (playerBonuses.containsKey(player.id())) {
                     player = playerBonuses.get(player.id()).applyTo(player);
-                    System.out.println(player.id() + " gets the bonus.");
-                    /*
-                    class IDReturner {
-                        public PlayerID playerWhoHasBonus() {
-                            return player.id();
-                        }
-                    }
-                    */
                 }
 
                 players1.add(new Player(player.id(), futureLifeStates,
@@ -619,8 +605,6 @@ public final class GameState {
 
         int nbBombs;
 
-        System.out.println();
-
         for (Player player : players0) {
             nbBombs = 0;
 
@@ -634,15 +618,10 @@ public final class GameState {
                     && !bombedCells.contains(player.position().containingCell())
                     && player.maxBombs() > nbBombs) {
                 bombs1.add(player.newBomb());
-                System.out.println("Player that put the bomb: " + player.id());
                 bombedCells.add(player.position().containingCell());
             }
         }
 
         return bombs1;
-    }
-
-    public List<PlayerID> getPermutation() {
-        return PERMUTATION.get(ticks);
     }
 }
