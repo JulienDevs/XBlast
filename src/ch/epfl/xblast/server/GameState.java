@@ -126,8 +126,7 @@ public final class GameState {
             if (p.isAlive())
                 nbAlivePlayers++;
         }
-        return (ticks == Ticks.TOTAL_TICKS || nbAlivePlayers <= 1);
-
+        return (ticks > Ticks.TOTAL_TICKS || nbAlivePlayers <= 1);
     }
 
     /**
