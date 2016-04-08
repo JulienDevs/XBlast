@@ -49,6 +49,28 @@ public final class Lists {
      * @return - a list containing all the permutations of l
      */
     public static <T> List<List<T>> permutations(List<T> l) {
+        if(l.size()==0){
+            return new ArrayList<List<T>>();
+        }
+        if(l.size()==1){
+            List<List<T>> result =   new ArrayList<List<T>>();
+            result.add(l);
+            return result;
+        }
+        
+        if(l.size()==2){
+            List<List<T>> result =   new ArrayList<List<T>>();
+            result.add(l);
+            List<T> temp = new ArrayList<T>();
+            temp.add(l.get(1));
+            temp.add(l.get(0));
+            result.add(temp);
+            return result;  
+            
+        }
+        
+        
+        
         List<T> subList = l.subList(l.size() - 2, l.size());
         List<List<T>> lists = new ArrayList<List<T>>();
         lists.add(subList);
