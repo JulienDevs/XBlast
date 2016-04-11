@@ -7,18 +7,22 @@ import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Stream;
 
 import org.junit.Test;
 
 import ch.epfl.cs108.Sq;
 import ch.epfl.xblast.Cell;
+import ch.epfl.xblast.Direction;
 import ch.epfl.xblast.PlayerID;
 import ch.epfl.xblast.server.Block;
 import ch.epfl.xblast.server.Board;
 import ch.epfl.xblast.server.GameState;
 import ch.epfl.xblast.server.Player;
 import ch.epfl.xblast.server.Player.DirectedPosition;
+import ch.epfl.xblast.server.debug.GameStatePrinter;
 import ch.epfl.xblast.server.debug.RandomEventGenerator;
 
 import static org.junit.Assert.assertTrue;
@@ -65,14 +69,17 @@ public class RandomTestGame {
         RandomEventGenerator randEvents = new RandomEventGenerator(2016, 30, 100);
         GameState s = new GameState(createBoard(), createPlayers(3, 2, 3, POS_NW, POS_NE, POS_SE, POS_SW));
         while (!s.isGameOver()) {
-            s = s.next(randEvents.randomSpeedChangeEvents(), randEvents.randomBombDropEvents());
-
+            Map<PlayerID, Optional<Direction>> speedChangeEvents = randEvents.randomSpeedChangeEvents();
+            
+            s = s.next(speedChangeEvents, randEvents.randomBombDropEvents());
+            GameStatePrinter.printGameState(s);
             for(Player p: s.players()) {
                 List<List<Integer>> pos = GameSimulation.positionsList(pos_iterator.next());
                 Sq<DirectedPosition> seq = p.directedPositions();
 
                 for(List<Integer> e: pos) {
                 	DirectedPosition h = seq.head();
+                	System.out.println(h.direction() + "    " + h.position() + "    " + e);
                 	assertTrue(GameSimulation.compare(h, e));
 
                 	seq = seq.tail();                	
