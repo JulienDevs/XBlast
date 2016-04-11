@@ -426,7 +426,7 @@ public final class GameState {
                 boolean isBlockedByBomb = bombedCells1
                         .contains(player.position().containingCell())
                         && player.position().distanceToCentral() == 6
-                        && player.position().neighbor(player.direction())
+                        && player.position().neighbor(futurePositions.head().direction())
                                 .distanceToCentral() == 5;
                 boolean isBlockedByWall = board1
                         .blockAt(player.position().containingCell()
