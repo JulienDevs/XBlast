@@ -13,7 +13,7 @@ public final class PlayerPainter {
     private final static byte STEP_FOR_DIRECTION = 3;
     private final static byte STEP_FOR_FIRST = 1;
     private final static byte STEP_FOR_SECOND = 2;
-    private final static byte BYTE_FOR_DEAD = 69;
+    private final static byte BYTE_FOR_DEAD = 100;
     
     private PlayerPainter() {
     }
