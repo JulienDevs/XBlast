@@ -32,7 +32,7 @@ public final class Lists {
             throw new IllegalArgumentException();
         }
         List<T> list = new ArrayList<T>(l);
-        List<T> tmpList = l.subList(0, l.size() - 1);
+        List<T> tmpList = new ArrayList<T>(l.subList(0, l.size() - 1));
         Collections.reverse(tmpList);
         list.addAll(tmpList);
         list = Collections.unmodifiableList(list);

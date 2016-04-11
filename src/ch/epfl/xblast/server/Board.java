@@ -47,8 +47,8 @@ public final class Board {
 
     public static Board ofRows(List<List<Block>> rows)
             throws IllegalArgumentException {
-        checkBlockMatrix(rows, 13, 15);
-        List<Sq<Block>> constantBlocks = new ArrayList<Sq<Block>>();
+        checkBlockMatrix(rows, Cell.ROWS, Cell.COLUMNS);
+        List<Sq<Block>> constantBlocks = new ArrayList<>();
 
         for (int i = 0; i < rows.size(); i++) {
             for (int j = 0; j < rows.get(i).size(); j++) {
@@ -74,22 +74,29 @@ public final class Board {
 
     public static Board ofInnerBlocksWalled(List<List<Block>> innerBlocks)
             throws IllegalArgumentException {
-        checkBlockMatrix(innerBlocks, 11, 13);
+        checkBlockMatrix(innerBlocks, Cell.ROWS - 2, Cell.COLUMNS - 2);
 
-        List<Sq<Block>> blocks = new ArrayList<Sq<Block>>();
+        List<List<Block>> blocks = new ArrayList<>();
 
-        for (int i = 0; i < innerBlocks.size() + 2; i++) {
-            for (int j = 0; j < innerBlocks.get(i).size() + 2; j++) {
-                if (i == 0 || j == 0 || i == innerBlocks.size() + 2
-                        || j == innerBlocks.get(i).size() + 2) {
-                    blocks.add(Sq.constant(Block.INDESTRUCTIBLE_WALL));
-                } else {
-                    blocks.add(Sq.constant(innerBlocks.get(i).get(j)));
-                }
+        blocks.add(
+                Collections.nCopies(Cell.COLUMNS, Block.INDESTRUCTIBLE_WALL));
+
+        List<Block> tmpBlocks;
+
+        for (int i = 0; i < innerBlocks.size(); i++) {
+            tmpBlocks = new ArrayList<>();
+            tmpBlocks.add(Block.INDESTRUCTIBLE_WALL);
+            for (Block j : innerBlocks.get(i)) {
+                tmpBlocks.add(j);
             }
+            tmpBlocks.add(Block.INDESTRUCTIBLE_WALL);
+            blocks.add(tmpBlocks);
         }
 
-        return new Board(blocks);
+        blocks.add(
+                Collections.nCopies(Cell.COLUMNS, Block.INDESTRUCTIBLE_WALL));
+
+        return ofRows(blocks);
     }
 
     /**
@@ -109,28 +116,18 @@ public final class Board {
     public static Board ofQuadrantNWBlocksWalled(
             List<List<Block>> quadrantNWBBlocks)
                     throws IllegalArgumentException {
-        checkBlockMatrix(quadrantNWBBlocks, 6, 7);
+        checkBlockMatrix(quadrantNWBBlocks, (Cell.ROWS - 1) / 2,
+                (Cell.COLUMNS - 1) / 2);
 
-        List<Sq<Block>> symmetricBlocks = new ArrayList<Sq<Block>>();
+        List<List<Block>> symmetricBlocks = new ArrayList<>();
 
-        for (int m = 0; m < quadrantNWBBlocks.size(); m++) {
-            quadrantNWBBlocks.set(m, Lists.mirrored(quadrantNWBBlocks.get(m)));
-        }
-        quadrantNWBBlocks = Lists.mirrored(quadrantNWBBlocks);
-
-        for (int i = 0; i < quadrantNWBBlocks.size() + 2; i++) {
-            for (int j = 0; j < quadrantNWBBlocks.get(2).size() + 2; j++) {
-                if (i == 0 || j == 0 || i == quadrantNWBBlocks.size() + 1
-                        || j == quadrantNWBBlocks.get(2).size() + 1) {
-                    symmetricBlocks.add(Sq.constant(Block.INDESTRUCTIBLE_WALL));
-                } else {
-                    symmetricBlocks.add(Sq
-                            .constant(quadrantNWBBlocks.get(i - 1).get(j - 1)));
-                }
-            }
+        for (List<Block> list : quadrantNWBBlocks) {
+            symmetricBlocks.add(Lists.mirrored(list));
         }
 
-        return new Board(symmetricBlocks);
+        symmetricBlocks = Lists.mirrored(symmetricBlocks);
+
+        return ofInnerBlocksWalled(symmetricBlocks);
     }
 
     /**
@@ -141,7 +138,6 @@ public final class Board {
      * @return sequence of blocks of c
      */
     public Sq<Block> blocksAt(Cell c) {
-
         return this.blocks.get(c.rowMajorIndex());
     }
 
