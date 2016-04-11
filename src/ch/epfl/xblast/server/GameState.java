@@ -65,7 +65,7 @@ public final class GameState {
     public GameState(int ticks, Board board, List<Player> players,
             List<Bomb> bombs, List<Sq<Sq<Cell>>> explosions,
             List<Sq<Cell>> blasts)
-                    throws IllegalArgumentException, NullPointerException {
+            throws IllegalArgumentException, NullPointerException {
 
         if (blasts == null || explosions == null || bombs == null
                 || players == null || board == null) {
@@ -346,128 +346,115 @@ public final class GameState {
         List<Player> players1 = new ArrayList<Player>();
 
         for (Player player : players0) {
-            if (player.isAlive()) {
-                Sq<Player.DirectedPosition> futurePositions;
+            Sq<Player.DirectedPosition> futurePositions;
 
-                // If the player wants to turn or stop
-                if (speedChangeEvents.containsKey(player.id())) {
+            // If the player wants to turn or stop
+            if (speedChangeEvents.containsKey(player.id())) {
+                if (!speedChangeEvents.get(player.id()).isPresent()) {
+                    // If the player wants to stop, he stops at the
+                    // first central subcell in his path.
 
-                    // If the player can't move, the evolution of its directed
-                    // positions is stopped.
-                    if (!player.lifeState().canMove()) {
-                        futurePositions = player.directedPositions();
+                    Player.DirectedPosition centralSubCell = player
+                            .directedPositions()
+                            .findFirst(p -> p.position().isCentral());
+                    System.out.println("QQQQQAOUBDAOBD "
+                            + centralSubCell.position().toString());
+
+                    Sq<Player.DirectedPosition> start = player
+                            .directedPositions().takeWhile(p -> !p.position()
+                                    .equals(centralSubCell.position()));
+
+                    Sq<Player.DirectedPosition> end = Player.DirectedPosition
+                            .stopped(centralSubCell);
+
+                    futurePositions = start.concat(end);
+                } else {
+                    Direction choice = speedChangeEvents.get(player.id()).get();
+
+                    Sq<Player.DirectedPosition> start;
+                    Sq<Player.DirectedPosition> end;
+
+                    // If the player wants to turn the parallel
+                    // direction and can move
+                    if (choice.isParallelTo(player.direction())) {
+                        futurePositions = Player.DirectedPosition.moving(
+                                new Player.DirectedPosition(player.position(),
+                                        choice));
+
                     } else {
-                        if (!speedChangeEvents.get(player.id()).isPresent()) {
-                            // If the player wants to stop, he stops at the
-                            // first central subcell in his path.
+                        // If the player wants to turn in a
+                        // perpendicular direction and can move
 
-                            Player.DirectedPosition centralSubCell = player
-                                    .directedPositions()
-                                    .findFirst(p -> p.position().isCentral());
+                        // The first central subcell in the path of the
+                        // player
+                        Player.DirectedPosition centralSubCell = player
+                                .directedPositions()
+                                .findFirst(p -> p.position().isCentral());
 
-                            Sq<Player.DirectedPosition> start = player
-                                    .directedPositions()
-                                    .takeWhile(p -> !p.position()
-                                            .equals(centralSubCell.position()));
+                        // Sequence of directed positions until the
+                        // first subcell (not included) in the path of
+                        // the player
+                        start = player.directedPositions().takeWhile(p -> !p
+                                .position().equals(centralSubCell.position()));
 
-                            Sq<Player.DirectedPosition> end = Player.DirectedPosition
-                                    .stopped(centralSubCell);
+                        // Sequence of directed positions starting at
+                        // the first central subcell in the path of the
+                        // player (included) and going in the direction
+                        // in which the player wants to turn (to
+                        // infinity)
+                        end = Player.DirectedPosition
+                                .moving(new Player.DirectedPosition(
+                                        centralSubCell.position(), choice));
 
-                            futurePositions = start.concat(end);
-                        } else {
-                            Direction choice = speedChangeEvents
-                                    .get(player.id()).get();
-
-                            Sq<Player.DirectedPosition> start;
-                            Sq<Player.DirectedPosition> end;
-
-                            // If the player wants to turn the parallel
-                            // direction and can move
-                            if (choice.isParallelTo(player.direction())) {
-                                futurePositions = Player.DirectedPosition
-                                        .moving(new Player.DirectedPosition(
-                                                player.position(), choice));
-
-                            } else {
-                                // If the player wants to turn in a
-                                // perpendicular direction and can move
-
-                                // The first central subcell in the path of the
-                                // player
-                                Player.DirectedPosition centralSubCell = player
-                                        .directedPositions().findFirst(
-                                                p -> p.position().isCentral());
-
-                                // Sequence of directed positions until the
-                                // first subcell (not included) in the path of
-                                // the player
-                                start = player.directedPositions()
-                                        .takeWhile(p -> !p.position().equals(
-                                                centralSubCell.position()));
-
-                                // Sequence of directed positions starting at
-                                // the first central subcell in the path of the
-                                // player (included) and going in the direction
-                                // in which the player wants to turn (to
-                                // infinity)
-                                end = Player.DirectedPosition
-                                        .moving(new Player.DirectedPosition(
-                                                centralSubCell.position(),
-                                                choice));
-
-                                futurePositions = start.concat(end);
-                            }
-                        }
+                        futurePositions = start.concat(end);
                     }
-                } else {
-                    futurePositions = player.directedPositions();
                 }
-
-                boolean isBlockedByBomb = bombedCells1
-                        .contains(player.position().containingCell())
-                        && player.position().distanceToCentral() == 6
-                        && player.position().neighbor(futurePositions.head().direction())
-                                .distanceToCentral() == 5;
-                boolean isBlockedByWall = board1
-                        .blockAt(player.position().containingCell()
-                                .neighbor(futurePositions.head().direction()))
-                        .castsShadow() && player.position().isCentral();
-
-                // If the player is blocked by a bomb, a destructible wall or a
-                // crumbling wall or if he can't move, we stop the evolution of
-                // its directed positions. Otherwise, if the bomb exploded or
-                // the wall was destroyed, the player's directed positions
-                // evolve again as he can move
-                if (!isBlockedByBomb && !isBlockedByWall
-                        && player.lifeState().canMove()) {
-                    futurePositions = futurePositions.tail();
-                }
-
-                Sq<Player.LifeState> futureLifeStates;
-
-                // The player loses a life if a blast is in the same cell as him
-                // and if he's vulnerable
-                if (blastedCells1
-                        .contains(futurePositions.head().position()
-                                .containingCell())
-                        && player.lifeState()
-                                .state() == Player.LifeState.State.VULNERABLE) {
-                    futureLifeStates = player.statesForNextLife();
-                } else {
-                    futureLifeStates = player.lifeStates().tail();
-                }
-
-                if (playerBonuses.containsKey(player.id())) {
-                    player = playerBonuses.get(player.id()).applyTo(player);
-                }
-
-                players1.add(new Player(player.id(), futureLifeStates,
-                        futurePositions, player.maxBombs(),
-                        player.bombRange()));
 
             } else {
-                players1.add(player);
+                futurePositions = player.directedPositions();
             }
+
+            boolean isBlockedByBomb = bombedCells1
+                    .contains(player.position().containingCell())
+                    && player.position().distanceToCentral() == 6
+                    && player.position()
+                            .neighbor(futurePositions.head().direction())
+                            .distanceToCentral() == 5;
+            boolean isBlockedByWall = board1
+                    .blockAt(player.position().containingCell()
+                            .neighbor(futurePositions.head().direction()))
+                    .castsShadow() && player.position().isCentral();
+
+            // If the player is blocked by a bomb, a destructible wall or a
+            // crumbling wall or if he can't move, we stop the evolution of
+            // its directed positions. Otherwise, if the bomb exploded or
+            // the wall was destroyed, the player's directed positions
+            // evolve again as he can move
+            if (!isBlockedByBomb && !isBlockedByWall
+                    && player.lifeState().canMove()) {
+                futurePositions = futurePositions.tail();
+            }
+
+            Sq<Player.LifeState> futureLifeStates;
+
+            // The player loses a life if a blast is in the same cell as him
+            // and if he's vulnerable
+            if (blastedCells1.contains(
+                    futurePositions.head().position().containingCell())
+                    && player.lifeState()
+                            .state() == Player.LifeState.State.VULNERABLE) {
+                futureLifeStates = player.statesForNextLife();
+            } else {
+                futureLifeStates = player.lifeStates().tail();
+            }
+
+            if (playerBonuses.containsKey(player.id())) {
+                player = playerBonuses.get(player.id()).applyTo(player);
+            }
+
+            players1.add(new Player(player.id(), futureLifeStates,
+                    futurePositions, player.maxBombs(), player.bombRange()));
+
         }
 
         return players1;

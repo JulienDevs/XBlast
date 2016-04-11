@@ -79,7 +79,7 @@ public class RandomTestGame {
 
                 for(List<Integer> e: pos) {
                 	DirectedPosition h = seq.head();
-                	System.out.println(h.direction() + "    " + h.position() + "    " + e);
+                	System.out.println(p.id() + "      " + h.direction() + "    " + h.position() + "    " + e + "     " +speedChangeEvents);
                 	assertTrue(GameSimulation.compare(h, e));
 
                 	seq = seq.tail();                	
