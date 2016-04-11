@@ -50,7 +50,9 @@ public final class Lists {
      */
     public static <T> List<List<T>> permutations(List<T> l) {
         if(l.size()==0){
-            return new ArrayList<List<T>>();
+            List<List<T>> result =   new ArrayList<List<T>>();
+            result.add(l);
+            return result;
         }
         if(l.size()==1){
             List<List<T>> result =   new ArrayList<List<T>>();
