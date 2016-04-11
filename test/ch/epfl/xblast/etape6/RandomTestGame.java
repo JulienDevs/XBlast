@@ -72,14 +72,14 @@ public class RandomTestGame {
             Map<PlayerID, Optional<Direction>> speedChangeEvents = randEvents.randomSpeedChangeEvents();
             
             s = s.next(speedChangeEvents, randEvents.randomBombDropEvents());
-            GameStatePrinter.printGameState(s);
+            
             for(Player p: s.players()) {
                 List<List<Integer>> pos = GameSimulation.positionsList(pos_iterator.next());
                 Sq<DirectedPosition> seq = p.directedPositions();
 
                 for(List<Integer> e: pos) {
                 	DirectedPosition h = seq.head();
-                	System.out.println(p.id() + "      " + h.direction() + "    " + h.position() + "    " + e + "     " +speedChangeEvents);
+                	 
                 	assertTrue(GameSimulation.compare(h, e));
 
                 	seq = seq.tail();                	

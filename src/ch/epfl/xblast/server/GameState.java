@@ -357,8 +357,6 @@ public final class GameState {
                     Player.DirectedPosition centralSubCell = player
                             .directedPositions()
                             .findFirst(p -> p.position().isCentral());
-                    System.out.println("QQQQQAOUBDAOBD "
-                            + centralSubCell.position().toString());
 
                     Sq<Player.DirectedPosition> start = player
                             .directedPositions().takeWhile(p -> !p.position()
@@ -420,10 +418,10 @@ public final class GameState {
                     && player.position()
                             .neighbor(futurePositions.head().direction())
                             .distanceToCentral() == 5;
-            boolean isBlockedByWall = board1
+            boolean isBlockedByWall = !board1
                     .blockAt(player.position().containingCell()
                             .neighbor(futurePositions.head().direction()))
-                    .castsShadow() && player.position().isCentral();
+                    .canHostPlayer() && player.position().isCentral();
 
             // If the player is blocked by a bomb, a destructible wall or a
             // crumbling wall or if he can't move, we stop the evolution of
