@@ -16,7 +16,7 @@ public final class BoardPainter {
     private final BlockImage shade;
 
     public BoardPainter(Map<Block, BlockImage> palette, BlockImage shade) {
-        this.palette = Collections.unmodifiableMap(new HashMap(palette));
+        this.palette = Collections.unmodifiableMap(new HashMap<>(palette));
         this.shade = shade;
     }
 

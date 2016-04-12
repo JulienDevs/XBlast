@@ -17,16 +17,17 @@ import java.util.List;
 import java.lang.Math;
 
 public final class Cell {
-
-    public final static int COLUMNS = 15;
-    public final static int ROWS = 13;
-    public final static int COUNT = COLUMNS * ROWS;
-    private final int x;
-    private final int y;
     public static final List<Cell> ROW_MAJOR_ORDER = Collections
             .unmodifiableList(rowMajorOrder());
     public static final List<Cell> SPIRAL_ORDER = Collections
             .unmodifiableList(rowSpiralOrder());
+
+    public final static int COLUMNS = 15;
+    public final static int ROWS = 13;
+    public final static int COUNT = COLUMNS * ROWS;
+    
+    private final int x;
+    private final int y;
 
     /**
      * Constructor of Cell.

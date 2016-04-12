@@ -27,6 +27,8 @@ import ch.epfl.xblast.SubCell;
  * @author Julien Malka (259041)
  */
 public final class GameState {
+    private final static int BOMB_BLOCK_DISTANCE = 6;
+    
     private final int ticks;
     private final Board board;
     private final List<Player> players;
@@ -37,7 +39,9 @@ public final class GameState {
     private static final List<List<PlayerID>> PERMUTATION = Lists
             .permutations(Arrays.asList(PlayerID.PLAYER_1, PlayerID.PLAYER_2,
                     PlayerID.PLAYER_3, PlayerID.PLAYER_4));
+
     private static final Random RANDOM = new Random(2016);
+
     private static final Block[] PROBABILITY_BLOCKS = { Block.BONUS_BOMB,
             Block.BONUS_RANGE, Block.FREE };
 
@@ -65,13 +69,13 @@ public final class GameState {
     public GameState(int ticks, Board board, List<Player> players,
             List<Bomb> bombs, List<Sq<Sq<Cell>>> explosions,
             List<Sq<Cell>> blasts)
-            throws IllegalArgumentException, NullPointerException {
+                    throws IllegalArgumentException, NullPointerException {
 
         if (blasts == null || explosions == null || bombs == null
                 || players == null || board == null) {
             throw new NullPointerException();
         }
-        if (ticks < 0 || players.size() != 4) {
+        if (ticks < 0 || players.size() != PlayerID.values().length) {
             throw new IllegalArgumentException();
         }
 
@@ -414,10 +418,10 @@ public final class GameState {
 
             boolean isBlockedByBomb = bombedCells1
                     .contains(player.position().containingCell())
-                    && player.position().distanceToCentral() == 6
+                    && player.position().distanceToCentral() == BOMB_BLOCK_DISTANCE
                     && player.position()
                             .neighbor(futurePositions.head().direction())
-                            .distanceToCentral() == 5;
+                            .distanceToCentral() == BOMB_BLOCK_DISTANCE - 1;
             boolean isBlockedByWall = !board1
                     .blockAt(player.position().containingCell()
                             .neighbor(futurePositions.head().direction()))

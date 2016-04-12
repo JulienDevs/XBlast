@@ -12,6 +12,8 @@ import java.lang.Math;
 public final class SubCell {
     public final static int COLUMNS = 240;
     public final static int ROWS = 208;
+    
+    private final static int SUBCELL_SIZE = 16;
 
     private final int x, y;
 
@@ -38,8 +40,8 @@ public final class SubCell {
 
     public static SubCell centralSubCellOf(Cell cell) {
         int tmpX, tmpY;
-        tmpX = cell.x() * 16 + 8;
-        tmpY = cell.y() * 16 + 8;
+        tmpX = cell.x() * SUBCELL_SIZE + SUBCELL_SIZE / 2;
+        tmpY = cell.y() * SUBCELL_SIZE + SUBCELL_SIZE / 2;
         return new SubCell(tmpX, tmpY);
     }
 
@@ -113,8 +115,8 @@ public final class SubCell {
     public Cell containingCell() {
         int cellX, cellY;
 
-        cellX = this.x / 16;
-        cellY = this.y / 16;
+        cellX = this.x / SUBCELL_SIZE;
+        cellY = this.y / SUBCELL_SIZE;
 
         return new Cell(cellX, cellY);
     }

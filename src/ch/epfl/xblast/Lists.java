@@ -83,13 +83,7 @@ public final class Lists {
         return recursion(lists, l);
     }
 
-    /**
-     * 
-     * 
-     * @param lists
-     * @param l
-     * @return
-     */
+    
     private static <T> List<List<T>> recursion(List<List<T>> lists, List<T> l) {
         int n = l.size();
         int fact = 1;
