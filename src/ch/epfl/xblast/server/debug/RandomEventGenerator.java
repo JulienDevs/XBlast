@@ -38,7 +38,7 @@ public final class RandomEventGenerator {
         }
         return Collections.unmodifiableMap(events);
     }
-
+    
     public Set<PlayerID> randomBombDropEvents() {
         Set<PlayerID> events = EnumSet.noneOf(PlayerID.class);
         for (PlayerID pID : PlayerID.values()) {
