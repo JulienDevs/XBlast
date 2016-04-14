@@ -10,6 +10,7 @@ import ch.epfl.xblast.server.Player.LifeState.State;
  */
 public final class PlayerPainter {
     private final static byte STEP_FOR_PLAYER = 20;
+    private final static byte INDEX_FOR_INVULNERABLE = 80;
     private final static byte STEP_FOR_DIRECTION = 3;
     private final static byte STEP_FOR_FIRST = 1;
     private final static byte STEP_FOR_SECOND = 2;
@@ -23,15 +24,12 @@ public final class PlayerPainter {
             return BYTE_FOR_DEAD;
         }
         byte bFP = 0;
-        if(tick % 2 == 0 && player.lifeState().state() == State.INVULNERABLE){
-            bFP = 80;
-        } else {
-            bFP += player.id().ordinal() * STEP_FOR_PLAYER;
-        }
+        
+        bFP += (tick % 2 != 0 && player.lifeState().state() == State.INVULNERABLE)? INDEX_FOR_INVULNERABLE  : player.id().ordinal()* STEP_FOR_PLAYER;
         
         bFP += player.direction().ordinal() * STEP_FOR_DIRECTION;
         
-        int mod = (player.direction() == Direction.E || player.direction() == Direction.W)? player.position().x() % 4 : player.position().y() % 4;
+        int mod = (player.direction().isHorizontal())? player.position().x() % 4 : player.position().y() % 4;
         
         if(mod == 1){
             bFP += STEP_FOR_FIRST;
