@@ -17,15 +17,33 @@ import java.util.List;
 import java.lang.Math;
 
 public final class Cell {
+    /**
+     * Cells of the board in reading order.
+     */
     public static final List<Cell> ROW_MAJOR_ORDER = Collections
             .unmodifiableList(rowMajorOrder());
+
+    /**
+     * Cells of the board in spiral order.
+     */
     public static final List<Cell> SPIRAL_ORDER = Collections
             .unmodifiableList(rowSpiralOrder());
 
+    /**
+     * Number of columns in the board.
+     */
     public final static int COLUMNS = 15;
+
+    /**
+     * Number of rows in the board.
+     */
     public final static int ROWS = 13;
+
+    /**
+     * Number of cells in the board.
+     */
     public final static int COUNT = COLUMNS * ROWS;
-    
+
     private final int x;
     private final int y;
 
@@ -40,13 +58,12 @@ public final class Cell {
     public Cell(int x, int y) {
         this.x = Math.floorMod(x, COLUMNS);
         this.y = Math.floorMod(y, ROWS);
-
     }
 
     /**
      * Returns a list of the cells in the reading order
      * 
-     * @return Object of type ArrayList of Cells.
+     * @return object of type ArrayList of Cells.
      */
     private static ArrayList<Cell> rowMajorOrder() {
         ArrayList<Cell> result = new ArrayList<Cell>();
@@ -58,13 +75,12 @@ public final class Cell {
 
         }
         return result;
-
     }
 
     /**
      * Returns a list of the cells in the spiral order
      * 
-     * @return Object of type ArrayList of Cells.
+     * @return object of type ArrayList of Cells.
      */
     private static ArrayList<Cell> rowSpiralOrder() {
         ArrayList<Integer> ix = new ArrayList<Integer>();
@@ -108,14 +124,18 @@ public final class Cell {
     }
 
     /**
-     * @return column of the cell.
+     * Returns column of the cell.
+     * 
+     * @return column of the cell
      */
     public int x() {
         return x;
     }
 
     /**
-     * @return row of the cell.
+     * Returns the row of the cell.
+     * 
+     * @return row of the cell
      */
     public int y() {
         return y;
@@ -124,11 +144,10 @@ public final class Cell {
     /**
      * Returns the index of the cell in reading order.
      * 
-     * @return - the index of the cell in reading order
+     * @return the index of the cell in reading order
      */
     public int rowMajorIndex() {
         return y * COLUMNS + x;
-
     }
 
     /**
@@ -137,7 +156,7 @@ public final class Cell {
      * 
      * @param dir
      *            - direction to the neighbor.
-     * @return The neighbor cell in the direction d.
+     * @return the neighbor cell in the direction d.
      */
     public Cell neighbor(Direction dir) {
 
@@ -162,7 +181,6 @@ public final class Cell {
         default:
             return null;
         }
-
     }
 
     @Override

@@ -10,10 +10,17 @@ import java.lang.Math;
  */
 
 public final class SubCell {
-    public final static int COLUMNS = 240;
-    public final static int ROWS = 208;
-    
     private final static int SUBCELL_SIZE = 16;
+    
+    /**
+     * Number of columns in the board.
+     */
+    public final static int COLUMNS = Cell.COLUMNS * SUBCELL_SIZE;
+
+    /**
+     * Number of rows in the board.
+     */
+    public final static int ROWS = Cell.ROWS * SUBCELL_SIZE;
 
     private final int x, y;
 
@@ -35,7 +42,7 @@ public final class SubCell {
      * 
      * @param cell
      *            - cell of which the central subcell is returned.
-     * @return subcell central subcell of the given cell.
+     * @return central subcell of the given cell.
      */
 
     public static SubCell centralSubCellOf(Cell cell) {
@@ -49,7 +56,7 @@ public final class SubCell {
      * Returns the Manhattan distance between the current subcell and the
      * central subcell.
      * 
-     * @return distance between a subcell and the central subcell.
+     * @return distance between the subcell and the central subcell.
      */
 
     public int distanceToCentral() {
@@ -60,7 +67,7 @@ public final class SubCell {
     }
 
     /**
-     * Checks if the current subcell is the central subcell.
+     * Checks if the current subcell is a central subcell.
      * 
      * @return <b>true</b> if the subcell is the central one, <b>false</b>
      *         otherwise
@@ -76,7 +83,7 @@ public final class SubCell {
      * for the cells.
      * 
      * @param d
-     *            direction to the neighbor.
+     *            - direction to the neighbor.
      * @return neighbor subcell in the direction d.
      */
 
@@ -141,6 +148,8 @@ public final class SubCell {
     }
 
     /**
+     * Returns the column of the subcell.
+     * 
      * @return column of the subcell.
      */
     public int x() {
@@ -148,6 +157,8 @@ public final class SubCell {
     }
 
     /**
+     * Returns the row of the subcell.
+     * 
      * @return row of the subcell.
      */
     public int y() {

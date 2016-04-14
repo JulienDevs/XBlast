@@ -1,7 +1,7 @@
 package ch.epfl.xblast;
 
 /**
- * Immutable class. Contains a single method that checks if an integer is non
+ * Class that contains a single method that checks if an integer is non
  * negative.
  * 
  * @author Yaron Dibner (257145)
@@ -12,12 +12,12 @@ public final class ArgumentChecker {
     }
 
     /**
-     * Throws an IllegalArgumentException if a value is striclty negative.
+     * Throws an IllegalArgumentException if a value is strictly negative.
      * Returns value otherwise.
      * 
      * @param value
      *            - integer to be checked
-     * @return - value is it is non negative.
+     * @return value is it is non negative.
      * @throws IllegalArgumentException
      *             if value is strictly negative.
      */

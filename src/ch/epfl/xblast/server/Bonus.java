@@ -1,6 +1,9 @@
 package ch.epfl.xblast.server;
 
 /**
+ * Enumaretion of the bonuses. These bonuses are applied to the players with the
+ * function applyTo, which is redefined in the values of the enumeration.
+ * 
  * @author Yaron Dibner (257145)
  * @author Julien Malka (259041)
  **/
@@ -29,5 +32,13 @@ public enum Bonus {
 
     private final static int MAX_BONUSES = 9;
 
+    /**
+     * Applies the bonus to the given player (i.e. increases its maxBombs or
+     * range).
+     * 
+     * @param player
+     *            - player which consumed the bonus
+     * @return a new player with the applied bonus
+     */
     abstract public Player applyTo(Player player);
 }

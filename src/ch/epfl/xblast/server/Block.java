@@ -3,7 +3,7 @@ package ch.epfl.xblast.server;
 import java.util.NoSuchElementException;
 
 /**
- * Different types of blocks of the board.
+ * Enumeration of the different blocks of the board.
  * 
  * @author Yaron Dibner (257145)
  * @author Julien Malka (259041)
@@ -64,11 +64,12 @@ public enum Block {
     }
 
     /**
+     * Returns which type of bonus the block is.
+     * 
      * @return which type of bonus the block is
      * @throws NoSuchElementException
-     *             if the block is not a bonus
+     *             - if the block is not a bonus
      */
-
     public Bonus associatedBonus() throws NoSuchElementException {
         if (maybeAssociatedBonus == null) {
             throw new NoSuchElementException();

@@ -1,7 +1,11 @@
 package ch.epfl.xblast;
 
 /**
- * Directions the player can take. N for north E for east S for south W for west
+ * Directions the player can take.<br/>
+ * - N for north <br/>
+ * - E for east <br/>
+ * - S for south <br/>
+ * - W for west
  * 
  * @author Yaron Dibner (257145)
  * @author Julien Malka (259041)
@@ -11,9 +15,9 @@ public enum Direction {
     N, E, S, W;
 
     /**
-     * Reverses the direction.
+     * Returns the opposite direction.
      * 
-     * @return The opposite direction.
+     * @return the opposite direction.
      */
 
     public Direction opposite() {

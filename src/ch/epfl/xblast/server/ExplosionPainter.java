@@ -17,7 +17,9 @@ public final class ExplosionPainter {
 
     public static byte byteForBomb(Bomb bomb) {
         int f = bomb.fuseLength();
-        if ((f & (f - 1)) == 0) {
+        boolean isPowerOf2 = ((f & (f - 1)) == 0);
+        
+        if (isPowerOf2) {
             return BYTE_FOR_WHITE_BOMB;
         }
         return BYTE_FOR_BLACK_BOMB;

@@ -28,7 +28,7 @@ import ch.epfl.xblast.SubCell;
  */
 public final class GameState {
     private final static int BOMB_BLOCK_DISTANCE = 6;
-    
+
     private final int ticks;
     private final Board board;
     private final List<Player> players;
@@ -49,22 +49,22 @@ public final class GameState {
      * Main constructor.
      * 
      * @param ticks
-     *            current tick
+     *            - current tick
      * @param board
-     *            board of the game
+     *            - board of the game
      * @param players
-     *            a list of the four players
+     *            - a list of the four players
      * @param bombs
-     *            the bombs on the board
+     *            - the bombs on the board
      * @param explosions
-     *            the current explosions
+     *            - the current explosions
      * @param blasts
-     *            the current explosion blasts
+     *            - the current explosion blasts
      * @throws IllegalArgumentException
-     *             if ticks is strictly negative or players doesn't contain four
-     *             players
+     *             - if ticks is strictly negative or players doesn't contain
+     *             four players
      * @throws NullPointerException
-     *             if the last five parameters are equal to null
+     *             - if the last five parameters are equal to null
      */
     public GameState(int ticks, Board board, List<Player> players,
             List<Bomb> bombs, List<Sq<Sq<Cell>>> explosions,
@@ -94,14 +94,14 @@ public final class GameState {
      * sets ticks to 0. Useful to create the beginning of a game.
      * 
      * @param board
-     *            board of the game
+     *            - board of the game
      * @param players
-     *            list of all four players
+     *            - list of all four players
      * @throws IllegalArgumentException
-     *             if ticks is strictly negative or players doesn't contain four
-     *             players
+     *             - if ticks is strictly negative or players doesn't contain
+     *             four players
      * @throws NullPointerException
-     *             if the last five parameters are equal to null
+     *             - if the last five parameters are equal to null
      */
     public GameState(Board board, List<Player> players)
             throws IllegalArgumentException, NullPointerException {
@@ -297,11 +297,11 @@ public final class GameState {
      * the blasts, bombs and explosions on time t.
      * 
      * @param blasts0
-     *            blasts on time t
+     *            - blasts on time t
      * @param board0
-     *            board on time t
+     *            - board on time t
      * @param explosions0
-     *            explosions on time t
+     *            - explosions on time t
      * @return blasts on time t+1
      */
     private static List<Sq<Cell>> nextBlasts(List<Sq<Cell>> blasts0,
@@ -341,7 +341,7 @@ public final class GameState {
      *            - map associating players with the direction the decided to
      *            take on time t (if there is one): N for up, S for down, E for
      *            right, W for left and Optional.empty to stop
-     * @return - players on time t+1
+     * @return players on time t+1
      */
     private static List<Player> nextPlayers(List<Player> players0,
             Map<PlayerID, Bonus> playerBonuses, Set<Cell> bombedCells1,
@@ -418,7 +418,8 @@ public final class GameState {
 
             boolean isBlockedByBomb = bombedCells1
                     .contains(player.position().containingCell())
-                    && player.position().distanceToCentral() == BOMB_BLOCK_DISTANCE
+                    && player.position()
+                            .distanceToCentral() == BOMB_BLOCK_DISTANCE
                     && player.position()
                             .neighbor(futurePositions.head().direction())
                             .distanceToCentral() == BOMB_BLOCK_DISTANCE - 1;
@@ -467,11 +468,11 @@ public final class GameState {
      * board, consumed bonuses and blasted cells on time t.
      * 
      * @param board0
-     *            board on time t
+     *            - board on time t
      * @param consumedBonuses
-     *            bonuses consumed by players on time t
+     *            - bonuses consumed by players on time t
      * @param blastedCells1
-     *            cells containing a blast on time t
+     *            - cells containing a blast on time t
      * @return board on time t+1
      */
     private static Board nextBoard(Board board0, Set<Cell> consumedBonuses,
@@ -484,8 +485,9 @@ public final class GameState {
             } else if (blastedCells1.contains(c)) {
                 if (board0.blockAt(c) == Block.DESTRUCTIBLE_WALL) {
                     blocks1.add((Sq.repeat(Ticks.WALL_CRUMBLING_TICKS,
-                            Block.CRUMBLING_WALL)).concat(Sq.constant(
-                                    PROBABILITY_BLOCKS[RANDOM.nextInt(3)])));
+                            Block.CRUMBLING_WALL)).concat(Sq
+                                    .constant(PROBABILITY_BLOCKS[RANDOM.nextInt(
+                                            Bonus.values().length + 1)])));
                 } else if (board0.blockAt(c).isBonus()) {
                     Sq<Block> b = board0.blocksAt(c);
                     boolean alreadyBlasted = false;
@@ -522,7 +524,7 @@ public final class GameState {
      * explosions coming from exploding bombs is handled in next().
      * 
      * @param explosions0
-     *            explosions on time t
+     *            - explosions on time t
      * @return explosions on time t+1, not including those created by exploding
      *         bombs.
      */
@@ -579,7 +581,7 @@ public final class GameState {
      *            - events of players trying to drop bombs on time t
      * @param bombs0
      *            - bombs on time t
-     * @return - list of newly dropped bombs on time t+1
+     * @return list of newly dropped bombs on time t+1
      */
     private static List<Bomb> newlyDroppedBombs(List<Player> players0,
             Set<PlayerID> bombDropEvents, List<Bomb> bombs0) {

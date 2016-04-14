@@ -9,7 +9,7 @@ import ch.epfl.xblast.Cell;
 import ch.epfl.xblast.Lists;
 
 /**
- * 
+ * Immutable class. Represents a board of the game, defined as a list of blocks.
  * 
  * @author Yaron Dibner (257145)
  * @author Julien Malka (259041)
@@ -21,10 +21,10 @@ public final class Board {
      * Constructor of Board.
      * 
      * @param blocks
-     *            The list of blocks that will compose the game board.
+     *            - The list of blocks that will compose the game board.
      * @throws IllegalArgumentException
-     *             Throws IllegalArgumentException if the size of the block list
-     *             is incorrect
+     *             - Throws IllegalArgumentException if the size of the block
+     *             list is incorrect
      */
     public Board(List<Sq<Block>> blocks) throws IllegalArgumentException {
         if (blocks == null || blocks.size() != Cell.COUNT) {
@@ -37,12 +37,12 @@ public final class Board {
      * Builds a constant board with a given matrix of blocks.
      * 
      * @param rows
-     *            List containing the rows of blocks, which contains a list of
+     *            - List containing the rows of blocks, which contains a list of
      *            the columns of blocks
      * @return board containing the blocks of rows
      * @throws IllegalArgumentException
-     *             Throws IllegalArgumentException if the size of the block list
-     *             is incorrect
+     *             - Throws IllegalArgumentException if the size of the block
+     *             list is incorrect
      */
 
     public static Board ofRows(List<List<Block>> rows)
@@ -64,12 +64,12 @@ public final class Board {
      * blocks.
      * 
      * @param innerBlocks
-     *            List containing the rows of the inner blocks, which contains a
-     *            list of the columns of the inner blocks
+     *            - List containing the rows of the inner blocks, which contains
+     *            a list of the columns of the inner blocks
      * @return board containing the blocks of innerBlocks and the walls
      * @throws IllegalArgumentException
-     *             Throws IllegalArgumentException if the size of the block list
-     *             is incorrect
+     *             - Throws IllegalArgumentException if the size of the block
+     *             list is incorrect
      */
 
     public static Board ofInnerBlocksWalled(List<List<Block>> innerBlocks)
@@ -104,13 +104,13 @@ public final class Board {
      * quadrant of blocks, which will be mirrored twice to form the whole board.
      * 
      * @param quandrantNWBBlocks
-     *            List containing the rows of the north west quadrant, which
+     *            - List containing the rows of the north west quadrant, which
      *            contains a list of the columns of the north west quadrant
      * @return board containing the blocks of quadrantNWBlocks used to fill the
      *         whole board and the border walls
      * @throws IllegalArgumentException
-     *             Throws IllegalArgumentException if the size of the block list
-     *             is incorrect
+     *             - Throws IllegalArgumentException if the size of the block
+     *             list is incorrect
      */
 
     public static Board ofQuadrantNWBlocksWalled(
@@ -134,7 +134,7 @@ public final class Board {
      * Returns the sequence of blocks of the cell c.
      * 
      * @param c
-     *            Cell of which the sequence of blocks is to be returned
+     *            -Cell of which the sequence of blocks is to be returned
      * @return sequence of blocks of c
      */
     public Sq<Block> blocksAt(Cell c) {
@@ -145,7 +145,7 @@ public final class Board {
      * Returns the head of the sequence of blocks of the cell c.
      * 
      * @param c
-     *            Cell of which the head of the sequence of blocks is to be
+     *            - Cell of which the head of the sequence of blocks is to be
      *            returned
      * @return head of the sequence of blocks of c
      */
@@ -158,17 +158,16 @@ public final class Board {
      * the correct numbers of columns
      * 
      * @param matrix
-     *            Array of dimension 2
+     *            - Array of dimension 2
      * @param rows
-     *            number of lines
+     *            - number of lines
      * @param columns
-     *            number of columns
+     *            - number of columns
      * @throws IllegalArgumentException
      *             if the given matrix is not correct
      * 
      * 
      */
-
     private static void checkBlockMatrix(List<List<Block>> matrix, int rows,
             int columns) throws IllegalArgumentException {
         if (matrix == null || matrix.size() != rows) {
