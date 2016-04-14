@@ -1,7 +1,5 @@
 package ch.epfl.xblast.server;
 
-import ch.epfl.xblast.Direction;
-
 /**
  * @author Yaron Dibner (257145)
  * @author Julien Malka (259041)

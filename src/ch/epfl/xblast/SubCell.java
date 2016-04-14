@@ -11,7 +11,7 @@ import java.lang.Math;
 
 public final class SubCell {
     private final static int SUBCELL_SIZE = 16;
-    
+
     /**
      * Number of columns in the board.
      */
