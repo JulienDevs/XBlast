@@ -23,21 +23,27 @@ public final class PlayerPainter {
         }
         byte bFP = 0;
 
+        if (player.lifeState().state() == State.DYING) {
+            bFP += (byte) ((player.lifeState().lives() > 1) ? 12 : 13);
+        } else {
+            bFP += player.direction().ordinal() * STEP_FOR_DIRECTION;
+
+            int mod = (player.direction().isHorizontal())
+                    ? player.position().x() % 4 : player.position().y() % 4;
+
+            if (mod == 1) {
+                bFP += STEP_FOR_FIRST;
+            } else if (mod == 3) {
+                bFP += STEP_FOR_SECOND;
+            }
+        }
+
+        // Will never add INDEX_FOR_INVULNERABLE if the player is dying, so
+        // won't try to reach for illegal indexes (like 92 or 93).
         bFP += (tick % 2 != 0
                 && player.lifeState().state() == State.INVULNERABLE)
                         ? INDEX_FOR_INVULNERABLE
                         : player.id().ordinal() * STEP_FOR_PLAYER;
-
-        bFP += player.direction().ordinal() * STEP_FOR_DIRECTION;
-
-        int mod = (player.direction().isHorizontal())
-                ? player.position().x() % 4 : player.position().y() % 4;
-
-        if (mod == 1) {
-            bFP += STEP_FOR_FIRST;
-        } else if (mod == 3) {
-            bFP += STEP_FOR_SECOND;
-        }
 
         return bFP;
     }

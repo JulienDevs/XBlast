@@ -20,13 +20,13 @@ public final class Cell {
     /**
      * Cells of the board in reading order.
      */
-    public static final List<Cell> ROW_MAJOR_ORDER = Collections
+    public final static List<Cell> ROW_MAJOR_ORDER = Collections
             .unmodifiableList(rowMajorOrder());
 
     /**
      * Cells of the board in spiral order.
      */
-    public static final List<Cell> SPIRAL_ORDER = Collections
+    public final static List<Cell> SPIRAL_ORDER = Collections
             .unmodifiableList(rowSpiralOrder());
 
     /**
