@@ -3,9 +3,13 @@ package ch.epfl.xblast.server;
 import ch.epfl.xblast.server.Player.LifeState.State;
 
 /**
+ * Non instantiable class. Represent a player painter. Can associate a player with
+ * the image that represent it
+ * 
  * @author Yaron Dibner (257145)
  * @author Julien Malka (259041)
  */
+
 public final class PlayerPainter {
     private final static byte STEP_FOR_PLAYER = 20;
     private final static byte INDEX_FOR_INVULNERABLE = 80;
@@ -16,6 +20,18 @@ public final class PlayerPainter {
 
     private PlayerPainter() {
     }
+
+    /**
+     * Returns byte corresponding to the image to use to represent the player at
+     * a given tick
+     * 
+     * @param tick
+     *            the given tick
+     * @param player
+     *            the given player
+     * @return Returns byte corresponding to the image to use to represent the
+     *         player.
+     */
 
     public static byte byteForPlayer(int tick, Player player) {
         if (!player.isAlive()) {

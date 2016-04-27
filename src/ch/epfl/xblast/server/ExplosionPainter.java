@@ -1,6 +1,9 @@
 package ch.epfl.xblast.server;
 
 /**
+ * Non instantiable class. Represent a explosion painter. Can associate a bomb
+ * or blast with the image that represent it
+ * 
  * @author Yaron Dibner (257145)
  * @author Julien Malka (259041)
  */
@@ -12,6 +15,15 @@ public final class ExplosionPainter {
 
     private ExplosionPainter() {
     }
+
+    /**
+     * Returns byte corresponding to the image to use to represent a bomb
+     * 
+     * @param tick
+     *            the given bomb
+     * @return Returns byte corresponding to the image to use to represent the
+     *         bomb.
+     */
 
     public static byte byteForBomb(Bomb bomb) {
         int f = bomb.fuseLength();

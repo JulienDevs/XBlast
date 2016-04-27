@@ -30,14 +30,36 @@ public final class Level {
     private final BoardPainter boardPainter;
     private final GameState gameState;
 
+    /**
+     * Main constructor. Construct a level given its painter (BoardPainter) and
+     * its gameState
+     * 
+     * @param boardPainter
+     *            painter of the level
+     * @param gameState
+     *            gameState of the level
+     */
+
     public Level(BoardPainter boardPainter, GameState gameState) {
         this.boardPainter = boardPainter;
         this.gameState = gameState;
     }
 
+    /**
+     * Getter for the painter of the level
+     * 
+     * @return the painter (BoardPainter)
+     */
+
     public BoardPainter boardPainter() {
         return boardPainter;
     }
+
+    /**
+     * Getter for the gameState of the level
+     * 
+     * @return the gameState
+     */
 
     public GameState gameState() {
         return gameState;
@@ -67,10 +89,10 @@ public final class Level {
                         Arrays.asList(xx, XX, __, XX, XX, XX, XX),
                         Arrays.asList(__, xx, __, xx, __, __, __),
                         Arrays.asList(xx, XX, xx, XX, xx, XX, __)));
-        
-        Cell positions[] = { new Cell(1, 1),
-                new Cell(13, 1), new Cell(13, 11), new Cell(1, 11) };
-        
+
+        Cell positions[] = { new Cell(1, 1), new Cell(13, 1), new Cell(13, 11),
+                new Cell(1, 11) };
+
         List<Player> players = new ArrayList<>(Arrays.asList(
                 new Player(PlayerID.PLAYER_1, DEFAULT_LIVES,
                         positions[PlayerID.PLAYER_1.ordinal()],

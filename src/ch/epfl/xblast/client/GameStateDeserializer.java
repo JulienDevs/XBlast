@@ -9,9 +9,12 @@ import java.util.List;
 import ch.epfl.xblast.Cell;
 import ch.epfl.xblast.PlayerID;
 import ch.epfl.xblast.RunLengthEncoder;
+import ch.epfl.xblast.SubCell;
 import ch.epfl.xblast.client.GameState.Player;
 
 /**
+ * Non Instantiable Class. Handles the deserialization of a GameState.
+ * 
  * @author Yaron Dibner (257145)
  * @author Julien Malka (259041)
  */
@@ -19,9 +22,21 @@ public final class GameStateDeserializer {
     private final static int NUMBER_INFORMATION_PER_PLAYER = 4;
     private final static byte FULL_TIME_BLOCK = 21;
     private final static byte EMPTY_TIME_BLOCK = 20;
+    private static final byte IMAGE_CENTRAL_PART = 12;
+    private static final byte START_SCORE_RECTANGLE = 10;
+    private static final byte END_SCORE_RECTANGLE = 11;
 
     private GameStateDeserializer() {
     }
+
+    /**
+     * Return a Client GameState given a serialized state in bytes. Uses private
+     * submethods
+     * 
+     * @param bytes
+     *            the serialized state
+     * @return the deserialized GameState
+     */
 
     public static GameState deserializeGameState(List<Byte> bytes) {
         int explosionIndex = bytes.get(0) + 1;
@@ -76,9 +91,47 @@ public final class GameStateDeserializer {
         List<Image> time = new ArrayList<>();
         ImageCollection scoreImages = new ImageCollection("score");
         
-        time.addAll(Collections.nCopies(remainingTime, scoreImages.image((byte)21)));
-        time.addAll(Collections.nCopies(60 - remainingTime, scoreImages.image((byte)20)));
+        time.addAll(Collections.nCopies(remainingTime, scoreImages.image(FULL_TIME_BLOCK)));
+        time.addAll(Collections.nCopies(60 - remainingTime, scoreImages.image(EMPTY_TIME_BLOCK)));
         
         return time;
     }
+
+    private static List<Player> deserializePlayers(List<Byte> bytesForPlayer) {
+        ImageCollection playerImages = new ImageCollection("player");
+        List<GameState.Player> players = new ArrayList<>();
+        for (int i = 0; i < bytesForPlayer.size(); i = i + 4) {
+            PlayerID id = PlayerID.values()[i / 4];
+            int lives = bytesForPlayer.get(i);
+            SubCell position = new SubCell(
+                    Byte.toUnsignedInt(bytesForPlayer.get(i + 1)),
+                    Byte.toUnsignedInt(bytesForPlayer.get(i + 2)));
+            Image img = playerImages.imageOrNull(bytesForPlayer.get(i + 3));
+            players.add(new GameState.Player(id, lives, position, img));
+        }
+        return players;
+    }
+
+    private static List<Image> deserializeScore(
+            List<GameState.Player> players) {
+        ImageCollection scoreImages = new ImageCollection("score");
+        List<Image> result = new ArrayList<>();
+        for (int i = 0; i < players.size(); ++i) {
+            if (i == 2) {
+                result.addAll(Collections.nCopies(8,
+                        scoreImages.image(IMAGE_CENTRAL_PART)));
+            }
+
+            int image = players.get(i).id().ordinal() * 2;
+            if (players.get(i).lives() == 0) {
+                image++;
+            }
+            result.add(scoreImages.image((byte) image));
+            result.add(scoreImages.image(START_SCORE_RECTANGLE));
+            result.add(scoreImages.image(END_SCORE_RECTANGLE));
+
+        }
+        return result;
+    }
+
 }
