@@ -14,7 +14,7 @@ import javax.imageio.ImageIO;
  * @author Julien Malka (259041)
  */
 public final class ImageCollection {
-    public final Map<Byte, Image> images = new HashMap<>();
+    private final Map<Byte, Image> images = new HashMap<>();
 
     public ImageCollection(String dirName) {
         File dir;

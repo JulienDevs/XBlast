@@ -25,6 +25,12 @@ public final class GameStateDeserializer {
     private static final byte IMAGE_CENTRAL_PART = 12;
     private static final byte START_SCORE_RECTANGLE = 10;
     private static final byte END_SCORE_RECTANGLE = 11;
+    
+
+    private static ImageCollection explosionImages = new ImageCollection("explosion");
+    private static ImageCollection scoreImages = new ImageCollection("score");
+    private static ImageCollection playerImages = new ImageCollection("player");
+    private static ImageCollection boardImages = new ImageCollection("board");
 
     private GameStateDeserializer() {
     }
@@ -59,7 +65,6 @@ public final class GameStateDeserializer {
 
     private static List<Image> deserializeBoard(List<Byte> bytesForBoard) {
         List<Image> board = new LinkedList<>();
-        ImageCollection boardImages = new ImageCollection("board");
 
         bytesForBoard = RunLengthEncoder.decode(bytesForBoard);
 
@@ -76,7 +81,6 @@ public final class GameStateDeserializer {
     private static List<Image> deserializeExplosions(
             List<Byte> bytesForExplosions) {
         List<Image> explosions = new ArrayList<>();
-        ImageCollection explosionImages = new ImageCollection("explosion");
 
         bytesForExplosions = RunLengthEncoder.decode(bytesForExplosions);
 
@@ -89,7 +93,6 @@ public final class GameStateDeserializer {
     
     private static List<Image> deserializeTime(byte remainingTime){
         List<Image> time = new ArrayList<>();
-        ImageCollection scoreImages = new ImageCollection("score");
         
         time.addAll(Collections.nCopies(remainingTime, scoreImages.image(FULL_TIME_BLOCK)));
         time.addAll(Collections.nCopies(60 - remainingTime, scoreImages.image(EMPTY_TIME_BLOCK)));
@@ -98,7 +101,6 @@ public final class GameStateDeserializer {
     }
 
     private static List<Player> deserializePlayers(List<Byte> bytesForPlayer) {
-        ImageCollection playerImages = new ImageCollection("player");
         List<GameState.Player> players = new ArrayList<>();
         for (int i = 0; i < bytesForPlayer.size(); i = i + 4) {
             PlayerID id = PlayerID.values()[i / 4];
@@ -114,7 +116,6 @@ public final class GameStateDeserializer {
 
     private static List<Image> deserializeScore(
             List<GameState.Player> players) {
-        ImageCollection scoreImages = new ImageCollection("score");
         List<Image> result = new ArrayList<>();
         for (int i = 0; i < players.size(); ++i) {
             if (i == 2) {
