@@ -27,10 +27,10 @@ public final class GameStateDeserializer {
     private static final byte END_SCORE_RECTANGLE = 11;
     
 
-    private static ImageCollection explosionImages = new ImageCollection("explosion");
-    private static ImageCollection scoreImages = new ImageCollection("score");
-    private static ImageCollection playerImages = new ImageCollection("player");
-    private static ImageCollection boardImages = new ImageCollection("board");
+    private static final ImageCollection explosionImages = new ImageCollection("explosion");
+    private static final ImageCollection scoreImages = new ImageCollection("score");
+    private static final ImageCollection playerImages = new ImageCollection("player");
+    private static final ImageCollection boardImages = new ImageCollection("board");
 
     private GameStateDeserializer() {
     }
