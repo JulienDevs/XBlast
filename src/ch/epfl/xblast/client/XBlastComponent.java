@@ -71,23 +71,22 @@ public final class XBlastComponent extends JComponent {
                 g.drawImage(i, x, y, null);
 
                 x += SCORE_SIZE % W;
-                y += (x == 0) ? SCORE_SIZE : 0;
             }
 
+            y += SCORE_SIZE;
             x = 0;
 
             for (Image i : game.time()) {
                 g.drawImage(i, x, y, null);
 
                 x += TIME_SIZE % W;
-                y += (x == 0) ? TIME_SIZE : 0;
             }
 
             Font font = new Font("Arial", Font.BOLD, 25);
             g.setColor(Color.WHITE);
             g.setFont(font);
-            for (Integer scoreX : SCORE_X_POSITIONS) {
-                g.drawString("Bonjour", scoreX, SCORE_Y_POSITION);
+            for (int i = 0 ; i < playerIds.size() ; i++) {
+                g.drawString(Integer.toString(game.players().get(i).lives()), SCORE_X_POSITIONS.get(i).intValue(), SCORE_Y_POSITION);
             }
 
             Comparator<Player> verticalPositionComparator = (p1, p2) -> Integer
@@ -98,7 +97,7 @@ public final class XBlastComponent extends JComponent {
             Comparator<Player> playerComparator = verticalPositionComparator
                     .thenComparing(currentPlayerComparator);
 
-            List<Player> players = game.players();
+            List<Player> players = new ArrayList<>(game.players());
             Collections.sort(players, playerComparator);
 
             for (Player p : players) {
