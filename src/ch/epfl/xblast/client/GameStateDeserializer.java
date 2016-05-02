@@ -30,7 +30,7 @@ public final class GameStateDeserializer {
     private static final ImageCollection explosionImages = new ImageCollection("explosion");
     private static final ImageCollection scoreImages = new ImageCollection("score");
     private static final ImageCollection playerImages = new ImageCollection("player");
-    private static final ImageCollection boardImages = new ImageCollection("board");
+    private static final ImageCollection boardImages = new ImageCollection("block");
 
     private GameStateDeserializer() {
     }
@@ -51,7 +51,7 @@ public final class GameStateDeserializer {
         List<Byte> bytesForExplosions = bytes.subList(explosionIndex + 1,
                 bytes.get(explosionIndex) + explosionIndex + 1);
         List<Byte> bytesForPlayers = bytes.subList(playerIndex, playerIndex
-                + PlayerID.values().length * NUMBER_INFORMATION_PER_PLAYER + 1);
+                + PlayerID.values().length * NUMBER_INFORMATION_PER_PLAYER);
         
         List<Player> players = deserializePlayers(bytesForPlayers);
         List<Image> board = deserializeBoard(bytesForBoard);
@@ -103,7 +103,7 @@ public final class GameStateDeserializer {
     private static List<Player> deserializePlayers(List<Byte> bytesForPlayer) {
         List<GameState.Player> players = new ArrayList<>();
         for (int i = 0; i < bytesForPlayer.size(); i = i + 4) {
-            PlayerID id = PlayerID.values()[i / 4];
+            PlayerID id = PlayerID.values()[i % 4];
             int lives = bytesForPlayer.get(i);
             SubCell position = new SubCell(
                     Byte.toUnsignedInt(bytesForPlayer.get(i + 1)),

@@ -31,7 +31,7 @@ public final class ImageCollection {
                 } catch (Exception e) {
                 }
             }
-        } catch (URISyntaxException e1) {
+        } catch (Exception e) {
         }
     }
 
