@@ -11,14 +11,6 @@ import ch.epfl.xblast.server.Player;
 
 public final class GameStatePrinter {
 
-    /*
-     * static String red = "\u001b[41m"; static String black = "\u001b[40m";
-     * static String green = "\u001b[42m"; static String yellow = "\u001b[43m";
-     * static String blue = "\u001b[44m"; static String magenta = "\u001b[45m";
-     * static String cyan = "\u001b[46m"; static String white = "\u001b[47m";
-     * static String std = "\u001b[m";
-     */
-
     private GameStatePrinter() {
     }
 
