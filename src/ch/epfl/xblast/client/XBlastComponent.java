@@ -90,8 +90,10 @@ public final class XBlastComponent extends JComponent {
                     .thenComparing(currentPlayerComparator);
 
             List<Player> players = new ArrayList<>(game.players());
+
             players.sort(playerComparator);
             
+
             for (Player p : players) {
                 int xs = 4 * p.position().x() - 24;
                 int ys = 3 * p.position().y() - 52;
