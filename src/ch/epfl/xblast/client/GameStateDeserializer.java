@@ -111,7 +111,7 @@ public final class GameStateDeserializer {
     private static List<Player> deserializePlayers(List<Byte> bytesForPlayer) {
         List<GameState.Player> players = new ArrayList<>();
         for (int i = 0; i < bytesForPlayer.size(); i = i + 4) {
-            PlayerID id = PlayerID.values()[i % 4];
+            PlayerID id = PlayerID.values()[i / 4];
             int lives = bytesForPlayer.get(i);
             SubCell position = new SubCell(
                     Byte.toUnsignedInt(bytesForPlayer.get(i + 1)),
