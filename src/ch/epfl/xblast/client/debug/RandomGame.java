@@ -1,34 +1,27 @@
-/**
- * 
- */
 package ch.epfl.xblast.client.debug;
 
 import java.awt.event.KeyEvent;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
 import java.util.function.Consumer;
 
 import javax.swing.JFrame;
 
+import ch.epfl.xblast.Direction;
 import ch.epfl.xblast.PlayerAction;
 import ch.epfl.xblast.PlayerID;
 import ch.epfl.xblast.client.GameStateDeserializer;
 import ch.epfl.xblast.client.KeyboardEventHandler;
 import ch.epfl.xblast.client.XBlastComponent;
-import ch.epfl.xblast.server.GameState;
 import ch.epfl.xblast.server.GameStateSerializer;
 import ch.epfl.xblast.server.Level;
 import ch.epfl.xblast.server.debug.RandomEventGenerator;
 
-/**
- * @author Yaron
- *
- */
-/**
- * @author Yaron Dibner (257145)
- * @author Julien Malka (259041)
- */
 public class RandomGame {
+
     public static void main(String[] args) {
         XBlastComponent xbc = new XBlastComponent();
         Map<Integer, PlayerAction> kb = new HashMap<>();
@@ -38,10 +31,9 @@ public class RandomGame {
         kb.put(KeyEvent.VK_LEFT, PlayerAction.MOVE_W);
         kb.put(KeyEvent.VK_SHIFT, PlayerAction.STOP);
         kb.put(KeyEvent.VK_SPACE, PlayerAction.DROP_BOMB);
+        Set<PlayerAction> set = new HashSet<>();
         Consumer<PlayerAction> c = x -> {
-            if (x != null) {
-                System.out.println(x.ordinal());
-            }
+            set.add(x);
         };
         xbc.addKeyListener(new KeyboardEventHandler(kb, c));
         JFrame frames = new JFrame("XBC");
@@ -54,25 +46,59 @@ public class RandomGame {
         frames.setLocationRelativeTo(null);
         xbc.requestFocusInWindow();
         Level level = Level.DEFAULT_LEVEL;
-        GameState gameState = level.gameState();
+        ch.epfl.xblast.server.GameState gameState = Level.DEFAULT_LEVEL.gameState();
         RandomEventGenerator reg = new RandomEventGenerator(1, 15, 100);
         while (!gameState.isGameOver()) {
-            try {
-                Thread.sleep(50L);
-            } catch (Exception e) {
-            }
             xbc.setGameState(GameStateDeserializer.deserializeGameState(
                     GameStateSerializer.serialize(level.boardPainter(),
                             gameState)),
                     PlayerID.PLAYER_1);
-            gameState = gameState.next(reg.randomSpeedChangeEvents(),
-                    reg.randomBombDropEvents());
+            gameState = gameState.next(map(set),
+                    set(set));
+            set.clear();
+            
+            try {
+                Thread.sleep(50L);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
 
         }
         xbc.setGameState(
                 GameStateDeserializer.deserializeGameState(GameStateSerializer
                         .serialize(level.boardPainter(), gameState)),
                 PlayerID.PLAYER_1);
-
+    }
+    
+    public static Map<PlayerID, Optional<Direction>> map(Set<PlayerAction> set){
+        Map<PlayerID, Optional<Direction>> map = new HashMap<>();
+        for(PlayerAction pA : set){
+            if(pA == PlayerAction.MOVE_N){
+                map.put(PlayerID.PLAYER_1, Optional.of(Direction.N));
+            }
+            if(pA == PlayerAction.MOVE_E){
+                map.put(PlayerID.PLAYER_1, Optional.of(Direction.E));
+            }
+            if(pA == PlayerAction.MOVE_S){
+                map.put(PlayerID.PLAYER_1, Optional.of(Direction.S));
+            }
+            if(pA == PlayerAction.MOVE_W){
+                map.put(PlayerID.PLAYER_1, Optional.of(Direction.W));
+            }
+            if(pA == PlayerAction.STOP){
+                map.put(PlayerID.PLAYER_1, Optional.empty());
+            }
+        }
+        return map;
+    }
+    
+    public static Set<PlayerID> set(Set<PlayerAction> set){
+        Set<PlayerID> set1 = new HashSet<>();
+        for(PlayerAction pA : set){
+            if(pA == PlayerAction.DROP_BOMB){
+                set1.add(PlayerID.PLAYER_1);
+            }
+        }
+        return set1;
     }
 }

@@ -48,14 +48,6 @@ public final class XBlastComponent extends JComponent {
     protected void paintComponent(Graphics g0) {
         Graphics2D g = (Graphics2D) g0;
         if (game != null) {
-            /*
-             * for(int y = 0 ; y < W ; y += IMAGE_HEIGHT){ for(int x = 0 ; x < H
-             * ; x += IMAGE_WIDTH){ int index = new
-             * SubCell(x,y).containingCell().rowMajorIndex();
-             * g.drawImage(game.board().get(index), x, y, null);
-             * g.drawImage(game.explosions().get(index), x, y, null); } }
-             */
-
             for (Cell c : Cell.ROW_MAJOR_ORDER) {
                 int x = c.x() * IMAGE_WIDTH;
                 int y = c.y() * IMAGE_HEIGHT;
@@ -99,7 +91,7 @@ public final class XBlastComponent extends JComponent {
 
             List<Player> players = new ArrayList<>(game.players());
             Collections.sort(players, playerComparator);
-
+            
             for (Player p : players) {
                 int xs = 4 * p.position().x() - 24;
                 int ys = 3 * p.position().y() - 52;
