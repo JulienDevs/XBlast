@@ -7,11 +7,16 @@ import java.net.StandardProtocolFamily;
 import java.nio.ByteBuffer;
 import java.nio.channels.DatagramChannel;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
 
+import ch.epfl.xblast.Direction;
 import ch.epfl.xblast.PlayerAction;
 import ch.epfl.xblast.PlayerID;
+import ch.epfl.xblast.Time;
 
 /**
  * @author Yaron Dibner (257145)
@@ -41,34 +46,83 @@ public final class Main {
         SocketAddress senderAddress;
         while (ips.size() < expectedClients) {
             senderAddress = channel.receive(buffer);
-            if (buffer.get(0) == PlayerAction.JOIN_GAME.ordinal()) {
+            if (buffer.get(0) == PlayerAction.JOIN_GAME.ordinal()
+                    && !ips.containsKey(senderAddress)) {
                 ips.put(senderAddress, PlayerID.values()[ips.size()]);
-
             }
         }
 
-        while (game.isGameOver()) {
+        channel.configureBlocking(false);
+        long initialTime = System.nanoTime();
+
+        while (!game.isGameOver()) {
             List<Byte> serializedGameState = GameStateSerializer
                     .serialize(bPainter, game);
+
+            ByteBuffer gs = ByteBuffer.allocate(serializedGameState.size());
+            for (byte b : serializedGameState) {
+                buffer.put(gs);
+            }
 
             for (Map.Entry<SocketAddress, PlayerID> e : ips.entrySet()) {
                 buffer = ByteBuffer.allocate(serializedGameState.size() + 1);
 
                 buffer.put((byte) e.getValue().ordinal());
-                for (byte b : serializedGameState) {
-                    buffer.put(b);
-                }
+                buffer.put(gs);
 
                 buffer.flip();
                 channel.send(buffer, e.getKey());
-                
-                channel.configureBlocking(true);
-                
             }
-            
-            
+
+            long timeOfNextTick = initialTime
+                    + game.ticks() * Ticks.TICK_NANOSECOND_DURATION;
+            long remainingTime = timeOfNextTick - System.nanoTime();
+            if(remainingTime > 0){
+                try {
+                    Thread.sleep(remainingTime/1000);
+                } catch (InterruptedException e1) {
+                }
+            }
+
+            ByteBuffer playerActions = ByteBuffer.allocate(1);
+
+            Map<PlayerID, Optional<Direction>> speedChangeEvents = new HashMap<>();
+            Set<PlayerID> bombDropEvents = new HashSet<>();
+
+            SocketAddress receiverAddress = channel.receive(playerActions);
+
+            switch (PlayerAction.values()[buffer.get(0)]) {
+            case MOVE_N:
+                speedChangeEvents.put(ips.get(receiverAddress),
+                        Optional.of(Direction.N));
+                break;
+            case MOVE_E:
+                speedChangeEvents.put(ips.get(receiverAddress),
+                        Optional.of(Direction.E));
+                break;
+            case MOVE_S:
+                speedChangeEvents.put(ips.get(receiverAddress),
+                        Optional.of(Direction.S));
+                break;
+            case MOVE_W:
+                speedChangeEvents.put(ips.get(receiverAddress),
+                        Optional.of(Direction.W));
+                break;
+            case STOP:
+                speedChangeEvents.put(ips.get(receiverAddress),
+                        Optional.empty());
+                break;
+            case DROP_BOMB:
+                bombDropEvents.add(ips.get(receiverAddress));
+                break;
+            default:
+                playerActions = ByteBuffer.allocate(1);
+                break;
+            }
+
+            game = game.next(speedChangeEvents, bombDropEvents);
         }
         
-        System.out.println(game.winner());
+        System.out.println();
     }
 }
