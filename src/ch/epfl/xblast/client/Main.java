@@ -6,14 +6,21 @@ import java.net.SocketAddress;
 import java.net.StandardProtocolFamily;
 import java.nio.ByteBuffer;
 import java.nio.channels.DatagramChannel;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import ch.epfl.xblast.PlayerAction;
+import ch.epfl.xblast.PlayerID;
 
 /**
  * @author Yaron Dibner (257145)
  * @author Julien Malka (259041)
  */
 public class Main {
+
+    public final static int NB_MAX_BYTES = 410;
 
     /**
      * @param args
@@ -23,11 +30,12 @@ public class Main {
      */
     public static void main(String[] args)
             throws IOException, InterruptedException {
+
         GameState game = null;
-        
+
         DatagramChannel channel = DatagramChannel
                 .open(StandardProtocolFamily.INET);
-        channel.configureBlocking(true);
+        channel.configureBlocking(false);
 
         SocketAddress address = new InetSocketAddress(
                 (args == null || args[0] == null || args[0].length() == 0)
@@ -45,8 +53,24 @@ public class Main {
 
             Thread.sleep(1000L);
         } while (channel.receive(buffer) == null);
-        
-        
+
+        channel.configureBlocking(true);
+        channel.bind(address);
+        buffer = ByteBuffer.allocate(NB_MAX_BYTES);
+        channel.receive(buffer);
+        while (channel.receive(buffer) != null) {
+            
+            PlayerID id = PlayerID.values()[buffer.get(0)];
+            byte[] bytes = buffer.array();
+            List<Byte> dgt = new ArrayList<>(Arrays.stream(bytes).boxed().collect(Collectors.toList()));
+            XBlastComponent xbc = new XBlastComponent();
+            
+            
+            
+            
+
+        }
+
     }
 
 }

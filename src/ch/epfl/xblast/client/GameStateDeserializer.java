@@ -65,7 +65,7 @@ public final class GameStateDeserializer {
         List<Image> board = deserializeBoard(bytesForBoard);
         List<Image> explosions = deserializeExplosions(bytesForExplosions);
         List<Image> score = deserializeScore(players);
-        List<Image> time = deserializeTime(bytes.get(bytes.size() - 1));
+        List<Image> time = deserializeTime(bytes.get(end));
 
         return new GameState(players, board, explosions, score, time);
     }
