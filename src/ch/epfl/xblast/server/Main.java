@@ -81,7 +81,7 @@ public final class Main {
             }
 
             long timeOfNextTick = initialTime
-                    + game.ticks() * Ticks.TICK_NANOSECOND_DURATION;
+                    + (long)game.ticks() * Ticks.TICK_NANOSECOND_DURATION;
             long remainingTime = timeOfNextTick - System.nanoTime();
             if(remainingTime > 0){
                 try {

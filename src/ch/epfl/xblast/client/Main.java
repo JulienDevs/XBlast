@@ -28,35 +28,31 @@ import ch.epfl.xblast.server.BoardPainter;
  * @author Julien Malka (259041)
  */
 public class Main {
-    
-    
-    
 
     public final static int NB_MAX_BYTES = 410;
 
     /**
-     * @throws InvocationTargetException 
-     * @param args
-     * @throws IOException
-     * @throws InterruptedException
-     *             - when the thread is interrupted while it's sleeping
-     * @throws  
+     * @throws InvocationTargetException @param args @throws IOException @throws
+     * InterruptedException - when the thread is interrupted while it's
+     * sleeping @throws
      */
-    
+
     private static SocketAddress address;
     private static XBlastComponent xbc;
-    
-    public static void main(String[] args)
-            throws IOException, InterruptedException, InvocationTargetException {
+
+    public static void main(String[] args) throws IOException,
+            InterruptedException, InvocationTargetException {
         
+        
+
         DatagramChannel channel = DatagramChannel
                 .open(StandardProtocolFamily.INET);
-        
+
         channel.configureBlocking(false);
         channel.bind(new InetSocketAddress(2016));
-         address = new InetSocketAddress(
-                (args == null ||args.length==0 || args[0] == null || args[0].length() == 0)
-                        ? "localhost" : args[0],
+        address = new InetSocketAddress(
+                (args == null || args.length == 0 || args[0] == null
+                        || args[0].length() == 0) ? "128.179.156.102" : args[0],
                 2016);
         ByteBuffer buffer;
 
@@ -71,43 +67,36 @@ public class Main {
             Thread.sleep(1000L);
         } while (channel.receive(buffer) == null);
 
+        System.out.println(buffer.remaining());
+
         channel.configureBlocking(true);
-        
+
         buffer = ByteBuffer.allocate(NB_MAX_BYTES);
-        channel.receive(buffer);
         
-        
-        while (channel.receive(buffer) != null) {
+        SwingUtilities.invokeAndWait(() -> createUI(channel));
+
+        while (true) {
             
+
+            channel.receive(buffer);
+
             PlayerID id = PlayerID.values()[buffer.get(0)];
-            
-            
+
             List<Byte> bytesList = new ArrayList<>();
-            for(int i =1;i<NB_MAX_BYTES;++i){
+            for (int i = 1; i < NB_MAX_BYTES; ++i) {
                 bytesList.add(buffer.get(i));
-                
             }
-            
-           GameState game = GameStateDeserializer.deserializeGameState(bytesList);
-            xbc.setGameState(game,id);
-            
-            
-           
-            
-            
-            
-            
+
+            GameState game = GameStateDeserializer
+                    .deserializeGameState(bytesList);
+            xbc.setGameState(game, id);
 
         }
 
     }
-    
-    
-    private static void createUI(DatagramChannel channel){
-        
-        
-        
-        
+
+    private static void createUI(DatagramChannel channel) {
+
         Map<Integer, PlayerAction> kb = new HashMap<>();
         kb.put(KeyEvent.VK_UP, PlayerAction.MOVE_N);
         kb.put(KeyEvent.VK_RIGHT, PlayerAction.MOVE_E);
@@ -115,8 +104,8 @@ public class Main {
         kb.put(KeyEvent.VK_LEFT, PlayerAction.MOVE_W);
         kb.put(KeyEvent.VK_SHIFT, PlayerAction.STOP);
         kb.put(KeyEvent.VK_SPACE, PlayerAction.DROP_BOMB);
-         xbc = new XBlastComponent();
-        
+        xbc = new XBlastComponent();
+
         JFrame frames = new JFrame("XBC");
         frames.setContentPane(xbc);
         frames.setUndecorated(true);
@@ -126,36 +115,23 @@ public class Main {
         frames.pack();
         frames.setLocationRelativeTo(null);
         xbc.requestFocusInWindow();
-        
-        
-        
-        
-       
-        
-       
+
         Consumer<PlayerAction> c = x -> {
-           ByteBuffer buffer = ByteBuffer.allocate(1);
-           buffer.put((byte)x.ordinal());
-           buffer.flip();
-           
+            ByteBuffer buffer = ByteBuffer.allocate(1);
+            buffer.put((byte) x.ordinal());
+            buffer.flip();
+
             try {
                 channel.send(buffer, address);
             } catch (Exception e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
             }
-        
+
         };
-        
-        
+
         xbc.addKeyListener(new KeyboardEventHandler(kb, c));
-        
-       
-        
-        
-        
+
     }
-    
-    
 
 }
