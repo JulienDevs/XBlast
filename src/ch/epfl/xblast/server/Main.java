@@ -77,16 +77,28 @@ public final class Main {
                 System.out.println(buffer);
                 channel.send(buffer, e.getKey());
                 buffer.clear();
-                gs.clear();
             }
 
-            long timeOfNextTick = initialTime
-                    + (long)game.ticks() * Ticks.TICK_NANOSECOND_DURATION;
-            long remainingTime = timeOfNextTick - System.nanoTime();
-            if(remainingTime > 0){
+//            long timeOfNextTick = initialTime
+//                    + (long)game.ticks() * Ticks.TICK_NANOSECOND_DURATION;
+//            long remainingTime = timeOfNextTick - System.nanoTime();
+//            if(remainingTime > 0){
+//                try {
+//                    Thread.sleep(remainingTime/1000);
+//                } catch (InterruptedException e1) {
+//                }
+//            }
+            long end = System.nanoTime();
+            long duration = end - initialTime;
+            long minDuration = (long) (game.ticks() + 1)
+                    * Ticks.TICK_NANOSECOND_DURATION;
+            if (duration < minDuration) {
                 try {
-                    Thread.sleep(remainingTime/1000);
-                } catch (InterruptedException e1) {
+                    long sleepDuration = minDuration - duration;
+                    Thread.sleep(sleepDuration * Time.MS_PER_S / Time.NS_PER_S,
+                            (int) (sleepDuration
+                                    % (Time.NS_PER_S / Time.MS_PER_S)));
+                } catch (InterruptedException e) {
                 }
             }
 
