@@ -1,44 +1,61 @@
 package ch.epfl.xblast.client;
 
+import java.awt.event.KeyEvent;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.net.InetSocketAddress;
 import java.net.SocketAddress;
 import java.net.StandardProtocolFamily;
 import java.nio.ByteBuffer;
 import java.nio.channels.DatagramChannel;
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Map;
+import java.util.Set;
+import java.util.function.Consumer;
+
+import javax.swing.JFrame;
+import javax.swing.SwingUtilities;
 
 import ch.epfl.xblast.PlayerAction;
 import ch.epfl.xblast.PlayerID;
+import ch.epfl.xblast.server.BoardPainter;
 
 /**
  * @author Yaron Dibner (257145)
  * @author Julien Malka (259041)
  */
 public class Main {
+    
+    
+    
 
     public final static int NB_MAX_BYTES = 410;
 
     /**
+     * @throws InvocationTargetException 
      * @param args
      * @throws IOException
      * @throws InterruptedException
      *             - when the thread is interrupted while it's sleeping
+     * @throws  
      */
+    
+    private static SocketAddress address;
+    private static XBlastComponent xbc;
+    
     public static void main(String[] args)
-            throws IOException, InterruptedException {
-
-        GameState game = null;
-
+            throws IOException, InterruptedException, InvocationTargetException {
+        
         DatagramChannel channel = DatagramChannel
                 .open(StandardProtocolFamily.INET);
+        
         channel.configureBlocking(false);
-
-        SocketAddress address = new InetSocketAddress(
-                (args == null || args[0] == null || args[0].length() == 0)
+        channel.bind(new InetSocketAddress(2016));
+         address = new InetSocketAddress(
+                (args == null ||args.length==0 || args[0] == null || args[0].length() == 0)
                         ? "localhost" : args[0],
                 2016);
         ByteBuffer buffer;
@@ -50,20 +67,32 @@ public class Main {
             buffer.flip();
 
             channel.send(buffer, address);
-
+            buffer.clear();
             Thread.sleep(1000L);
         } while (channel.receive(buffer) == null);
 
         channel.configureBlocking(true);
-        channel.bind(address);
+        
         buffer = ByteBuffer.allocate(NB_MAX_BYTES);
         channel.receive(buffer);
+        
+        
         while (channel.receive(buffer) != null) {
             
             PlayerID id = PlayerID.values()[buffer.get(0)];
-            byte[] bytes = buffer.array();
-            List<Byte> dgt = new ArrayList<>(Arrays.stream(bytes).boxed().collect(Collectors.toList()));
-            XBlastComponent xbc = new XBlastComponent();
+            
+            
+            List<Byte> bytesList = new ArrayList<>();
+            for(int i =1;i<NB_MAX_BYTES;++i){
+                bytesList.add(buffer.get(i));
+                
+            }
+            
+           GameState game = GameStateDeserializer.deserializeGameState(bytesList);
+            xbc.setGameState(game,id);
+            
+            
+           
             
             
             
@@ -72,5 +101,61 @@ public class Main {
         }
 
     }
+    
+    
+    private static void createUI(DatagramChannel channel){
+        
+        
+        
+        
+        Map<Integer, PlayerAction> kb = new HashMap<>();
+        kb.put(KeyEvent.VK_UP, PlayerAction.MOVE_N);
+        kb.put(KeyEvent.VK_RIGHT, PlayerAction.MOVE_E);
+        kb.put(KeyEvent.VK_DOWN, PlayerAction.MOVE_S);
+        kb.put(KeyEvent.VK_LEFT, PlayerAction.MOVE_W);
+        kb.put(KeyEvent.VK_SHIFT, PlayerAction.STOP);
+        kb.put(KeyEvent.VK_SPACE, PlayerAction.DROP_BOMB);
+         xbc = new XBlastComponent();
+        
+        JFrame frames = new JFrame("XBC");
+        frames.setContentPane(xbc);
+        frames.setUndecorated(true);
+        frames.setResizable(false);
+        frames.setVisible(true);
+        frames.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frames.pack();
+        frames.setLocationRelativeTo(null);
+        xbc.requestFocusInWindow();
+        
+        
+        
+        
+       
+        
+       
+        Consumer<PlayerAction> c = x -> {
+           ByteBuffer buffer = ByteBuffer.allocate(1);
+           buffer.put((byte)x.ordinal());
+           buffer.flip();
+           
+            try {
+                channel.send(buffer, address);
+            } catch (Exception e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+        
+        };
+        
+        
+        xbc.addKeyListener(new KeyboardEventHandler(kb, c));
+        
+       
+        
+        
+        
+    }
+    
+    
 
 }
