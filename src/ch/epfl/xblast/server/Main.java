@@ -31,7 +31,7 @@ public final class Main {
     public static void main(String[] args) throws IOException {
         GameState game = Level.DEFAULT_LEVEL.gameState();
         BoardPainter bPainter = Level.DEFAULT_LEVEL.boardPainter();
-        int expectedClients = 1;
+        int expectedClients = 3;
         ByteBuffer buffer;
         Map<SocketAddress, PlayerID> ips = new HashMap<>();
 
@@ -46,11 +46,12 @@ public final class Main {
         SocketAddress senderAddress;
         while (ips.size() < expectedClients) {
             senderAddress = channel.receive(buffer);
-            System.out.println(buffer.get(0));
             if (buffer.get(0) == PlayerAction.JOIN_GAME.ordinal()
                     && !ips.containsKey(senderAddress)) {
                 ips.put(senderAddress, PlayerID.values()[ips.size()]);
             }
+            
+            System.out.println(buffer.get(0));
         }
 
         channel.configureBlocking(false);
@@ -69,25 +70,24 @@ public final class Main {
                 buffer = ByteBuffer.allocate(serializedGameState.size() + 1);
 
                 buffer.put((byte) e.getValue().ordinal());
-               
+
                 gs.flip();
                 buffer.put(gs);
 
                 buffer.flip();
-                System.out.println(buffer);
                 channel.send(buffer, e.getKey());
                 buffer.clear();
             }
 
-//            long timeOfNextTick = initialTime
-//                    + (long)game.ticks() * Ticks.TICK_NANOSECOND_DURATION;
-//            long remainingTime = timeOfNextTick - System.nanoTime();
-//            if(remainingTime > 0){
-//                try {
-//                    Thread.sleep(remainingTime/1000);
-//                } catch (InterruptedException e1) {
-//                }
-//            }
+            // long timeOfNextTick = initialTime
+            // + (long)game.ticks() * Ticks.TICK_NANOSECOND_DURATION;
+            // long remainingTime = timeOfNextTick - System.nanoTime();
+            // if(remainingTime > 0){
+            // try {
+            // Thread.sleep(remainingTime/1000);
+            // } catch (InterruptedException e1) {
+            // }
+            // }
             long end = System.nanoTime();
             long duration = end - initialTime;
             long minDuration = (long) (game.ticks() + 1)
@@ -106,43 +106,43 @@ public final class Main {
 
             Map<PlayerID, Optional<Direction>> speedChangeEvents = new HashMap<>();
             Set<PlayerID> bombDropEvents = new HashSet<>();
-
-            SocketAddress receiverAddress = channel.receive(playerActions);
             
-            System.out.println(playerActions);
+            SocketAddress receiverAddress;
 
-            switch (PlayerAction.values()[buffer.get(0)]) {
-            case MOVE_N:
-                speedChangeEvents.put(ips.get(receiverAddress),
-                        Optional.of(Direction.N));
-                break;
-            case MOVE_E:
-                speedChangeEvents.put(ips.get(receiverAddress),
-                        Optional.of(Direction.E));
-                break;
-            case MOVE_S:
-                speedChangeEvents.put(ips.get(receiverAddress),
-                        Optional.of(Direction.S));
-                break;
-            case MOVE_W:
-                speedChangeEvents.put(ips.get(receiverAddress),
-                        Optional.of(Direction.W));
-                break;
-            case STOP:
-                speedChangeEvents.put(ips.get(receiverAddress),
-                        Optional.empty());
-                break;
-            case DROP_BOMB:
-                bombDropEvents.add(ips.get(receiverAddress));
-                break;
-            default:
-                playerActions = ByteBuffer.allocate(1);
-                break;
+            while ((receiverAddress = channel.receive(playerActions)) != null) {
+
+                switch (PlayerAction.values()[playerActions.get(0)]) {
+                case MOVE_N:
+                    speedChangeEvents.put(ips.get(receiverAddress),
+                            Optional.of(Direction.N));
+                    break;
+                case MOVE_E:
+                    speedChangeEvents.put(ips.get(receiverAddress),
+                            Optional.of(Direction.E));
+                    break;
+                case MOVE_S:
+                    speedChangeEvents.put(ips.get(receiverAddress),
+                            Optional.of(Direction.S));
+                    break;
+                case MOVE_W:
+                    speedChangeEvents.put(ips.get(receiverAddress),
+                            Optional.of(Direction.W));
+                    break;
+                case STOP:
+                    speedChangeEvents.put(ips.get(receiverAddress),
+                            Optional.empty());
+                    break;
+                case DROP_BOMB:
+                    bombDropEvents.add(ips.get(receiverAddress));
+                    break;
+                default:
+                    playerActions = ByteBuffer.allocate(1);
+                    break;
+                }
+
             }
 
             game = game.next(speedChangeEvents, bombDropEvents);
         }
-        
-        System.out.println();
     }
 }

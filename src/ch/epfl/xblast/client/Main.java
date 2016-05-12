@@ -10,10 +10,8 @@ import java.nio.ByteBuffer;
 import java.nio.channels.DatagramChannel;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.function.Consumer;
 
 import javax.swing.JFrame;
@@ -21,7 +19,6 @@ import javax.swing.SwingUtilities;
 
 import ch.epfl.xblast.PlayerAction;
 import ch.epfl.xblast.PlayerID;
-import ch.epfl.xblast.server.BoardPainter;
 
 /**
  * @author Yaron Dibner (257145)
@@ -49,10 +46,9 @@ public class Main {
                 .open(StandardProtocolFamily.INET);
 
         channel.configureBlocking(false);
-        channel.bind(new InetSocketAddress(2016));
         address = new InetSocketAddress(
                 (args == null || args.length == 0 || args[0] == null
-                        || args[0].length() == 0) ? "128.179.156.102" : args[0],
+                        || args[0].length() == 0) ? "128.179.148.210" : args[0],
                 2016);
         ByteBuffer buffer;
 
