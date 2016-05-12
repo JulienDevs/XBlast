@@ -40,23 +40,23 @@ public final class GameStateDeserializer {
     }
 
     /**
-     * Return a Client GameState given a serialized state in bytes. Uses private
-     * submethods
+     * Returns a client GameState given a serialized GameState, expressed as a list
+     * of bytes. Uses private sub-methods to separately deserialize the states
+     * of the board, the explosions, the players, the score and the time.
      * 
      * @param bytes
-     *            the serialized state
+     *            - the serialized GameState
      * @return the deserialized GameState
      */
-
     public static GameState deserializeGameState(List<Byte> bytes) {
         int start = 1;
         int end = start + Byte.toUnsignedInt(bytes.get(0));
         List<Byte> bytesForBoard = bytes.subList(start, end);
-        
+
         start = end + 1;
         end = start + Byte.toUnsignedInt(bytes.get(end));
         List<Byte> bytesForExplosions = bytes.subList(start, end);
-        
+
         start = end;
         end += PlayerID.values().length * NUMBER_INFORMATION_PER_PLAYER;
         List<Byte> bytesForPlayers = bytes.subList(start, end);

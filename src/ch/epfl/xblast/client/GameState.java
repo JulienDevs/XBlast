@@ -23,21 +23,20 @@ public final class GameState {
     private final List<Image> time;
 
     /**
-     * Main constructor. Construct the gameState given its players, board,
-     * explosions, scores, time
+     * Main constructor. Constructs the GameState given its players, board,
+     * explosions, scores and time.
      * 
      * @param players
-     *            the given List of players
+     *            - the given List of players
      * @param board
-     *            the given board (List of images)
+     *            - the given board (List of images)
      * @param explosions
-     *            the given explosions (List of images)
+     *            - the given explosions (List of images)
      * @param scores
-     *            the given scores (List of images)
+     *            - the given scores (List of images)
      * @param time
-     *            the given time (List of images)
+     *            - the given time (List of images)
      */
-
     public GameState(List<Player> players, List<Image> board,
             List<Image> explosions, List<Image> scores, List<Image> time) {
         this.players = Collections.unmodifiableList(new ArrayList<>(players));
@@ -49,29 +48,27 @@ public final class GameState {
     }
 
     /**
-     * Getter of the players
+     * Returns the fours players of the game.
      * 
-     * @return players
+     * @return the players of the game
      */
-
     public List<Player> players() {
         return players;
     }
 
     /**
-     * Getter of the board
+     * Returns the images of the board of the game.
      * 
-     * @return board
+     * @return images of the board of the game
      */
-
     public List<Image> board() {
         return board;
     }
 
     /**
-     * Getter of the explosions
+     * Returns the images of the bombs and the blasts of the game.
      * 
-     * @return explosions
+     * @return images of the bombs and the blasta of the game
      */
 
     public List<Image> explosions() {
@@ -79,9 +76,9 @@ public final class GameState {
     }
 
     /**
-     * Getter of the scores
+     * Returns the images of the scores of the players.
      * 
-     * @return scores
+     * @return images of the scores of the players
      */
 
     public List<Image> scores() {
@@ -89,9 +86,9 @@ public final class GameState {
     }
 
     /**
-     * Getter of the time
+     * Returns the images of the time-line.
      * 
-     * @return time
+     * @return images of the time-line
      */
 
     public List<Image> time() {
@@ -113,7 +110,7 @@ public final class GameState {
         private final Image image;
 
         /**
-         * Main Constructor. Construct the player from its id, lives, position
+         * Main Constructor. Constructs the player from its id, lives, position
          * and image.
          * 
          * @param id
@@ -121,7 +118,7 @@ public final class GameState {
          * @param lives
          *            given player's number of lives
          * @param position
-         *            given player's positiokn
+         *            given player's position
          * @param image
          *            given player's image
          */
@@ -134,9 +131,9 @@ public final class GameState {
         }
 
         /**
-         * Getter of the player's id
+         * Returns the id of the player.
          * 
-         * @return id
+         * @return id of the player
          */
 
         public PlayerID id() {
@@ -144,9 +141,9 @@ public final class GameState {
         }
 
         /**
-         * Getter of the player's number of lives
+         * Returns the player's number of lives.
          * 
-         * @return lives
+         * @return player's number of lives
          */
 
         public int lives() {
@@ -154,9 +151,9 @@ public final class GameState {
         }
 
         /**
-         * Getter of the player's position
+         * Returns the player's position.
          * 
-         * @return position
+         * @return player's position
          */
 
         public SubCell position() {
@@ -164,9 +161,9 @@ public final class GameState {
         }
 
         /**
-         * Getter of the player's image
+         * Returns the image representing the player.
          * 
-         * @return image
+         * @return image representing the player 
          */
         public Image image() {
             return image;

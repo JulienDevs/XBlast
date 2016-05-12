@@ -5,6 +5,9 @@ import java.util.Iterator;
 import java.util.List;
 
 /**
+ * Class containing two static methods that encode and decode a list of bytes
+ * using the technique of run-length encoding.
+ * 
  * @author Yaron Dibner (257145)
  * @author Julien Malka (259041)
  */
