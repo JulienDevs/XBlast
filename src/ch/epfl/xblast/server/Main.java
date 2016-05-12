@@ -108,6 +108,8 @@ public final class Main {
             Set<PlayerID> bombDropEvents = new HashSet<>();
 
             SocketAddress receiverAddress = channel.receive(playerActions);
+            
+            System.out.println(playerActions);
 
             switch (PlayerAction.values()[buffer.get(0)]) {
             case MOVE_N:

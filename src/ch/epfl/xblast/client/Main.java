@@ -74,7 +74,7 @@ public class Main {
         buffer = ByteBuffer.allocate(NB_MAX_BYTES);
         
         SwingUtilities.invokeAndWait(() -> createUI(channel));
-
+        xbc.requestFocusInWindow();
         while (true) {
             
 
@@ -90,7 +90,7 @@ public class Main {
             GameState game = GameStateDeserializer
                     .deserializeGameState(bytesList);
             xbc.setGameState(game, id);
-
+            buffer.clear();
         }
 
     }
@@ -105,17 +105,6 @@ public class Main {
         kb.put(KeyEvent.VK_SHIFT, PlayerAction.STOP);
         kb.put(KeyEvent.VK_SPACE, PlayerAction.DROP_BOMB);
         xbc = new XBlastComponent();
-
-        JFrame frames = new JFrame("XBC");
-        frames.setContentPane(xbc);
-        frames.setUndecorated(true);
-        frames.setResizable(false);
-        frames.setVisible(true);
-        frames.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frames.pack();
-        frames.setLocationRelativeTo(null);
-        xbc.requestFocusInWindow();
-
         Consumer<PlayerAction> c = x -> {
             ByteBuffer buffer = ByteBuffer.allocate(1);
             buffer.put((byte) x.ordinal());
@@ -131,6 +120,18 @@ public class Main {
         };
 
         xbc.addKeyListener(new KeyboardEventHandler(kb, c));
+        
+        JFrame frames = new JFrame("XBC");
+        frames.setContentPane(xbc);
+        frames.setUndecorated(true);
+        frames.setResizable(false);
+        frames.setVisible(true);
+        frames.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frames.pack();
+        frames.setLocationRelativeTo(null);
+        
+
+        
 
     }
 
