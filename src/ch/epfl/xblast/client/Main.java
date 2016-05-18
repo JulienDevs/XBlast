@@ -29,9 +29,11 @@ public class Main {
     public final static int NB_MAX_BYTES = 410;
 
     /**
-     * @throws InvocationTargetException @param args @throws IOException @throws
-     * InterruptedException - when the thread is interrupted while it's
-     * sleeping @throws
+     * @throws InvocationTargetException
+     * @param args
+     * @throws IOException
+     * @throws InterruptedException
+     *             - when the thread is interrupted while it's sleeping @throws
      */
 
     private static SocketAddress address;
@@ -39,8 +41,6 @@ public class Main {
 
     public static void main(String[] args) throws IOException,
             InterruptedException, InvocationTargetException {
-        
-        
 
         DatagramChannel channel = DatagramChannel
                 .open(StandardProtocolFamily.INET);
@@ -48,8 +48,10 @@ public class Main {
         channel.configureBlocking(false);
         address = new InetSocketAddress(
                 (args == null || args.length == 0 || args[0] == null
-                        || args[0].length() == 0) ? "128.179.148.210" : args[0],
+                        || args[0].length() == 0) ? "localhost" : args[0],
                 2016);
+
+        System.out.println(address);
         ByteBuffer buffer;
 
         buffer = ByteBuffer.allocate(1);
@@ -63,17 +65,14 @@ public class Main {
             Thread.sleep(1000L);
         } while (channel.receive(buffer) == null);
 
-        System.out.println(buffer.remaining());
-
         channel.configureBlocking(true);
 
         buffer = ByteBuffer.allocate(NB_MAX_BYTES);
-        
+
         SwingUtilities.invokeAndWait(() -> createUI(channel));
         xbc.requestFocusInWindow();
-        while (true) {
-            
 
+        while (true) {
             channel.receive(buffer);
 
             PlayerID id = PlayerID.values()[buffer.get(0)];
@@ -88,7 +87,6 @@ public class Main {
             xbc.setGameState(game, id);
             buffer.clear();
         }
-
     }
 
     private static void createUI(DatagramChannel channel) {
@@ -109,14 +107,13 @@ public class Main {
             try {
                 channel.send(buffer, address);
             } catch (Exception e) {
-                // TODO Auto-generated catch block
                 e.printStackTrace();
             }
 
         };
 
         xbc.addKeyListener(new KeyboardEventHandler(kb, c));
-        
+
         JFrame frames = new JFrame("XBC");
         frames.setContentPane(xbc);
         frames.setUndecorated(true);
@@ -125,9 +122,6 @@ public class Main {
         frames.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frames.pack();
         frames.setLocationRelativeTo(null);
-        
-
-        
 
     }
 

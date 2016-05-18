@@ -50,7 +50,6 @@ public final class Lists {
      *            - the list of which the permutations will be returned
      * @return a list containing all the permutations of l
      */
-
     public static <T> List<List<T>> permutations(List<T> l) {
         List<List<T>> list = new ArrayList<>(Arrays.asList());
 

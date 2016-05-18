@@ -6,6 +6,7 @@ import java.net.SocketAddress;
 import java.net.StandardProtocolFamily;
 import java.nio.ByteBuffer;
 import java.nio.channels.DatagramChannel;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -31,7 +32,8 @@ public final class Main {
     public static void main(String[] args) throws IOException {
         GameState game = Level.DEFAULT_LEVEL.gameState();
         BoardPainter bPainter = Level.DEFAULT_LEVEL.boardPainter();
-        int expectedClients = 3;
+        // TODO: change expectedClients to 4
+        int expectedClients = 2;
         ByteBuffer buffer;
         Map<SocketAddress, PlayerID> ips = new HashMap<>();
 
@@ -50,7 +52,7 @@ public final class Main {
                     && !ips.containsKey(senderAddress)) {
                 ips.put(senderAddress, PlayerID.values()[ips.size()]);
             }
-            
+
             System.out.println(buffer.get(0));
         }
 
@@ -79,24 +81,17 @@ public final class Main {
                 buffer.clear();
             }
 
-            // long timeOfNextTick = initialTime
-            // + (long)game.ticks() * Ticks.TICK_NANOSECOND_DURATION;
-            // long remainingTime = timeOfNextTick - System.nanoTime();
-            // if(remainingTime > 0){
-            // try {
-            // Thread.sleep(remainingTime/1000);
-            // } catch (InterruptedException e1) {
-            // }
-            // }
-            long end = System.nanoTime();
-            long duration = end - initialTime;
-            long minDuration = (long) (game.ticks() + 1)
+            long actualTime = System.nanoTime();
+            long timeSinceLastTick = actualTime - initialTime;
+            long expectedTimeUntilNextTick = (long) (game.ticks() + 1)
                     * Ticks.TICK_NANOSECOND_DURATION;
-            if (duration < minDuration) {
+            if (expectedTimeUntilNextTick > timeSinceLastTick) {
                 try {
-                    long sleepDuration = minDuration - duration;
-                    Thread.sleep(sleepDuration * Time.MS_PER_S / Time.NS_PER_S,
-                            (int) (sleepDuration
+                    long timeUntilNextTick = expectedTimeUntilNextTick
+                            - timeSinceLastTick;
+                    Thread.sleep(
+                            timeUntilNextTick * Time.MS_PER_S / Time.NS_PER_S,
+                            (int) (timeUntilNextTick
                                     % (Time.NS_PER_S / Time.MS_PER_S)));
                 } catch (InterruptedException e) {
                 }
@@ -106,7 +101,7 @@ public final class Main {
 
             Map<PlayerID, Optional<Direction>> speedChangeEvents = new HashMap<>();
             Set<PlayerID> bombDropEvents = new HashSet<>();
-            
+
             SocketAddress receiverAddress;
 
             while ((receiverAddress = channel.receive(playerActions)) != null) {
@@ -144,5 +139,7 @@ public final class Main {
 
             game = game.next(speedChangeEvents, bombDropEvents);
         }
+
+        System.out.println(game.winner());
     }
 }

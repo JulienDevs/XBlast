@@ -10,6 +10,8 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Random;
 import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import ch.epfl.cs108.Sq;
 import ch.epfl.xblast.Cell;
@@ -182,11 +184,8 @@ public final class GameState {
      * @return all alive players
      */
     public List<Player> alivePlayers() {
-        List<Player> alivePlayers = new ArrayList<Player>();
-        for (Player p : players) {
-            if (p.isAlive())
-                alivePlayers.add(p);
-        }
+        List<Player> alivePlayers = players.stream().filter(p -> p.isAlive())
+                .collect(Collectors.toList());
 
         return alivePlayers;
     }
@@ -247,10 +246,8 @@ public final class GameState {
             }
         }
 
-        Set<Cell> blastedCells1 = new HashSet<Cell>();
-        for (Sq<Cell> b : blasts1) {
-            blastedCells1.add(b.head());
-        }
+        Set<Cell> blastedCells1 = blasts1.stream().map(Sq::head)
+                .collect(Collectors.toSet());
 
         Board board1 = nextBoard(board, consumedBonuses, blastedCells1);
 
@@ -279,10 +276,8 @@ public final class GameState {
 
         // 5. Evolution of the Players
 
-        Set<Cell> bombedCellsSet = new HashSet<Cell>();
-        for (Bomb b : bombs1) {
-            bombedCellsSet.add(b.position());
-        }
+        Set<Cell> bombedCellsSet = bombs1.stream().map(Bomb::position)
+                .collect(Collectors.toSet());
 
         List<Player> players1 = nextPlayers(players, playerBonuses,
                 bombedCellsSet, board1, blastedCells1, speedChangeEvents);
@@ -306,18 +301,12 @@ public final class GameState {
      */
     private static List<Sq<Cell>> nextBlasts(List<Sq<Cell>> blasts0,
             Board board0, List<Sq<Sq<Cell>>> explosions0) {
-        List<Sq<Cell>> blasts1 = new ArrayList<Sq<Cell>>();
-
-        for (Sq<Cell> blast : blasts0) {
-            if (board0.blocksAt(blast.head()).head().isFree()
-                    && !blast.tail().isEmpty()) {
-                blasts1.add(blast.tail());
-            }
-        }
-
-        for (Sq<Sq<Cell>> explosion : explosions0) {
-            blasts1.add(explosion.head());
-        }
+        List<Sq<Cell>> blasts1 = Stream
+                .concat(blasts0.stream()
+                        .filter(b -> board0.blocksAt(b.head()).head().isFree()
+                                && !b.tail().isEmpty())
+                        .map(Sq::tail), explosions0.stream().map(Sq::head))
+                .collect(Collectors.toList());
 
         return blasts1;
     }
@@ -530,14 +519,8 @@ public final class GameState {
      */
     private static List<Sq<Sq<Cell>>> nextExplosions(
             List<Sq<Sq<Cell>>> explosions0) {
-        List<Sq<Sq<Cell>>> explosions1 = new ArrayList<Sq<Sq<Cell>>>();
-
-        for (Sq<Sq<Cell>> e : explosions0) {
-            if (!e.tail().isEmpty())
-                explosions1.add(e.tail());
-        }
-
-        return explosions1;
+        return explosions0.stream().filter(e -> !e.tail().isEmpty())
+                .map(Sq::tail).collect(Collectors.toList());
     }
 
     /**
@@ -553,6 +536,9 @@ public final class GameState {
             bombCells.put(b.position(), b);
         }
 
+        // TODO: Correct stream? : bombCells =
+        // bombs.stream().collect(Collectors.toMap(Bomb::position, b -> b));
+
         return bombCells;
     }
 
@@ -562,13 +548,7 @@ public final class GameState {
      * @return set with all the cells that have a blast on it
      */
     public Set<Cell> blastedCells() {
-        Set<Cell> blastCells = new HashSet<Cell>();
-
-        for (Sq<Cell> b : blasts) {
-            blastCells.add(b.head());
-        }
-
-        return blastCells;
+        return blasts.stream().map(Sq::head).collect(Collectors.toSet());
     }
 
     /**
@@ -586,11 +566,8 @@ public final class GameState {
     private static List<Bomb> newlyDroppedBombs(List<Player> players0,
             Set<PlayerID> bombDropEvents, List<Bomb> bombs0) {
         List<Bomb> bombs1 = new ArrayList<Bomb>();
-        List<Cell> bombedCells = new ArrayList<Cell>();
-
-        for (Bomb b : bombs0) {
-            bombedCells.add(b.position());
-        }
+        List<Cell> bombedCells = bombs0.stream().map(Bomb::position)
+                .collect(Collectors.toList());
 
         int nbBombs;
 

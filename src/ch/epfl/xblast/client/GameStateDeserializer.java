@@ -6,6 +6,9 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
+
+import javax.swing.plaf.synth.SynthSeparatorUI;
 
 import ch.epfl.xblast.Cell;
 import ch.epfl.xblast.PlayerID;
@@ -40,9 +43,9 @@ public final class GameStateDeserializer {
     }
 
     /**
-     * Returns a client GameState given a serialized GameState, expressed as a list
-     * of bytes. Uses private sub-methods to separately deserialize the states
-     * of the board, the explosions, the players, the score and the time.
+     * Returns a client GameState given a serialized GameState, expressed as a
+     * list of bytes. Uses private sub-methods to separately deserialize the
+     * states of the board, the explosions, the players, the score and the time.
      * 
      * @param bytes
      *            - the serialized GameState
@@ -86,15 +89,11 @@ public final class GameStateDeserializer {
 
     private static List<Image> deserializeExplosions(
             List<Byte> bytesForExplosions) {
-        List<Image> explosions = new ArrayList<>();
-
         bytesForExplosions = RunLengthEncoder.decode(bytesForExplosions);
 
-        for (byte b : bytesForExplosions) {
-            explosions.add(EXPLOSION_IMAGES.imageOrNull(b));
-        }
-
-        return explosions;
+        return bytesForExplosions.stream()
+                .map(b -> EXPLOSION_IMAGES.imageOrNull(b))
+                .collect(Collectors.toList());
     }
 
     private static List<Image> deserializeTime(byte remainingTime) {

@@ -25,6 +25,7 @@ import ch.epfl.xblast.client.GameState.Player;
  * @author Yaron Dibner (257145)
  * @author Julien Malka (259041)
  */
+@SuppressWarnings("serial")
 public final class XBlastComponent extends JComponent {
     private final static int W = 960;
     private final static int H = 688;
@@ -77,8 +78,9 @@ public final class XBlastComponent extends JComponent {
             Font font = new Font("Arial", Font.BOLD, 25);
             g.setColor(Color.WHITE);
             g.setFont(font);
-            for (int i = 0 ; i < playerIds.size() ; i++) {
-                g.drawString(Integer.toString(game.players().get(i).lives()), SCORE_X_POSITIONS.get(i).intValue(), SCORE_Y_POSITION);
+            for (int i = 0; i < playerIds.size(); i++) {
+                g.drawString(Integer.toString(game.players().get(i).lives()),
+                        SCORE_X_POSITIONS.get(i).intValue(), SCORE_Y_POSITION);
             }
 
             Comparator<Player> verticalPositionComparator = (p1, p2) -> Integer
@@ -92,7 +94,6 @@ public final class XBlastComponent extends JComponent {
             List<Player> players = new ArrayList<>(game.players());
 
             players.sort(playerComparator);
-            
 
             for (Player p : players) {
                 int xs = 4 * p.position().x() - 24;
@@ -103,6 +104,15 @@ public final class XBlastComponent extends JComponent {
         }
     }
 
+    /**
+     * Updates the GameState for the display. The player's id is given to
+     * resolve the cases where two players stand on top of each other.
+     * 
+     * @param game
+     *            - the new GameState
+     * @param p
+     *            - the id of the client
+     */
     public void setGameState(GameState game, PlayerID p) {
         this.game = game;
 

@@ -1,7 +1,9 @@
 package ch.epfl.xblast.server;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import ch.epfl.cs108.Sq;
 import ch.epfl.xblast.ArgumentChecker;
@@ -135,7 +137,7 @@ public final class Bomb {
      */
     public List<Sq<Sq<Cell>>> explosion() {
         List<Sq<Sq<Cell>>> arms = new ArrayList<Sq<Sq<Cell>>>();
-
+        
         for (Direction dir : Direction.values()) {
             arms.add(explosionArmTowards(dir));
         }
