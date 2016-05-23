@@ -3,6 +3,7 @@ package ch.epfl.xblast.server;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import ch.epfl.cs108.Sq;
@@ -45,11 +46,13 @@ public final class Bomb {
      */
     public Bomb(PlayerID ownerId, Cell position, Sq<Integer> fuseLengths,
             int range) throws NullPointerException, IllegalArgumentException {
-        if (ownerId == null || position == null || fuseLengths == null) {
-            throw new NullPointerException();
-        } else if (fuseLengths.isEmpty()) {
+        Objects.requireNonNull(ownerId);
+        Objects.requireNonNull(position);
+        Objects.requireNonNull(fuseLengths);
+        if(fuseLengths.isEmpty()){
             throw new IllegalArgumentException();
         }
+        
         this.ownerId = ownerId;
         this.position = position;
         this.fuseLengths = fuseLengths;
@@ -114,7 +117,7 @@ public final class Bomb {
      * @return current fuse length
      */
     public int fuseLength() {
-        return fuseLengths.head().intValue();
+        return fuseLengths.head();
     }
 
     /**
