@@ -93,24 +93,14 @@ public final class SubCell {
 
         switch (d) {
         case E:
-            x = Math.floorMod(++x, COLUMNS);
-            break;
-
+            return new SubCell(++x, y);
         case W:
-            x = Math.floorMod(--x, COLUMNS);
-            break;
-
+            return new SubCell(--x, y);
         case N:
-            y = Math.floorMod(--y, ROWS);
-            break;
-
+            return new SubCell(x, --y);
         default:
-            y = Math.floorMod(++y, ROWS);
-            break;
-
+            return new SubCell(x, ++y);
         }
-
-        return new SubCell(x, y);
     }
 
     /**

@@ -159,25 +159,15 @@ public final class Cell {
      * @return the neighbor cell in the direction d.
      */
     public Cell neighbor(Direction dir) {
-
         switch (dir) {
         case N:
-            int y2 = Math.floorMod(y - 1, ROWS);
-
-            return ROW_MAJOR_ORDER.get(y2 * COLUMNS + x);
-
+            return new Cell(x, y - 1);
         case S:
-            int y3 = Math.floorMod(y + 1, ROWS);
-            return ROW_MAJOR_ORDER.get(y3 * COLUMNS + x);
-
+            return new Cell(x, y + 1);
         case E:
-            int x2 = Math.floorMod(x + 1, COLUMNS);
-            return ROW_MAJOR_ORDER.get(y * COLUMNS + x2);
-
+            return new Cell(x + 1, y);
         case W:
-            int x3 = Math.floorMod(x - 1, COLUMNS);
-            return ROW_MAJOR_ORDER.get(y * COLUMNS + x3);
-
+            return new Cell(x - 1, y);
         default:
             return null;
         }

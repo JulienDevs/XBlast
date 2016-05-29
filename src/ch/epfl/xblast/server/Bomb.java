@@ -47,10 +47,10 @@ public final class Bomb {
         Objects.requireNonNull(ownerId);
         Objects.requireNonNull(position);
         Objects.requireNonNull(fuseLengths);
-        
         if (fuseLengths.isEmpty()) {
             throw new IllegalArgumentException();
         }
+
         this.ownerId = ownerId;
         this.position = position;
         this.fuseLengths = fuseLengths;
@@ -114,7 +114,7 @@ public final class Bomb {
      * @return current fuse length
      */
     public int fuseLength() {
-        return fuseLengths.head().intValue();
+        return fuseLengths.head();
     }
 
     /**
