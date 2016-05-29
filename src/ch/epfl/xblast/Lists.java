@@ -28,8 +28,7 @@ public final class Lists {
      * @throws IllegalArgumentException
      *             - if the list is null or empty
      */
-    public static <T> List<T> mirrored(List<T> l)
-            throws IllegalArgumentException {
+    public static <T> List<T> mirrored(List<T> l) {
         if (l == null || l.isEmpty()) {
             throw new IllegalArgumentException();
         }
@@ -42,19 +41,17 @@ public final class Lists {
     }
 
     /**
-     * Returns all the permutations of the given list in an arbitrary order. The
-     * computation of all the permutations is done in the private and static
-     * method recursion(...).
+     * Returns all the permutations of the given list in an arbitrary order.
      * 
      * @param l
      *            - the list of which the permutations will be returned
-     * @return a list containing all the permutations of l
+     * @return A list containing all the permutations of l
      */
     public static <T> List<List<T>> permutations(List<T> l) {
         List<List<T>> list = new ArrayList<>(Arrays.asList());
 
         if (l == null || l.isEmpty()) {
-            return new ArrayList<List<T>>(Arrays.asList(new ArrayList<>()));
+            return new ArrayList<List<T>>();
         }
 
         if (l.size() == 2) {

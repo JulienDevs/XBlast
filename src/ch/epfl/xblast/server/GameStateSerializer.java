@@ -14,24 +14,22 @@ import ch.epfl.xblast.RunLengthEncoder;
  * @author Julien Malka (259041)
  */
 public final class GameStateSerializer {
-    
-    
-    
-    
-    
+
     private GameStateSerializer() {
     }
 
-    
-    
     /**
-     * From a painter and a gamestate, compute return the serialized version of the game state.
+     * From a painter and a gamestate, compute return the serialized version of
+     * the game state.
      * 
-     * @param bPainter the boardpainter used to get the images associated with each block
-     * @param game the state of the game
+     * @param bPainter
+     *            the boardpainter used to get the images associated with each
+     *            block
+     * @param game
+     *            the state of the game
      * @return A List of Bytes serialized to represent the game state
      */
-    
+
     public static List<Byte> serialize(BoardPainter bPainter, GameState game) {
         List<Byte> bytes = new ArrayList<>();
 

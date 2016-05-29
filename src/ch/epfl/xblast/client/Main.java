@@ -19,6 +19,7 @@ import javax.swing.SwingUtilities;
 
 import ch.epfl.xblast.PlayerAction;
 import ch.epfl.xblast.PlayerID;
+import ch.epfl.xblast.Time;
 
 /**
  * @author Yaron Dibner (257145)
@@ -26,7 +27,7 @@ import ch.epfl.xblast.PlayerID;
  */
 public class Main {
 
-    public final static int NB_MAX_BYTES = 410;
+    private final static int NB_MAX_BYTES = 410;
 
     /**
      * @throws InvocationTargetException
@@ -48,7 +49,7 @@ public class Main {
         channel.configureBlocking(false);
         address = new InetSocketAddress(
                 (args == null || args.length == 0 || args[0] == null
-                        || args[0].length() == 0) ? "localhost" : args[0],
+                        || args[0].length() == 0) ? "128.179.161.186" : args[0],
                 2016);
 
         System.out.println(address);
@@ -62,7 +63,7 @@ public class Main {
 
             channel.send(buffer, address);
             buffer.clear();
-            Thread.sleep(1000L);
+            Thread.sleep(Time.MS_PER_S);
         } while (channel.receive(buffer) == null);
 
         channel.configureBlocking(true);

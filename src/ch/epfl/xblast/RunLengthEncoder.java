@@ -12,6 +12,9 @@ import java.util.List;
  * @author Julien Malka (259041)
  */
 public final class RunLengthEncoder {
+    private static final int MAX_LENGTH = Byte.MAX_VALUE + 3;
+    private static final int MIN_ENCODE_SIZE = 2;
+
     private RunLengthEncoder() {
     }
 
@@ -36,24 +39,22 @@ public final class RunLengthEncoder {
         List<Byte> sequence = new ArrayList<>();
         for (Byte b : bytes) {
             if (!(sequence.isEmpty() || sequence.contains(b))
-                    || sequence.size() == 130) {
-                if (sequence.size() <= 2) {
+                    || sequence.size() >= MAX_LENGTH) {
+                if (sequence.size() <= MIN_ENCODE_SIZE) {
                     finalBytes.addAll(sequence);
                 } else {
-                    finalBytes.add((byte) -(sequence.size() - 2));
+                    finalBytes.add((byte) -(sequence.size() - MIN_ENCODE_SIZE));
                     finalBytes.add(sequence.get(0));
                 }
-
                 sequence = new ArrayList<>();
             }
-
             sequence.add(b);
         }
 
-        if (sequence.size() <= 2) {
+        if (sequence.size() <= MIN_ENCODE_SIZE) {
             finalBytes.addAll(sequence);
         } else {
-            finalBytes.add((byte) -(sequence.size() - 2));
+            finalBytes.add((byte) -(sequence.size() - MIN_ENCODE_SIZE));
             finalBytes.add(sequence.get(0));
         }
 
@@ -80,7 +81,7 @@ public final class RunLengthEncoder {
         while (it.hasNext()) {
             Byte b = it.next();
             if (b < 0) {
-                int n = Math.abs(b) + 2;
+                int n = Math.abs(b) + MIN_ENCODE_SIZE;
                 Byte nextB = it.next();
                 for (int i = 0; i < n; ++i) {
                     finalBytes.add(nextB);

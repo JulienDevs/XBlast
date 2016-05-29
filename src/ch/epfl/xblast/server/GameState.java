@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Random;
 import java.util.Set;
@@ -14,6 +15,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import ch.epfl.cs108.Sq;
+import ch.epfl.xblast.ArgumentChecker;
 import ch.epfl.xblast.Cell;
 import ch.epfl.xblast.Direction;
 import ch.epfl.xblast.Lists;
@@ -39,8 +41,7 @@ public final class GameState {
     private final List<Sq<Cell>> blasts;
 
     private static final List<List<PlayerID>> PERMUTATION = Lists
-            .permutations(Arrays.asList(PlayerID.PLAYER_1, PlayerID.PLAYER_2,
-                    PlayerID.PLAYER_3, PlayerID.PLAYER_4));
+            .permutations(Arrays.asList(PlayerID.values()));
 
     private static final Random RANDOM = new Random(2016);
 
@@ -70,14 +71,16 @@ public final class GameState {
      */
     public GameState(int ticks, Board board, List<Player> players,
             List<Bomb> bombs, List<Sq<Sq<Cell>>> explosions,
-            List<Sq<Cell>> blasts)
-                    throws IllegalArgumentException, NullPointerException {
+            List<Sq<Cell>> blasts) {
 
-        if (blasts == null || explosions == null || bombs == null
-                || players == null || board == null) {
-            throw new NullPointerException();
-        }
-        if (ticks < 0 || players.size() != PlayerID.values().length) {
+        Objects.requireNonNull(blasts);
+        Objects.requireNonNull(explosions);
+        Objects.requireNonNull(bombs);
+        Objects.requireNonNull(players);
+        Objects.requireNonNull(board);
+
+        ArgumentChecker.requireNonNegative(ticks);
+        if (players.size() != PlayerID.values().length) {
             throw new IllegalArgumentException();
         }
 
@@ -105,8 +108,7 @@ public final class GameState {
      * @throws NullPointerException
      *             - if the last five parameters are equal to null
      */
-    public GameState(Board board, List<Player> players)
-            throws IllegalArgumentException, NullPointerException {
+    public GameState(Board board, List<Player> players) {
         this(0, board, players, new ArrayList<Bomb>(),
                 new ArrayList<Sq<Sq<Cell>>>(), new ArrayList<Sq<Cell>>());
     }
@@ -478,28 +480,12 @@ public final class GameState {
                                     .constant(PROBABILITY_BLOCKS[RANDOM.nextInt(
                                             Bonus.values().length + 1)])));
                 } else if (board0.blockAt(c).isBonus()) {
-                    Sq<Block> b = board0.blocksAt(c);
-                    boolean alreadyBlasted = false;
-
-                    for (int i = 0; i < Ticks.BONUS_DISAPPEARING_TICKS; i++) {
-                        b = b.tail();
-                        if (b.head() == Block.FREE) {
-                            alreadyBlasted = true;
-                        }
-                    }
-
-                    if (!alreadyBlasted) {
-                        blocks1.add(Sq
-                                .repeat(Ticks.BONUS_DISAPPEARING_TICKS,
-                                        board0.blockAt(c))
-                                .concat(Sq.constant(Block.FREE)));
-                    } else {
-                        blocks1.add(board0.blocksAt(c).tail());
-                    }
+                    blocks1.add(board0.blocksAt(c)
+                            .limit(Ticks.BONUS_DISAPPEARING_TICKS)
+                            .concat(Sq.constant(Block.FREE)));
                 } else {
                     blocks1.add(board0.blocksAt(c).tail());
                 }
-
             } else {
                 blocks1.add(board0.blocksAt(c).tail());
             }
@@ -530,14 +516,8 @@ public final class GameState {
      * @return map of cells that have a bomb on it, and the associated bombs
      */
     public Map<Cell, Bomb> bombedCells() {
-        Map<Cell, Bomb> bombCells = new HashMap<Cell, Bomb>();
-
-        for (Bomb b : bombs) {
-            bombCells.put(b.position(), b);
-        }
-
-        // TODO: Correct stream? : bombCells =
-        // bombs.stream().collect(Collectors.toMap(Bomb::position, b -> b));
+        Map<Cell, Bomb> bombCells = bombs.stream()
+                .collect(Collectors.toMap(Bomb::position, b -> b));
 
         return bombCells;
     }

@@ -1,9 +1,8 @@
 package ch.epfl.xblast.server;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Objects;
 
 import ch.epfl.cs108.Sq;
 import ch.epfl.xblast.ArgumentChecker;
@@ -44,10 +43,12 @@ public final class Bomb {
      *             - if fuseLengts is empty or range is strictly negative
      */
     public Bomb(PlayerID ownerId, Cell position, Sq<Integer> fuseLengths,
-            int range) throws NullPointerException, IllegalArgumentException {
-        if (ownerId == null || position == null || fuseLengths == null) {
-            throw new NullPointerException();
-        } else if (fuseLengths.isEmpty()) {
+            int range) {
+        Objects.requireNonNull(ownerId);
+        Objects.requireNonNull(position);
+        Objects.requireNonNull(fuseLengths);
+        
+        if (fuseLengths.isEmpty()) {
             throw new IllegalArgumentException();
         }
         this.ownerId = ownerId;
@@ -75,8 +76,7 @@ public final class Bomb {
      * @throws IllegalArgumentException
      *             - if fuseLengts is empty or range is strictly negative
      */
-    public Bomb(PlayerID ownerId, Cell position, int fuseLength, int range)
-            throws NullPointerException, IllegalArgumentException {
+    public Bomb(PlayerID ownerId, Cell position, int fuseLength, int range) {
         this(ownerId, position,
                 Sq.iterate(fuseLength, u -> u - 1).limit(fuseLength), range);
     }
@@ -137,7 +137,7 @@ public final class Bomb {
      */
     public List<Sq<Sq<Cell>>> explosion() {
         List<Sq<Sq<Cell>>> arms = new ArrayList<Sq<Sq<Cell>>>();
-        
+
         for (Direction dir : Direction.values()) {
             arms.add(explosionArmTowards(dir));
         }

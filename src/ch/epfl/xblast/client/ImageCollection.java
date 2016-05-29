@@ -48,11 +48,11 @@ public final class ImageCollection {
      * 
      * @param byteForImage
      *            - byte of the image to be returned
-     * @return the image corresponding to the given byte
+     * @return The image corresponding to the given byte
      * @throws NoSuchElementException
-     *             - if there images doesn't contain the given byte
+     *             if there images doesn't contain the given byte
      */
-    public Image image(byte byteForImage) throws NoSuchElementException {
+    public Image image(byte byteForImage) {
         if (!images.containsKey(byteForImage)) {
             System.out.println(byteForImage);
             throw new NoSuchElementException();
@@ -61,6 +61,15 @@ public final class ImageCollection {
         return images.get(byteForImage);
     }
 
+    /**
+     * Returns the image corresponding to the given byte or null if there is no
+     * image associated to that byte.
+     * 
+     * @param byteForImage
+     *            - byte of the image to be returned.
+     * @return The image corresponding to the given byte, or null if there is no
+     *         image associated to that byte
+     */
     public Image imageOrNull(byte byteForImage) {
         return images.getOrDefault(byteForImage, null);
     }

@@ -24,7 +24,9 @@ public class KeyboardEventHandler implements KeyListener {
      * Main constructor.
      * 
      * @param actionsMap
+     *            - map associating player actions with key codes (integers)
      * @param actionsConsumer
+     *            - consumer of players' actions
      */
     public KeyboardEventHandler(Map<Integer, PlayerAction> actionsMap,
             Consumer<PlayerAction> actionsConsumer) {

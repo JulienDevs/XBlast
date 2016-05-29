@@ -12,7 +12,7 @@ public enum Block {
     FREE, INDESTRUCTIBLE_WALL, DESTRUCTIBLE_WALL, CRUMBLING_WALL, BONUS_BOMB(
             Bonus.INC_BOMB), BONUS_RANGE(Bonus.INC_RANGE);
 
-    private Bonus maybeAssociatedBonus;
+    private final Bonus maybeAssociatedBonus;
 
     private Block(Bonus maybeAssociatedBonus) {
         this.maybeAssociatedBonus = maybeAssociatedBonus;

@@ -3,6 +3,7 @@ package ch.epfl.xblast.server;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import ch.epfl.cs108.Sq;
 import ch.epfl.xblast.Cell;
@@ -50,10 +51,9 @@ public final class Board {
         checkBlockMatrix(rows, Cell.ROWS, Cell.COLUMNS);
         List<Sq<Block>> constantBlocks = new ArrayList<>();
 
-        for (int i = 0; i < rows.size(); i++) {
-            for (int j = 0; j < rows.get(i).size(); j++) {
-                constantBlocks.add(Sq.constant(rows.get(i).get(j)));
-            }
+        for (List<Block> l : rows) {
+            constantBlocks.addAll(l.stream().map(b -> Sq.constant(b))
+                    .collect(Collectors.toList()));
         }
 
         return new Board(constantBlocks);
@@ -83,12 +83,10 @@ public final class Board {
 
         List<Block> tmpBlocks;
 
-        for (int i = 0; i < innerBlocks.size(); i++) {
+        for (List<Block> l : innerBlocks) {
             tmpBlocks = new ArrayList<>();
             tmpBlocks.add(Block.INDESTRUCTIBLE_WALL);
-            for (Block j : innerBlocks.get(i)) {
-                tmpBlocks.add(j);
-            }
+            tmpBlocks.addAll(l);
             tmpBlocks.add(Block.INDESTRUCTIBLE_WALL);
             blocks.add(tmpBlocks);
         }
@@ -119,11 +117,8 @@ public final class Board {
         checkBlockMatrix(quadrantNWBBlocks, (Cell.ROWS - 1) / 2,
                 (Cell.COLUMNS - 1) / 2);
 
-        List<List<Block>> symmetricBlocks = new ArrayList<>();
-
-        for (List<Block> list : quadrantNWBBlocks) {
-            symmetricBlocks.add(Lists.mirrored(list));
-        }
+        List<List<Block>> symmetricBlocks = quadrantNWBBlocks.stream()
+                .map(Lists::mirrored).collect(Collectors.toList());
 
         symmetricBlocks = Lists.mirrored(symmetricBlocks);
 
@@ -174,13 +169,10 @@ public final class Board {
             throw new IllegalArgumentException();
         }
 
-        for (int k = 0; k < matrix.size(); k++) {
-            if (matrix.get(k).size() != columns) {
+        for (List<Block> l : matrix) {
+            if (l.size() != columns) {
                 throw new IllegalArgumentException();
-
             }
-
         }
-
     }
 }

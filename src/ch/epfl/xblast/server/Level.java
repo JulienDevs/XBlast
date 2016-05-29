@@ -2,14 +2,12 @@ package ch.epfl.xblast.server;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import ch.epfl.xblast.Cell;
 import ch.epfl.xblast.PlayerID;
-import ch.epfl.xblast.server.Player.LifeState.State;
 
 /**
  * Representation of a level of XBlast. Consists of a pair of a board painter
@@ -20,6 +18,11 @@ import ch.epfl.xblast.server.Player.LifeState.State;
  */
 public final class Level {
 
+    /**
+     * Default level. The BoardPainter is the one that draws the same board as
+     * in the introduction video. The GameState is the same as the one in the
+     * video in stage 6.
+     */
     public final static Level DEFAULT_LEVEL = new Level(defaultBlockImage(),
             defaultGameState());
 
@@ -31,36 +34,33 @@ public final class Level {
     private final GameState gameState;
 
     /**
-     * Main constructor. Construct a level given its painter (BoardPainter) and
-     * its gameState
+     * Main constructor. Constructs a level given its BoardPainter and its
+     * GameState.
      * 
      * @param boardPainter
-     *            painter of the level
+     *            - BoardPainter of the level
      * @param gameState
-     *            gameState of the level
+     *            - GameState of the level
      */
-
     public Level(BoardPainter boardPainter, GameState gameState) {
         this.boardPainter = boardPainter;
         this.gameState = gameState;
     }
 
     /**
-     * Getter for the painter of the level
+     * Returns the painter of the board.
      * 
-     * @return the painter (BoardPainter)
+     * @return The painter the painter of the board
      */
-
     public BoardPainter boardPainter() {
         return boardPainter;
     }
 
     /**
-     * Getter for the gameState of the level
+     * Returns the GameState of the level.
      * 
-     * @return the gameState
+     * @return The GameState of the level
      */
-
     public GameState gameState() {
         return gameState;
     }

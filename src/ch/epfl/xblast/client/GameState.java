@@ -10,7 +10,7 @@ import ch.epfl.xblast.SubCell;
 
 /**
  * Immutable Class. Handles a simple representation of the GameState for the
- * client
+ * client.
  * 
  * @author Yaron Dibner (257145)
  * @author Julien Malka (259041)
@@ -29,13 +29,13 @@ public final class GameState {
      * @param players
      *            - the given List of players
      * @param board
-     *            - the given board (List of images)
+     *            - the board of the game
      * @param explosions
-     *            - the given explosions (List of images)
+     *            - the explosions of the game
      * @param scores
-     *            - the given scores (List of images)
+     *            - the scores (i.e. number of lives) of the players
      * @param time
-     *            - the given time (List of images)
+     *            - the time since the game began
      */
     public GameState(List<Player> players, List<Image> board,
             List<Image> explosions, List<Image> scores, List<Image> time) {
@@ -68,7 +68,7 @@ public final class GameState {
     /**
      * Returns the images of the bombs and the blasts of the game.
      * 
-     * @return images of the bombs and the blasta of the game
+     * @return images of the bombs and the blasts of the game
      */
 
     public List<Image> explosions() {
@@ -97,7 +97,7 @@ public final class GameState {
 
     /**
      * Immutable Class. Handles a simple representation of a Player for the
-     * client
+     * client.
      * 
      * @author Yaron Dibner (257145)
      * @author Julien Malka (259041)
@@ -114,13 +114,13 @@ public final class GameState {
          * and image.
          * 
          * @param id
-         *            given player id
+         *            - id of the player
          * @param lives
-         *            given player's number of lives
+         *            - player's number of lives
          * @param position
-         *            given player's position
+         *            - player's position
          * @param image
-         *            given player's image
+         *            - player's image
          */
 
         public Player(PlayerID id, int lives, SubCell position, Image image) {
@@ -135,7 +135,6 @@ public final class GameState {
          * 
          * @return id of the player
          */
-
         public PlayerID id() {
             return id;
         }
@@ -145,7 +144,6 @@ public final class GameState {
          * 
          * @return player's number of lives
          */
-
         public int lives() {
             return lives;
         }
@@ -155,7 +153,6 @@ public final class GameState {
          * 
          * @return player's position
          */
-
         public SubCell position() {
             return position;
         }
@@ -163,7 +160,7 @@ public final class GameState {
         /**
          * Returns the image representing the player.
          * 
-         * @return image representing the player 
+         * @return image representing the player
          */
         public Image image() {
             return image;

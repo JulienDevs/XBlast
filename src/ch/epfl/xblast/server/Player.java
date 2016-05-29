@@ -46,8 +46,7 @@ public final class Player {
      */
 
     public Player(PlayerID id, Sq<LifeState> lifeStates,
-            Sq<DirectedPosition> directedPos, int maxBombs, int bombRange)
-                    throws NullPointerException, IllegalArgumentException {
+            Sq<DirectedPosition> directedPos, int maxBombs, int bombRange) {
         this.id = Objects.requireNonNull(id);
         this.lifeStates = Objects.requireNonNull(lifeStates);
         this.directedPos = Objects.requireNonNull(directedPos);
@@ -77,8 +76,7 @@ public final class Player {
      */
 
     public Player(PlayerID id, int lives, Cell position, int maxBombs,
-            int bombRange)
-                    throws NullPointerException, IllegalArgumentException {
+            int bombRange) {
         this(id, createLifeStates(ArgumentChecker.requireNonNegative(lives)),
                 DirectedPosition.stopped(new DirectedPosition(
                         SubCell.centralSubCellOf(
@@ -275,8 +273,7 @@ public final class Player {
          * @throws IllegalArgumentException
          *             - if lives is strictly negative
          */
-        public LifeState(int lives, State state)
-                throws NullPointerException, IllegalArgumentException {
+        public LifeState(int lives, State state) {
             this.lives = ArgumentChecker.requireNonNegative(lives);
             this.state = Objects.requireNonNull(state);
         }
@@ -348,8 +345,7 @@ public final class Player {
          *             - if position or direction is null
          */
 
-        public DirectedPosition(SubCell position, Direction direction)
-                throws NullPointerException {
+        public DirectedPosition(SubCell position, Direction direction) {
             this.position = Objects.requireNonNull(position);
             this.direction = Objects.requireNonNull(direction);
         }

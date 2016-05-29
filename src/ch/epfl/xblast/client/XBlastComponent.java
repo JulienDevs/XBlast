@@ -29,8 +29,8 @@ import ch.epfl.xblast.client.GameState.Player;
 public final class XBlastComponent extends JComponent {
     private final static int W = 960;
     private final static int H = 688;
-    private final static int IMAGE_WIDTH = 64;
-    private final static int IMAGE_HEIGHT = 48;
+    private final static int BLOCK_WIDTH = 64;
+    private final static int BLOCK_HEIGHT = 48;
     private final static int SCORE_SIZE = 48;
     private final static int TIME_SIZE = 16;
     private final static List<Integer> SCORE_X_POSITIONS = new ArrayList<>(
@@ -50,15 +50,15 @@ public final class XBlastComponent extends JComponent {
         Graphics2D g = (Graphics2D) g0;
         if (game != null) {
             for (Cell c : Cell.ROW_MAJOR_ORDER) {
-                int x = c.x() * IMAGE_WIDTH;
-                int y = c.y() * IMAGE_HEIGHT;
+                int x = c.x() * BLOCK_WIDTH;
+                int y = c.y() * BLOCK_HEIGHT;
                 int index = c.rowMajorIndex();
 
                 g.drawImage(game.board().get(index), x, y, null);
                 g.drawImage(game.explosions().get(index), x, y, null);
             }
 
-            int x = 0, y = Cell.ROWS * IMAGE_HEIGHT;
+            int x = 0, y = Cell.ROWS * BLOCK_HEIGHT;
 
             for (Image i : game.scores()) {
                 g.drawImage(i, x, y, null);

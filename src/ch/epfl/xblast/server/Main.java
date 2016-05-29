@@ -6,7 +6,6 @@ import java.net.SocketAddress;
 import java.net.StandardProtocolFamily;
 import java.nio.ByteBuffer;
 import java.nio.channels.DatagramChannel;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -33,12 +32,15 @@ public final class Main {
         GameState game = Level.DEFAULT_LEVEL.gameState();
         BoardPainter bPainter = Level.DEFAULT_LEVEL.boardPainter();
         // TODO: change expectedClients to 4
-        int expectedClients = 2;
+        int expectedClients = 4;
         ByteBuffer buffer;
         Map<SocketAddress, PlayerID> ips = new HashMap<>();
 
-        if (args.length != 0)
-            expectedClients = Integer.parseInt(args[0]);
+        try {
+            if (args.length != 0)
+                expectedClients = Integer.parseInt(args[0]);
+        } catch (NumberFormatException e) {
+        }
 
         DatagramChannel channel = DatagramChannel
                 .open(StandardProtocolFamily.INET);
@@ -52,7 +54,6 @@ public final class Main {
                     && !ips.containsKey(senderAddress)) {
                 ips.put(senderAddress, PlayerID.values()[ips.size()]);
             }
-
             System.out.println(buffer.get(0));
         }
 
@@ -105,7 +106,6 @@ public final class Main {
             SocketAddress receiverAddress;
 
             while ((receiverAddress = channel.receive(playerActions)) != null) {
-
                 switch (PlayerAction.values()[playerActions.get(0)]) {
                 case MOVE_N:
                     speedChangeEvents.put(ips.get(receiverAddress),
@@ -131,12 +131,11 @@ public final class Main {
                     bombDropEvents.add(ips.get(receiverAddress));
                     break;
                 default:
-                    playerActions = ByteBuffer.allocate(1);
                     break;
                 }
-
+                playerActions = ByteBuffer.allocate(1);
             }
-
+            
             game = game.next(speedChangeEvents, bombDropEvents);
         }
 
