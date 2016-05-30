@@ -116,7 +116,7 @@ public final class XBlastComponent extends JComponent {
     public void setGameState(GameState game, PlayerID p) {
         this.game = game;
 
-        this.playerIds = Arrays.asList(PlayerID.values());
+        playerIds = Arrays.asList(PlayerID.values());
         Collections.rotate(playerIds, playerIds.size() - p.ordinal() - 1);
 
         repaint();
