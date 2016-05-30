@@ -21,6 +21,9 @@ import ch.epfl.xblast.client.GameState.Player;
  */
 public final class GameStateDeserializer {
     private final static int NB_INFORMATION_PER_PLAYER = 4;
+    private final static int STEP_X_POS = 1;
+    private final static int STEP_Y_POS = 2;
+    private final static int STEP_IMG = 3;
 
     private final static byte FULL_TIME_BLOCK = 21;
     private final static byte EMPTY_TIME_BLOCK = 20;
@@ -50,7 +53,7 @@ public final class GameStateDeserializer {
      * 
      * @param bytes
      *            - the serialized GameState
-     * @return the deserialized GameState
+     * @return Deserialized GameState.
      */
     public static GameState deserializeGameState(List<Byte> bytes) {
         int start = 1;
@@ -115,9 +118,10 @@ public final class GameStateDeserializer {
             PlayerID id = PlayerID.values()[i / NB_INFORMATION_PER_PLAYER];
             int lives = bytesForPlayer.get(i);
             SubCell position = new SubCell(
-                    Byte.toUnsignedInt(bytesForPlayer.get(i + 1)),
-                    Byte.toUnsignedInt(bytesForPlayer.get(i + 2)));
-            Image img = PLAYER_IMAGES.imageOrNull(bytesForPlayer.get(i + 3));
+                    Byte.toUnsignedInt(bytesForPlayer.get(i + STEP_X_POS)),
+                    Byte.toUnsignedInt(bytesForPlayer.get(i + STEP_Y_POS)));
+            Image img = PLAYER_IMAGES
+                    .imageOrNull(bytesForPlayer.get(i + STEP_IMG));
             players.add(new GameState.Player(id, lives, position, img));
         }
         return players;
@@ -128,11 +132,6 @@ public final class GameStateDeserializer {
         List<Image> result = new ArrayList<>();
 
         for (GameState.Player p : players) {
-            if (p.id() == PlayerID.PLAYER_2) {
-                result.addAll(Collections.nCopies(NB_FILLING_IMAGES_FOR_SCORE,
-                        SCORE_IMAGES.image(BYTE_FOR_FILLING_IMAGES)));
-            }
-
             int image = p.id().ordinal() * 2;
             if (p.lives() == 0) {
                 image++;
@@ -141,6 +140,11 @@ public final class GameStateDeserializer {
             result.add(SCORE_IMAGES.image((byte) image));
             result.add(SCORE_IMAGES.image(START_SCORE_RECTANGLE));
             result.add(SCORE_IMAGES.image(END_SCORE_RECTANGLE));
+
+            if (p.id() == PlayerID.PLAYER_2) {
+                result.addAll(Collections.nCopies(NB_FILLING_IMAGES_FOR_SCORE,
+                        SCORE_IMAGES.image(BYTE_FOR_FILLING_IMAGES)));
+            }
         }
 
         return result;

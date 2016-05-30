@@ -10,6 +10,10 @@ import ch.epfl.xblast.Direction;
 import ch.epfl.xblast.RunLengthEncoder;
 
 /**
+ * Class handling the serialization of a GameState. Uses the method
+ * {@link ch.epfl.xblast.RunLengthEncoder#encode(List) encode} to compress the
+ * information. The serialized GameState will be sent to the client.
+ * 
  * @author Yaron Dibner (257145)
  * @author Julien Malka (259041)
  */
@@ -19,17 +23,16 @@ public final class GameStateSerializer {
     }
 
     /**
-     * From a painter and a gamestate, compute return the serialized version of
-     * the game state.
+     * Returns the serialized version of the given GameState using the given
+     * BoardPainter.
      * 
      * @param bPainter
-     *            the boardpainter used to get the images associated with each
-     *            block
+     *            - the BoardPainter used to get the images associated with each
+     *            block of the game
      * @param game
-     *            the state of the game
-     * @return A List of Bytes serialized to represent the game state
+     *            - the state of the game
+     * @return List of serialized bytes that represents the GameState.
      */
-
     public static List<Byte> serialize(BoardPainter bPainter, GameState game) {
         List<Byte> bytes = new ArrayList<>();
 
@@ -61,7 +64,7 @@ public final class GameStateSerializer {
                 b = ExplosionPainter.BYTE_FOR_EMPTY;
             }
 
-            bytesForExplosions.add(game.board().blockAt(c).isFree() ? b
+            bytesForExplosions.add(game.board().blockAt(c).canHostPlayer() ? b
                     : ExplosionPainter.BYTE_FOR_EMPTY);
         }
 
@@ -74,6 +77,7 @@ public final class GameStateSerializer {
         bytes.addAll(bytesForExplosions);
 
         // ----------PLAYERS------------
+        
         for (Player p : game.players()) {
             bytes.add((byte) p.lives());
             bytes.add((byte) p.position().x());

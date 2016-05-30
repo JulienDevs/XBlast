@@ -14,25 +14,41 @@ public final class PlayerPainter {
     private final static byte STEP_FOR_PLAYER = 20;
     private final static byte INDEX_FOR_INVULNERABLE = 80;
     private final static byte STEP_FOR_DIRECTION = 3;
-    private final static byte STEP_FOR_LEFT_STEP = 1;
-    private final static byte STEP_FOR_RIGHT_STEP = 2;
+
     private final static byte ILLEGAL_BYTE = 100;
+
     private final static byte STEP_FOR_DYING = 12;
     private final static byte STEP_FOR_DEAD = 13;
+
+    /**
+     * Number of frames in the walking animation of the players.
+     */
+    private final static byte NB_WALKING_ANIMATION_STEPS = 4;
+
+    /**
+     * Position of the left foot frame in the walking animation of the players.
+     */
+    private final static byte LEFT_FOOT_IMAGE = 1;
+
+    /**
+     * Position of the right foot frame in the walking animation of the players.
+     */
+    private final static byte RIGHT_FOOT_IMAGE = 3;
+    private final static byte STEP_FOR_LEFT_STEP = 1;
+    private final static byte STEP_FOR_RIGHT_STEP = 2;
 
     private PlayerPainter() {
     }
 
     /**
-     * Returns byte corresponding to the image to use to represent the player at
-     * a given tick
+     * Returns the byte corresponding to the image to use to represent the
+     * player at a given tick.
      * 
      * @param tick
-     *            - the given tick
+     *            - current tick
      * @param player
-     *            - the given player
-     * @return the byte corresponding to the image to use to represent the
-     *         player.
+     *            - player for which the byte is asked
+     * @return Byte corresponding to the image to use to represent the player.
      */
     public static byte byteForPlayer(int tick, Player player) {
         if (!player.isAlive()) {
@@ -47,11 +63,12 @@ public final class PlayerPainter {
             bFP += player.direction().ordinal() * STEP_FOR_DIRECTION;
 
             int mod = (player.direction().isHorizontal())
-                    ? player.position().x() % 4 : player.position().y() % 4;
+                    ? player.position().x() % NB_WALKING_ANIMATION_STEPS
+                    : player.position().y() % NB_WALKING_ANIMATION_STEPS;
 
-            if (mod == 1) {
+            if (mod == LEFT_FOOT_IMAGE) {
                 bFP += STEP_FOR_LEFT_STEP;
-            } else if (mod == 3) {
+            } else if (mod == RIGHT_FOOT_IMAGE) {
                 bFP += STEP_FOR_RIGHT_STEP;
             }
         }

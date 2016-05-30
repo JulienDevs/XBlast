@@ -32,7 +32,7 @@ public final class Main {
         GameState game = Level.DEFAULT_LEVEL.gameState();
         BoardPainter bPainter = Level.DEFAULT_LEVEL.boardPainter();
         // TODO: change expectedClients to 4
-        int expectedClients = 4;
+        int expectedClients = 2;
         ByteBuffer buffer;
         Map<SocketAddress, PlayerID> ips = new HashMap<>();
 

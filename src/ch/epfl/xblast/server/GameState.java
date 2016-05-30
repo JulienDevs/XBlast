@@ -63,11 +63,6 @@ public final class GameState {
      *            - the current explosions
      * @param blasts
      *            - the current explosion blasts
-     * @throws IllegalArgumentException
-     *             - if ticks is strictly negative or players doesn't contain
-     *             four players
-     * @throws NullPointerException
-     *             - if the last five parameters are equal to null
      */
     public GameState(int ticks, Board board, List<Player> players,
             List<Bomb> bombs, List<Sq<Sq<Cell>>> explosions,
@@ -102,11 +97,6 @@ public final class GameState {
      *            - board of the game
      * @param players
      *            - list of all four players
-     * @throws IllegalArgumentException
-     *             - if ticks is strictly negative or players doesn't contain
-     *             four players
-     * @throws NullPointerException
-     *             - if the last five parameters are equal to null
      */
     public GameState(Board board, List<Player> players) {
         this(0, board, players, new ArrayList<Bomb>(),

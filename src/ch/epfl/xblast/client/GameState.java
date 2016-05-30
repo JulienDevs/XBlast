@@ -50,7 +50,7 @@ public final class GameState {
     /**
      * Returns the fours players of the game.
      * 
-     * @return the players of the game
+     * @return Players of the game.
      */
     public List<Player> players() {
         return players;
@@ -59,7 +59,7 @@ public final class GameState {
     /**
      * Returns the images of the board of the game.
      * 
-     * @return images of the board of the game
+     * @return Images of the board of the game.
      */
     public List<Image> board() {
         return board;
@@ -68,9 +68,8 @@ public final class GameState {
     /**
      * Returns the images of the bombs and the blasts of the game.
      * 
-     * @return images of the bombs and the blasts of the game
+     * @return Images of the bombs and the blasts of the game.
      */
-
     public List<Image> explosions() {
         return explosions;
     }
@@ -78,9 +77,8 @@ public final class GameState {
     /**
      * Returns the images of the scores of the players.
      * 
-     * @return images of the scores of the players
+     * @return Images of the scores of the players.
      */
-
     public List<Image> scores() {
         return scores;
     }
@@ -88,9 +86,8 @@ public final class GameState {
     /**
      * Returns the images of the time-line.
      * 
-     * @return images of the time-line
+     * @return Images of the time-line.
      */
-
     public List<Image> time() {
         return time;
     }
@@ -122,7 +119,6 @@ public final class GameState {
          * @param image
          *            - player's image
          */
-
         public Player(PlayerID id, int lives, SubCell position, Image image) {
             this.id = id;
             this.lives = lives;
@@ -133,7 +129,7 @@ public final class GameState {
         /**
          * Returns the id of the player.
          * 
-         * @return id of the player
+         * @return Id of the player.
          */
         public PlayerID id() {
             return id;
@@ -142,7 +138,7 @@ public final class GameState {
         /**
          * Returns the player's number of lives.
          * 
-         * @return player's number of lives
+         * @return Player's number of lives.
          */
         public int lives() {
             return lives;
@@ -151,7 +147,7 @@ public final class GameState {
         /**
          * Returns the player's position.
          * 
-         * @return player's position
+         * @return Player's position.
          */
         public SubCell position() {
             return position;
@@ -160,7 +156,7 @@ public final class GameState {
         /**
          * Returns the image representing the player.
          * 
-         * @return image representing the player
+         * @return Image representing the player.
          */
         public Image image() {
             return image;

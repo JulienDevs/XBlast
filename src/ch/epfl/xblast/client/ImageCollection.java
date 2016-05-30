@@ -50,8 +50,6 @@ public final class ImageCollection {
      * @param byteForImage
      *            - byte of the image to be returned
      * @return The image corresponding to the given byte
-     * @throws NoSuchElementException
-     *             if there images doesn't contain the given byte
      */
     public Image image(byte byteForImage) {
         if (!images.containsKey(byteForImage)) {

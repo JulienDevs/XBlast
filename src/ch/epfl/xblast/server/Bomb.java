@@ -37,10 +37,6 @@ public final class Bomb {
      *            future)
      * @param range
      *            - range of the bomb's explosion
-     * @throws NullPointerException
-     *             - if ownerId, position or fuseLenghts is null
-     * @throws IllegalArgumentException
-     *             - if fuseLengts is empty or range is strictly negative
      */
     public Bomb(PlayerID ownerId, Cell position, Sq<Integer> fuseLengths,
             int range) {
@@ -71,10 +67,6 @@ public final class Bomb {
      *            its wick)
      * @param range
      *            - range of the bomb's explosion
-     * @throws NullPointerException
-     *             - if ownerId, position or fuseLenghts is null
-     * @throws IllegalArgumentException
-     *             - if fuseLengts is empty or range is strictly negative
      */
     public Bomb(PlayerID ownerId, Cell position, int fuseLength, int range) {
         this(ownerId, position,

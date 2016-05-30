@@ -1,6 +1,3 @@
-/**
- * 
- */
 package ch.epfl.xblast.client;
 
 import java.awt.Color;
@@ -22,6 +19,8 @@ import ch.epfl.xblast.PlayerID;
 import ch.epfl.xblast.client.GameState.Player;
 
 /**
+ * A Swing component that displays the state of a game of XBlast.
+ * 
  * @author Yaron Dibner (257145)
  * @author Julien Malka (259041)
  */
@@ -49,6 +48,9 @@ public final class XBlastComponent extends JComponent {
     protected void paintComponent(Graphics g0) {
         Graphics2D g = (Graphics2D) g0;
         if (game != null) {
+
+            // -------- Board & Explosions --------
+
             for (Cell c : Cell.ROW_MAJOR_ORDER) {
                 int x = c.x() * BLOCK_WIDTH;
                 int y = c.y() * BLOCK_HEIGHT;
@@ -58,6 +60,8 @@ public final class XBlastComponent extends JComponent {
                 g.drawImage(game.explosions().get(index), x, y, null);
             }
 
+            // -------- Score ---------
+
             int x = 0, y = Cell.ROWS * BLOCK_HEIGHT;
 
             for (Image i : game.scores()) {
@@ -65,6 +69,8 @@ public final class XBlastComponent extends JComponent {
 
                 x += SCORE_SIZE % W;
             }
+
+            // -------- Time ----------
 
             y += SCORE_SIZE;
             x = 0;

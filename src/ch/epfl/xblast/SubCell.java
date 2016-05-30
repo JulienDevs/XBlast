@@ -44,7 +44,6 @@ public final class SubCell {
      *            - cell of which the central subcell is returned.
      * @return central subcell of the given cell.
      */
-
     public static SubCell centralSubCellOf(Cell cell) {
         int tmpX, tmpY;
         tmpX = cell.x() * SUBCELL_SIZE + SUBCELL_SIZE / 2;

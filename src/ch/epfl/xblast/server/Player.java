@@ -39,10 +39,6 @@ public final class Player {
      *            - the number of bomb that the player can drop at most
      * @param bombRange
      *            - range of the bomb's explosion of the player
-     * @throws NullPointerException
-     *             - if id, lifeStates or directedPos is null
-     * @throws IllegalArgumentException
-     *             - if maxBombs or bombRange is strictly negative
      */
 
     public Player(PlayerID id, Sq<LifeState> lifeStates,
@@ -69,10 +65,6 @@ public final class Player {
      *            - the number of bomb that the player can drop at most
      * @param bombRange
      *            - range of the bomb's explosion of the player
-     * @throws NullPointerException
-     *             - if id or position is null
-     * @throws IllegalArgumentException
-     *             - if lives, maxBombs or bombRange is strictly negative
      */
 
     public Player(PlayerID id, int lives, Cell position, int maxBombs,

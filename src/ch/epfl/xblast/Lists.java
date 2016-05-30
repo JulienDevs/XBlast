@@ -25,8 +25,6 @@ public final class Lists {
      * @param List
      *            -list to be mirrored
      * @return list symmetric version of l
-     * @throws IllegalArgumentException
-     *             - if the list is null or empty
      */
     public static <T> List<T> mirrored(List<T> l) {
         if (l == null || l.isEmpty()) {

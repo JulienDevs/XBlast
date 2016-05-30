@@ -19,7 +19,7 @@ public final class ArgumentChecker {
      *            - integer to be checked
      * @return value is it is non negative.
      * @throws IllegalArgumentException
-     *             if value is strictly negative.
+     *             - if value is strictly negative.
      */
     public static int requireNonNegative(int value) {
         if (value < 0) {

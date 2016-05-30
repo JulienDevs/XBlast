@@ -23,11 +23,8 @@ public final class Board {
      * 
      * @param blocks
      *            - The list of blocks that will compose the game board.
-     * @throws IllegalArgumentException
-     *             - Throws IllegalArgumentException if the size of the block
-     *             list is incorrect
      */
-    public Board(List<Sq<Block>> blocks) throws IllegalArgumentException {
+    public Board(List<Sq<Block>> blocks) {
         if (blocks == null || blocks.size() != Cell.COUNT) {
             throw new IllegalArgumentException();
         }
@@ -41,13 +38,9 @@ public final class Board {
      *            - List containing the rows of blocks, which contains a list of
      *            the columns of blocks
      * @return board containing the blocks of rows
-     * @throws IllegalArgumentException
-     *             - Throws IllegalArgumentException if the size of the block
-     *             list is incorrect
      */
 
-    public static Board ofRows(List<List<Block>> rows)
-            throws IllegalArgumentException {
+    public static Board ofRows(List<List<Block>> rows) {
         checkBlockMatrix(rows, Cell.ROWS, Cell.COLUMNS);
         List<Sq<Block>> constantBlocks = new ArrayList<>();
 
@@ -66,14 +59,10 @@ public final class Board {
      * @param innerBlocks
      *            - List containing the rows of the inner blocks, which contains
      *            a list of the columns of the inner blocks
-     * @return board containing the blocks of innerBlocks and the walls
-     * @throws IllegalArgumentException
-     *             - Throws IllegalArgumentException if the size of the block
-     *             list is incorrect
+     * @return Board containing the blocks of innerBlocks and the walls
      */
 
-    public static Board ofInnerBlocksWalled(List<List<Block>> innerBlocks)
-            throws IllegalArgumentException {
+    public static Board ofInnerBlocksWalled(List<List<Block>> innerBlocks) {
         checkBlockMatrix(innerBlocks, Cell.ROWS - 2, Cell.COLUMNS - 2);
 
         List<List<Block>> blocks = new ArrayList<>();
@@ -106,14 +95,10 @@ public final class Board {
      *            contains a list of the columns of the north west quadrant
      * @return board containing the blocks of quadrantNWBlocks used to fill the
      *         whole board and the border walls
-     * @throws IllegalArgumentException
-     *             - Throws IllegalArgumentException if the size of the block
-     *             list is incorrect
      */
 
     public static Board ofQuadrantNWBlocksWalled(
-            List<List<Block>> quadrantNWBBlocks)
-                    throws IllegalArgumentException {
+            List<List<Block>> quadrantNWBBlocks) {
         checkBlockMatrix(quadrantNWBBlocks, (Cell.ROWS - 1) / 2,
                 (Cell.COLUMNS - 1) / 2);
 
@@ -149,8 +134,8 @@ public final class Board {
     }
 
     /**
-     * Verify if the matrix given has the correct numbers of rows with each time
-     * the correct numbers of columns
+     * Verifes if the matrix given has the correct numbers of rows with each time
+     * the correct numbers of columns.
      * 
      * @param matrix
      *            - Array of dimension 2
@@ -158,10 +143,6 @@ public final class Board {
      *            - number of lines
      * @param columns
      *            - number of columns
-     * @throws IllegalArgumentException
-     *             if the given matrix is not correct
-     * 
-     * 
      */
     private static void checkBlockMatrix(List<List<Block>> matrix, int rows,
             int columns) throws IllegalArgumentException {

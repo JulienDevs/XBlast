@@ -29,6 +29,9 @@ public class Main {
 
     private final static int NB_MAX_BYTES = 410;
 
+    private static SocketAddress address;
+    private static XBlastComponent xbc;
+    
     /**
      * @throws InvocationTargetException
      * @param args
@@ -36,10 +39,6 @@ public class Main {
      * @throws InterruptedException
      *             - when the thread is interrupted while it's sleeping @throws
      */
-
-    private static SocketAddress address;
-    private static XBlastComponent xbc;
-
     public static void main(String[] args) throws IOException,
             InterruptedException, InvocationTargetException {
 

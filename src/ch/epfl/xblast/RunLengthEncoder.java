@@ -24,12 +24,9 @@ public final class RunLengthEncoder {
      * 
      * @param bytes
      *            - the list to be encoded
-     * @return the encoded list of bytes
-     * @throws IllegalArgumentException
-     *             - if one of the elements of bytes is negative
+     * @return Encoded list of bytes.
      */
-    public static List<Byte> encode(List<Byte> bytes)
-            throws IllegalArgumentException {
+    public static List<Byte> encode(List<Byte> bytes) {
         for (byte b : bytes) {
             ArgumentChecker.requireNonNegative(b);
         }
@@ -67,12 +64,9 @@ public final class RunLengthEncoder {
      * 
      * @param bytes
      *            - the list to be decoded
-     * @return the decoded list of bytes
-     * @throws IllegalArgumentException
-     *             - if the last element of bytes is negative
+     * @return Decoded list of bytes
      */
-    public static List<Byte> decode(List<Byte> bytes)
-            throws IllegalArgumentException {
+    public static List<Byte> decode(List<Byte> bytes){
         ArgumentChecker.requireNonNegative(bytes.get(bytes.size() - 1));
 
         List<Byte> finalBytes = new ArrayList<>();

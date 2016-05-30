@@ -25,7 +25,7 @@ public enum Block {
     /**
      * Returns true if and only if a block is free.
      * 
-     * @return <b>true<\b> if and only if the block is free <b>false</b>
+     * @return <b>true</b> if and only if the block is free <b>false</b>
      *         otherwise
      */
     public boolean isFree() {
@@ -67,10 +67,8 @@ public enum Block {
      * Returns which type of bonus the block is.
      * 
      * @return which type of bonus the block is
-     * @throws NoSuchElementException
-     *             - if the block is not a bonus
      */
-    public Bonus associatedBonus() throws NoSuchElementException {
+    public Bonus associatedBonus() {
         if (maybeAssociatedBonus == null) {
             throw new NoSuchElementException();
         } else {
