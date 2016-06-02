@@ -22,6 +22,9 @@ import ch.epfl.xblast.PlayerID;
 import ch.epfl.xblast.Time;
 
 /**
+ * Main of the client. Handles the display of the game state bytes sent by the
+ * server and the sends to it the actions of the players.
+ * 
  * @author Yaron Dibner (257145)
  * @author Julien Malka (259041)
  */
@@ -31,13 +34,16 @@ public class Main {
 
     private static SocketAddress address;
     private static XBlastComponent xbc;
-    
+
     /**
-     * @throws InvocationTargetException
+     * Displays game state using the bytes received from the server. Sends back
+     * the actions of the players.
+     * 
      * @param args
+     *            - address of the receiver (if none, then it is the localhost)
      * @throws IOException
      * @throws InterruptedException
-     *             - when the thread is interrupted while it's sleeping @throws
+     * @throws InvocationTargetException
      */
     public static void main(String[] args) throws IOException,
             InterruptedException, InvocationTargetException {
@@ -51,7 +57,6 @@ public class Main {
                         || args[0].length() == 0) ? "localhost" : args[0],
                 2016);
 
-        System.out.println(address);
         ByteBuffer buffer;
 
         buffer = ByteBuffer.allocate(1);
@@ -73,11 +78,9 @@ public class Main {
         xbc.requestFocusInWindow();
 
         while (channel.isOpen()) {
-            //buffer.flip();
             channel.receive(buffer);
 
             PlayerID id = PlayerID.values()[buffer.get(0)];
-            System.out.println(buffer.get(0));
 
             List<Byte> bytesList = new ArrayList<>();
             for (int i = 1; i < NB_MAX_BYTES; ++i) {
@@ -101,7 +104,7 @@ public class Main {
         kb.put(KeyEvent.VK_SHIFT, PlayerAction.STOP);
         kb.put(KeyEvent.VK_SPACE, PlayerAction.DROP_BOMB);
         xbc = new XBlastComponent();
-        
+
         Consumer<PlayerAction> c = x -> {
             ByteBuffer buffer2 = ByteBuffer.allocate(1);
             buffer2.put((byte) x.ordinal());
@@ -114,9 +117,6 @@ public class Main {
             }
 
         };
-        
-        
-        
 
         xbc.addKeyListener(new KeyboardEventHandler(kb, c));
 

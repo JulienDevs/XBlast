@@ -19,25 +19,32 @@ import ch.epfl.xblast.PlayerID;
 import ch.epfl.xblast.Time;
 
 /**
+ * Main of the server. Handles the computation of the next game state using the
+ * actions of the players sent by the clients. Sends the game state to the
+ * client.
+ * 
  * @author Yaron Dibner (257145)
  * @author Julien Malka (259041)
  */
 
 public final class Main {
 
-    private static final int DEFAULT_NB_OF_CLIENTS = 2;
+    private static final int DEFAULT_NB_OF_CLIENTS = 4;
     private static Map<SocketAddress, PlayerID> ips = new HashMap<>();
     private static DatagramChannel channel;
 
     /**
+     * Computes the next game state using the actions of the players sent by the
+     * clients. Sends the game state back to the clients.
+     * 
      * @param args
+     *            - number of expected clients (4 if none is given)
      * @throws IOException
      */
     public static void main(String[] args) throws IOException {
 
         GameState game = Level.DEFAULT_LEVEL.gameState();
         BoardPainter bPainter = Level.DEFAULT_LEVEL.boardPainter();
-        // TODO: change expectedClients to 4
         int expectedClients = DEFAULT_NB_OF_CLIENTS;
         ByteBuffer buffer;
 
@@ -57,14 +64,11 @@ public final class Main {
         buffer = ByteBuffer.allocate(1);
 
         SocketAddress senderAddress;
-        // Part 1 : wait for all the players and store their ip
         while (ips.size() < expectedClients) {
             senderAddress = channel.receive(buffer);
             if (buffer.get(0) == PlayerAction.JOIN_GAME.ordinal()
-                    && !ips.containsKey(senderAddress)) {
+                    && !ips.containsKey(senderAddress))
                 ips.put(senderAddress, PlayerID.values()[ips.size()]);
-            }
-            System.out.println(buffer.get(0));
         }
 
         channel.configureBlocking(false);
@@ -86,8 +90,6 @@ public final class Main {
                 gs.rewind();
                 channel.send(gs, s);
             }
-
-           
 
             ByteBuffer playerActions = ByteBuffer.allocate(1);
 
