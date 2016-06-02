@@ -72,7 +72,8 @@ public class Main {
         SwingUtilities.invokeAndWait(() -> createUI(channel));
         xbc.requestFocusInWindow();
 
-        while (true) {
+        while (channel.isOpen()) {
+            //buffer.flip();
             channel.receive(buffer);
 
             PlayerID id = PlayerID.values()[buffer.get(0)];
@@ -100,18 +101,22 @@ public class Main {
         kb.put(KeyEvent.VK_SHIFT, PlayerAction.STOP);
         kb.put(KeyEvent.VK_SPACE, PlayerAction.DROP_BOMB);
         xbc = new XBlastComponent();
+        
         Consumer<PlayerAction> c = x -> {
-            ByteBuffer buffer = ByteBuffer.allocate(1);
-            buffer.put((byte) x.ordinal());
-            buffer.flip();
+            ByteBuffer buffer2 = ByteBuffer.allocate(1);
+            buffer2.put((byte) x.ordinal());
+            buffer2.flip();
 
             try {
-                channel.send(buffer, address);
+                channel.send(buffer2, address);
             } catch (Exception e) {
                 e.printStackTrace();
             }
 
         };
+        
+        
+        
 
         xbc.addKeyListener(new KeyboardEventHandler(kb, c));
 

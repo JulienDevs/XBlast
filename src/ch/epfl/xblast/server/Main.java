@@ -87,21 +87,7 @@ public final class Main {
                 channel.send(gs, s);
             }
 
-            long actualTime = System.nanoTime();
-            long timeSinceLastTick = actualTime - initialTime;
-            long expectedTimeUntilNextTick = (long) (game.ticks() + 1)
-                    * Ticks.TICK_NANOSECOND_DURATION;
-            if (expectedTimeUntilNextTick > timeSinceLastTick) {
-                try {
-                    long timeUntilNextTick = expectedTimeUntilNextTick
-                            - timeSinceLastTick;
-                    Thread.sleep(
-                            timeUntilNextTick * Time.MS_PER_S / Time.NS_PER_S,
-                            (int) (timeUntilNextTick
-                                    % (Time.NS_PER_S / Time.MS_PER_S)));
-                } catch (InterruptedException e) {
-                }
-            }
+           
 
             ByteBuffer playerActions = ByteBuffer.allocate(1);
 
@@ -142,6 +128,21 @@ public final class Main {
             }
 
             game = game.next(speedChangeEvents, bombDropEvents);
+            long actualTime = System.nanoTime();
+            long timeSinceLastTick = actualTime - initialTime;
+            long expectedTimeUntilNextTick = (long) (game.ticks() + 1)
+                    * Ticks.TICK_NANOSECOND_DURATION;
+            if (expectedTimeUntilNextTick > timeSinceLastTick) {
+                try {
+                    long timeUntilNextTick = expectedTimeUntilNextTick
+                            - timeSinceLastTick;
+                    Thread.sleep(
+                            timeUntilNextTick * Time.MS_PER_S / Time.NS_PER_S,
+                            (int) (timeUntilNextTick
+                                    % (Time.NS_PER_S / Time.MS_PER_S)));
+                } catch (InterruptedException e) {
+                }
+            }
         }
 
         System.out.println(game.winner());
