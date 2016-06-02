@@ -22,32 +22,42 @@ import ch.epfl.xblast.Time;
  * @author Yaron Dibner (257145)
  * @author Julien Malka (259041)
  */
+
 public final class Main {
+
+    private static final int DEFAULT_NB_OF_CLIENTS = 2;
+    private static Map<SocketAddress, PlayerID> ips = new HashMap<>();
+    private static DatagramChannel channel;
 
     /**
      * @param args
      * @throws IOException
      */
     public static void main(String[] args) throws IOException {
+
         GameState game = Level.DEFAULT_LEVEL.gameState();
         BoardPainter bPainter = Level.DEFAULT_LEVEL.boardPainter();
         // TODO: change expectedClients to 4
-        int expectedClients = 2;
+        int expectedClients = DEFAULT_NB_OF_CLIENTS;
         ByteBuffer buffer;
-        Map<SocketAddress, PlayerID> ips = new HashMap<>();
 
         try {
-            if (args.length != 0)
-                expectedClients = Integer.parseInt(args[0]);
+            if (args != null && args.length != 0) {
+                if (Integer.parseInt(args[0]) > 0
+                        && Integer.parseInt(args[0]) < DEFAULT_NB_OF_CLIENTS) {
+                    expectedClients = Integer.parseInt(args[0]);
+                }
+            }
         } catch (NumberFormatException e) {
         }
 
-        DatagramChannel channel = DatagramChannel
-                .open(StandardProtocolFamily.INET);
+        channel = DatagramChannel.open(StandardProtocolFamily.INET);
         channel.bind(new InetSocketAddress(2016));
 
         buffer = ByteBuffer.allocate(1);
+
         SocketAddress senderAddress;
+        // Part 1 : wait for all the players and store their ip
         while (ips.size() < expectedClients) {
             senderAddress = channel.receive(buffer);
             if (buffer.get(0) == PlayerAction.JOIN_GAME.ordinal()
@@ -58,28 +68,23 @@ public final class Main {
         }
 
         channel.configureBlocking(false);
+
         long initialTime = System.nanoTime();
 
         while (!game.isGameOver()) {
             List<Byte> serializedGameState = GameStateSerializer
                     .serialize(bPainter, game);
 
-            ByteBuffer gs = ByteBuffer.allocate(serializedGameState.size());
+            ByteBuffer gs = ByteBuffer.allocate(serializedGameState.size() + 1);
+            gs.put((byte) 0);
             for (byte b : serializedGameState) {
                 gs.put(b);
             }
 
-            for (Map.Entry<SocketAddress, PlayerID> e : ips.entrySet()) {
-                buffer = ByteBuffer.allocate(serializedGameState.size() + 1);
-
-                buffer.put((byte) e.getValue().ordinal());
-
-                gs.flip();
-                buffer.put(gs);
-
-                buffer.flip();
-                channel.send(buffer, e.getKey());
-                buffer.clear();
+            for (SocketAddress s : ips.keySet()) {
+                gs.put(0, (byte) ips.get(s).ordinal());
+                gs.rewind();
+                channel.send(gs, s);
             }
 
             long actualTime = System.nanoTime();
@@ -135,7 +140,7 @@ public final class Main {
                 }
                 playerActions = ByteBuffer.allocate(1);
             }
-            
+
             game = game.next(speedChangeEvents, bombDropEvents);
         }
 
