@@ -17,7 +17,7 @@ import javax.imageio.ImageIO;
  */
 public final class ImageCollection {
     private final Map<Byte, Image> images = new HashMap<>();
-    private final static int nb_characters = 3;
+    private final static int NB_CHARACTERS = 3;
 
     /**
      * Constructor of ImageCollection. Extracts all the images in the directory
@@ -34,8 +34,8 @@ public final class ImageCollection {
                     .getResource(dirName).toURI());
             for (File file : dir.listFiles()) {
                 try {
-                    byte byteForImage = Byte
-                            .parseByte(file.getName().substring(0, nb_characters));
+                    byte byteForImage = Byte.parseByte(
+                            file.getName().substring(0, NB_CHARACTERS));
                     images.put(byteForImage, ImageIO.read(file));
                 } catch (Exception e) {
                 }

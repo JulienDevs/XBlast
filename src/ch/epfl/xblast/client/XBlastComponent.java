@@ -80,6 +80,8 @@ public final class XBlastComponent extends JComponent {
 
                 x += TIME_SIZE % W;
             }
+            
+            // -------- Players ----------
 
             Font font = new Font("Arial", Font.BOLD, 25);
             g.setColor(Color.WHITE);

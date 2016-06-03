@@ -18,6 +18,8 @@ import ch.epfl.xblast.RunLengthEncoder;
  * @author Julien Malka (259041)
  */
 public final class GameStateSerializer {
+    
+    private final static double SECONDS_PER_TIME_SQUARE = 2.0;
 
     private GameStateSerializer() {
     }
@@ -87,7 +89,7 @@ public final class GameStateSerializer {
 
         // ----------TIME-----------
 
-        bytes.add((byte) Math.ceil(game.remainingTime() / 2.0));
+        bytes.add((byte) Math.ceil(game.remainingTime() / SECONDS_PER_TIME_SQUARE));
 
         return bytes;
     }

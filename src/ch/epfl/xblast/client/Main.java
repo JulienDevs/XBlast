@@ -106,12 +106,12 @@ public class Main {
         xbc = new XBlastComponent();
 
         Consumer<PlayerAction> c = x -> {
-            ByteBuffer buffer2 = ByteBuffer.allocate(1);
-            buffer2.put((byte) x.ordinal());
-            buffer2.flip();
+            ByteBuffer buffer = ByteBuffer.allocate(1);
+            buffer.put((byte) x.ordinal());
+            buffer.flip();
 
             try {
-                channel.send(buffer2, address);
+                channel.send(buffer, address);
             } catch (Exception e) {
                 e.printStackTrace();
             }
